@@ -1,15 +1,23 @@
+"use strict"
+import cors from "cors";
 import express from "express";
 import morgan from "morgan";
 import indexRoutes from "./src/routes/index.routes.js";
-import { PORT, HOST } from "./src/config/configEnv.js"
+import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createUsers } from "./src/config/initDb.js";
 
 async function setupServer() {
-
   // Crea la instancia de Express
   const app = express();
   app.disable("x-powered-by");
+
+  app.use(
+    cors({
+      credentials: true,
+      origin: true,
+    })
+  );
 
   // Avisa a express que use JSON
   app.use(express.json());
@@ -26,7 +34,7 @@ async function setupServer() {
   });
 }
 
-// Función para configurar la API	
+// Función para configurar la API
 async function setupAPI() {
   try {
     // Conecta la base de datos

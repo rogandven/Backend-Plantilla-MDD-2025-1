@@ -82,11 +82,11 @@ export async function login(req, res) {
   }
 }
 
-export async function isAdminFunction(req, res) {
-    try {
-        res.status(200).json({ message: "El usuario es administrador" });
-    } catch (error) {
-        console.error("Error en auth.controller.js -> isAdminFunction(): ", error);
-        return res.status(500).json({ message: "Error interno del servidor", error });
-    }
+export async function logout(req, res) {
+  try {
+    res.clearCookie("jwt", { httpOnly: true });
+    res.status(200).json({ message: "Sesión cerrada exitosamente" })
+  } catch (error) {
+    return res.status(500).json({ message: "Error al iniciar sesión" });
+  }
 }
