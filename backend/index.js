@@ -12,6 +12,7 @@ async function setupServer() {
   const app = express();
   app.disable("x-powered-by");
 
+  // Habilita el CORS para permitir solicitudes desde otros dominios (frontend)
   app.use(
     cors({
       credentials: true,

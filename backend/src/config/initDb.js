@@ -4,6 +4,8 @@ import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
 
+// Función para crear usuarios por defecto
+// Se aplica sólo al iniciar la base de datos
 export async function createUsers() {
     try {
         const userRepository = AppDataSource.getRepository(User);
