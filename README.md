@@ -1,6 +1,6 @@
 # 🚀 Plantilla de Proyecto Metodología del Desarrollo IECI 2025-1
 
-Este repositorio contiene la plantilla base para el proyecto semestral de Metodología del Desarrollo usando Node.js, Express, PostgreSQL y React. Sigue estos pasos para clonar, configurar y ejecutar el servidor localmente.
+Este repositorio contiene el backend de la plantilla base para el proyecto semestral de Metodología del Desarrollo usando Node.js, Express y PostgreSQL. Sigue estos pasos para clonar, configurar y ejecutar el servidor localmente.
 
 ---
 
@@ -17,13 +17,12 @@ Antes de comenzar, asegúrate de tener instalado en tu sistema:
 ## 🔧 Clonar y ejecutar el proyecto
 
 ### 1. Clona el repositorio
-
 ```bash
-git clone https://github.com/HunterUrisus/Plantilla-MDD-2025-1.git
-cd Plantilla-MDD-2025-1/
+git clone https://github.com/HunterUrisus/Backend-Plantilla-MDD-2025-1
+cd Backend-Plantilla-MDD-2025-1/
 ```
-### 2. Accede a la carpeta backend e instala las dependencias
 
+### 2. Accede a la carpeta backend e instala las dependencias
 ```bash
 cd backend/
 npm install
