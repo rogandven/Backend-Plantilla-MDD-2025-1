@@ -50,7 +50,6 @@ export const registerValidation = Joi.object({
   password: Joi.string()
     .min(8)
     .max(26)
-    .pattern(/^[a-zA-Z0-9!@#$%^&*()_\-+=\[\]{};:'",.<>/?\\|`~]+$/)
     .required()
     .messages({
       "string.empty": "La contraseña no puede estar vacía.",
@@ -58,8 +57,6 @@ export const registerValidation = Joi.object({
       "string.base": "La contraseña debe ser de tipo texto.",
       "string.min": "La contraseña debe tener al menos 8 caracteres.",
       "string.max": "La contraseña debe tener como máximo 26 caracteres.",
-      "string.pattern.base":
-        "La contraseña solo puede contener letras, números y caracteres especiales.",
     }),
 })
   .unknown(false)

@@ -1,5 +1,4 @@
 "use strict";
-
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
@@ -75,5 +74,30 @@ export async function deleteUserById(req, res) {
   } catch (error) {
     console.error("Error en user.controller.js -> deleteUserById(): ", error);
     res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
+
+export async function getProfile(req, res) {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    
+    const userEmail = req.user.email;
+    const user = await userRepository.findOne({ where: { email: userEmail } });
+    if (!user) {
+      return res.status(404).json({ message: "Perfil no encontrado." });
+    }
+
+    const formattedUser = {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      rut: user.rut,
+      role: user.role
+    };
+    res.status(200).json({ message: "Perfil encontrado: ", data: formattedUser });
+
+  } catch (error) {
+    console.error("Error en user.controller -> getProfile(): ", error);
+    res.status(500).json({ message: "Error interno del servidor"})
   }
 }
