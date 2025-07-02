@@ -44,6 +44,12 @@ export const UserEntity = new EntitySchema({
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
     },
+    creator: {
+        type: 'one-to-many',
+        target: 'asambleas',
+        inverseSide: 'creator',
+        joinColumn: false
+    },
 });
 
 export default UserEntity;
