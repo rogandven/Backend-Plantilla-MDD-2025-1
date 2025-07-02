@@ -1,6 +1,7 @@
 import { AppDataSource } from "../config/configDb.js";
 import Asamblea from "../entity/asamblea.entity.js";
-import createValidation from "../validations/asamblea.validations.js"
+import { createValidation, updateValidation } from "../validations/asamblea.validations.js"
+import { getUserId, getToken } from "../middleware/authentication.middleware.js";
 
 export async function getAsambleas(req, res) {
     try {
@@ -17,7 +18,17 @@ export async function getAsambleas(req, res) {
 export async function createAsamblea(req, res) {
     try {
         const asambleaRepository = AppDataSource.getRepository(Asamblea);
-        const { creatorId, description, date } = req.body;
+        const { description, date } = req.body;
+
+        const creatorId = getUserId(getToken(req))
+        console.log(req.body.creatorId)
+        if (creatorId == null || creatorId == undefined) {
+            return res.status(401).json({
+                message: "No es un usuario válido"
+            })
+        }
+        
+        req.body.creatorId = creatorId;
         const { error } = createValidation.validate(req.body);
         if (error) return res.status(400).json({ message: error.message });
 
