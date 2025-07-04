@@ -11,12 +11,24 @@ export const AsambleaEntity = new EntitySchema({
     },
     relations: {
         creator: {
-            type: 'one-to-many',
+            type: 'many-to-one',
             target: 'users',
-            inverseSide: 'id',
+            inverseSide: 'creator',
             joinColumn: true
         },
-    },    
+        place: {
+            type: 'many-to-many',
+            target: 'places',
+            inverseSide: 'asamblea',
+            joinTable: true
+        },
+        url: {
+            type: 'many-to-many',
+            target: 'urls',
+            inverseSide: 'asamblea',
+            joinTable: true
+        }
+    },         
 });
 
 export default AsambleaEntity;

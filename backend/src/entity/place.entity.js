@@ -8,6 +8,14 @@ export const PlaceEntity = new EntitySchema({
         name: { type: String, nullable: false },
         address: { type: String, nullable: false },
     },
+    relations: {
+        asamblea: {
+            type: 'many-to-many',
+            target: 'asambleas',
+            inverseSide: 'place',
+            joinTable: true
+        },
+    },       
 });
 
 export default PlaceEntity;
