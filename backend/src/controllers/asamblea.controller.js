@@ -1,6 +1,6 @@
 import { AppDataSource } from "../config/configDb.js";
 import Asamblea from "../entity/asamblea.entity.js";
-import { createValidation, updateValidation } from "../validations/asamblea.validations.js"
+import { createValidation, updateValidation } from "../validations/asamblea.validation.js"
 import { getUserId, getToken } from "../middleware/authentication.middleware.js";
 
 export async function getAsambleas(req, res) {

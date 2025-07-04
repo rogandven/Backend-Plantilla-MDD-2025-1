@@ -1,6 +1,6 @@
 import { AppDataSource } from "../config/configDb.js";
 import Place from "../entity/place.entity.js";
-import { createValidation, updateValidation } from "../validations/place.validations.js"
+import { createValidation, updateValidation } from "../validations/place.validation.js"
 
 export async function getPlaces(req, res) {
     try {

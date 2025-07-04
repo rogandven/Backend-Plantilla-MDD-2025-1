@@ -8,7 +8,7 @@ export const createValidation = Joi.object({
         "string.base": "El título debe ser una cadena",
         "string.min": "El título no puede ser vacío",
         "string.max": "El título no puede tener más de 20 caracteres",
-        "string.reuired": "El título es obligatorio"
+        "string.required": "El título es obligatorio"
     }),
     address: Joi.string().min(1).max(50).required().messages({
         "string.base": "La dirección debe ser una cadena",
