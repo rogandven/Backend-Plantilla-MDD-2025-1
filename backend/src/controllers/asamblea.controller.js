@@ -1,7 +1,8 @@
 import { AppDataSource } from "../config/configDb.js";
 import Asamblea from "../entity/asamblea.entity.js";
-import { createValidation, updateValidation } from "../validations/asamblea.validation.js"
+import { createValidation, NULL_INDICATOR, updateValidation } from "../validations/asamblea.validation.js"
 import { getUserId, getToken } from "../middleware/authentication.middleware.js";
+import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/other.validation.js";
 
 export async function getAsambleas(req, res) {
     try {
@@ -18,24 +19,32 @@ export async function getAsambleas(req, res) {
 export async function createAsamblea(req, res) {
     try {
         const asambleaRepository = AppDataSource.getRepository(Asamblea);
-        const { description, date } = req.body;
+        const { description, date, url, place } = req.body;
 
         const creatorId = getUserId(getToken(req))
-        console.log(req.body.creatorId)
-        if (creatorId == null || creatorId == undefined) {
+        if (isNull(creatorId)) {
             return res.status(401).json({
                 message: "No es un usuario válido"
             })
         }
-        
+
         req.body.creatorId = creatorId;
         const { error } = createValidation.validate(req.body);
+
         if (error) return res.status(400).json({ message: error.message });
+
+        if (isNull(url) && isNull(place)) {
+            return res.status(400).json({
+                message: "El link y el lugar no pueden ser ambos nulos"
+            })
+        }
 
         const newAsamblea = asambleaRepository.create({
             creatorId,
             description,
             date,
+            url,
+            place,
         });
         const savedAsamblea = await asambleaRepository.save(newAsamblea);
 
@@ -52,6 +61,12 @@ export async function getAsambleaById(req, res) {
     try {
         const asambleaRepository = AppDataSource.getRepository(Asamblea);
         const { id } = req.params;
+
+        const assertValidIdResult = assertValidId(id, req, res);
+        if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+            return assertValidIdResult
+        }
+
         const asamblea = await asambleaRepository.findOne({ where: { id } });
         if (!asamblea) return res.status(404).json({ message: "Asamblea no encontrada." });
 
@@ -65,10 +80,23 @@ export async function getAsambleaById(req, res) {
 export async function updateAsamblea(req, res) {
     try {
         const asambleaRepository = AppDataSource.getRepository(Asamblea);
-        const { description, date, creatorId } = req.body;
+        const { description, date, url, place } = req.body;
         const { id } = req.params;
 
+        const assertValidIdResult = assertValidId(id, req, res);
+        if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+            return assertValidIdResult
+        }
+
+        const creatorId = getUserId(getToken(req))
+        if (isNull(creatorId)) {
+            return res.status(401).json({
+                message: "No es un usuario válido"
+            })
+        }
+
         const { error } = updateValidation.validate(req.body);
+
         if (error) return res.status(400).json({ message: error.message });
 
         const asamblea = await asambleaRepository.findOne({ where: { id } });
@@ -76,7 +104,17 @@ export async function updateAsamblea(req, res) {
 
         asamblea.description = description || asamblea.description;
         asamblea.date = date || asamblea.date;
-        asamblea.creatorId = creatorId || asamblea.creatorId;
+        asamblea.creatorId = creatorId;
+        if (url !== undefined) {
+            asamblea.url = url
+        }
+        if (place !== undefined) {
+            asamblea.place = place 
+        }
+        if (asamblea.place === null && asamblea.url === null) {
+            return res.status(400).json({ message: "El URL y el lugar no pueden ser ambos nulos" });
+        }
+
 
         await asambleaRepository.save(asamblea);
 
@@ -93,6 +131,11 @@ export async function deleteAsamblea(req, res) {
     try {
         const asambleaRepository = AppDataSource.getRepository(Asamblea);
         const { id } = req.params;
+
+        const assertValidIdResult = assertValidId(id, req, res);
+        if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+            return assertValidIdResult
+        }
 
         const asamblea = await asambleaRepository.findOne({ where: { id } });
         if (!asamblea) return res.status(404).json({ message: "Asamblea no encontrada." });

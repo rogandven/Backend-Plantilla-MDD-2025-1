@@ -27,7 +27,7 @@ export function authenticateJwt(req, res, next) {
 export function getToken(req) {
   // Conseguir el token del encabezado Authorization
   const authHeader = req.headers.authorization;
-  console.log(authHeader)
+  // console.log(authHeader)
   
   // Verificar si el token está presente y es un Bearer Token
   if (!authHeader || !authHeader.startsWith("Bearer "))
@@ -40,7 +40,7 @@ export function getToken(req) {
 export function getUserId(token) {
   try {
     const decoded = jwt.verify(token, SESSION_SECRET);
-    console.log(decoded)
+    // console.log(decoded)
     return decoded.id;
   } catch (error) {
     console.log(error)

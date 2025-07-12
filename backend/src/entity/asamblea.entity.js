@@ -7,7 +7,9 @@ export const AsambleaEntity = new EntitySchema({
         id: { type: Number, primary: true, generated: true },
         description: { type: String, nullable: false },
         date: { type: 'timestamp', nullable: false, default: () => "CURRENT_TIMESTAMP"},
-        creatorId: {type: Number, nullable: false}
+        creatorId: {type: Number, nullable: false},
+        url: { type: String, nullable: true },
+        place: { type: String, nullable: true },
     },
     relations: {
         creator: {
@@ -16,18 +18,6 @@ export const AsambleaEntity = new EntitySchema({
             inverseSide: 'creator',
             joinColumn: true
         },
-        place: {
-            type: 'many-to-many',
-            target: 'places',
-            inverseSide: 'asamblea',
-            joinTable: true
-        },
-        url: {
-            type: 'many-to-many',
-            target: 'urls',
-            inverseSide: 'asamblea',
-            joinTable: true
-        }
     },         
 });
 
