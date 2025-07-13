@@ -17,9 +17,14 @@ const urlValidator = (value, helpers) => {
     if (typeof(value) !== "string") {
         return helpers.message("El link debe ser una cadena de caracteres");
     }
+    if (value.match(URL_REGEXP) == null) {
+        return helpers.message("Link inválido");
+    }    
     return value;
 };
 
+
+export const URL_REGEXP = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/i;
 export const NULL_INDICATOR = -1;
 
 export const validateDate = (date, helper) => {
@@ -40,34 +45,35 @@ export const createValidation = Joi.object({
         "number.integer": "El ID debe ser un entero",
         "number.base": "El ID debe ser un número",
         "number.infinity": "El ID no puede ser infinito",
-        "number.required": "El ID es obligatorio"
+        "any.required": "El ID es obligatorio"
     }),
     description: Joi.string().min(1).max(50).required().messages({
         "string.max": "La descripción no puede tener más de 50 caracteres",
         "string.min": "La descripción no puede ser vacía",
         "string.empty": "La descripción no puede ser vacía",
-        "string.required": "La descripción es obligatoria",
+        "any.required": "La descripción es obligatoria",
         "string.base": "La descripción debe ser una cadena"
     }),
     date: Joi.string().required().isoDate().custom(validateDate).messages({
-        "string.required": "La fecha es obligatoria",
+        "any.required": "La fecha es obligatoria",
         "string.base": "La fecha no está en el formato correcto",
         "string.isoDate": "La fecha tiene que estar en formato timestamp",
         "date.required": "La fecha es obligatoria",
         "date.base": "La fecha no está en el formato correcto",
         "date.isoDate": "La fecha tiene que estar en formato timestamp"
     }),
-    url: Joi.string().min(1).messages({
-        "string.max": "El link no puede tener más de 50 caracteres",
-        "string.min": "El link no puede ser vacío",
-        "string.empty": "El link no puede ser vacío",
-        "string.required": "El link es obligatorio"
+    url: Joi.string().min(1).pattern(URL_REGEXP).messages({
+            "string.max": "El link no puede tener más de 50 caracteres",
+            "string.min": "El link no puede ser vacío",
+            "string.pattern": "El link debe ser un URL válido",            
+            "string.empty": "El link no puede ser vacío",
+            "any.required": "El link es obligatorio",
     }),
     place: Joi.string().min(1).max(50).messages({
         "string.max": "El lugar no puede tener más de 50 caracteres",
         "string.min": "El lugar no puede ser vacío",
         "string.empty": "El lugar no puede ser vacío",
-        "string.required": "El lugar es obligatorio",
+        "any.required": "El lugar es obligatorio",
         "string.base": "El lugar debe ser una cadena"
     })
 }).unknown(false).messages({
@@ -86,11 +92,11 @@ export const updateValidation = Joi.object({
         "string.max": "La descripción no puede tener más de 50 caracteres",
         "string.min": "La descripción no puede ser vacía",
         "string.empty": "La descripción no puede ser vacía",
-        "string.required": "La descripción es obligatoria",
+        "any.required": "La descripción es obligatoria",
         "string.base": "La descripción debe ser una cadena"
     }),
     date: Joi.string().isoDate().custom(validateDate).messages({
-        "string.required": "La fecha es obligatoria",
+        "any.required": "La fecha es obligatoria",
         "string.base": "La fecha no está en el formato correcto",
         "string.isoDate": "La fecha tiene que estar en formato timestamp",
         "date.required": "La fecha es obligatoria",
@@ -99,13 +105,13 @@ export const updateValidation = Joi.object({
     }),
     url: Joi.custom(urlValidator).messages({
         "string.max": "El link no puede tener más de 50 caracteres",
-        "string.required": "El link es obligatorio"
+        "any.required": "El link es obligatorio"
     }),
     place: Joi.custom(placeValidator).messages({
         "string.max": "El lugar no puede tener más de 50 caracteres",
         "string.min": "El lugar no puede ser vacío",
         "string.empty": "El lugar no puede ser vacío",
-        "string.required": "El lugar es obligatorio",
+        "any.required": "El lugar es obligatorio",
         "string.base": "El lugar debe ser una cadena"
     })
 }).unknown(false).messages({
