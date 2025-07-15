@@ -31,7 +31,7 @@ async function setupServer() {
 
   // Enciende el servidor
   app.listen(PORT, () => {
-    console.log(`Servidor corriendo en ${HOST}:${PORT}`);
+    console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
   });
 }
 
