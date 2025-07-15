@@ -14,9 +14,10 @@ export async function isAdmin(req, res, next) {
 
     // Verificar el rol del usuario
     const rolUser = userFound.role;
+    console.log(rolUser);
 
     // Si el rol no es administrador, devolver un error 403
-    if (rolUser !== "administrador")
+    if (rolUser !== "presidente"&& rolUser !== "vicepresidente" && rolUser !== "tesorero" && rolUser !== "secretaria" && rolUser !== "vocalia")
       return res
         .status(403)
         .json({

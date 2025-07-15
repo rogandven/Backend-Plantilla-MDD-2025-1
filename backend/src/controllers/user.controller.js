@@ -1,6 +1,7 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
+import { updateValidation } from "../validations/auth.validation.js";
 
 export async function getUsers(req, res) {
   try {
@@ -39,7 +40,11 @@ export async function updateUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar un usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
-    const { username, email, rut } = req.body;
+    const { username, email, rut, role } = req.body;
+
+    const { error } = updateValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -51,6 +56,7 @@ export async function updateUserById(req, res) {
     user.username = username || user.username;
     user.email = email || user.email;
     user.rut = rut || user.rut;
+    user.role = role || user.role;
 
     // Guardar los cambios en la base de datos
     await userRepository.save(user);
