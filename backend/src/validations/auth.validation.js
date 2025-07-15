@@ -23,7 +23,8 @@ export const registerValidation = Joi.object({
         "El nombre de usuario solo puede contener letras, números y guiones bajos.",
       "string.min": "El nombre de usuario debe tener al menos 3 caracteres.",
       "string.max": "El nombre de usuario no puede exceder los 30 caracteres.",
-      "string.empty": "El nombre de usuario es obligatorio.",
+      "any.required": "El nombre de usuario es obligatorio.",
+      "string.empty": "El nombre de usuario es obligatorio."
     }),
   rut: Joi.string()
     .required()
@@ -32,6 +33,7 @@ export const registerValidation = Joi.object({
       "string.empty": "El rut no puede estar vacío.",
       "string.base": "El rut debe ser de tipo string.",
       "string.pattern.base": "Formato rut inválido. Debe ser xx.xxx.xxx-x.",
+      "any.required": "El rut es obligatorio."
     }),
   email: Joi.string()
     .email()
@@ -43,6 +45,7 @@ export const registerValidation = Joi.object({
       "string.min": "El correo electrónico debe tener al menos 15 caracteres.",
       "string.max": "El correo electrónico no puede exceder los 50 caracteres.",
       "string.empty": "El correo electrónico es obligatorio.",
+      "any.required": "El correo electrónico es obligatorio."
     })
     .custom(
       domainEmailValidator,
@@ -54,7 +57,7 @@ export const registerValidation = Joi.object({
     .required()
     .messages({
       "string.empty": "La contraseña no puede estar vacía.",
-      "any.required": "La contraseña es obligatorio.",
+      "any.required": "La contraseña es obligatoria.",
       "string.base": "La contraseña debe ser de tipo texto.",
       "string.min": "La contraseña debe tener al menos 8 caracteres.",
       "string.max": "La contraseña debe tener como máximo 26 caracteres.",
@@ -142,6 +145,7 @@ export const loginValidation = Joi.object({
     .messages({
       "string.email": "El correo electrónico debe ser válido.",
       "string.empty": "El correo electrónico es obligatorio.",
+      "any.required": "El correo electrónico es obligatorio."
     })
     .custom(
       domainEmailValidator,
