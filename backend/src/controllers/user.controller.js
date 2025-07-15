@@ -1,6 +1,8 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
+//
+import {encryptPassword} from "../helpers/bcrypt.helper.js"
 
 export async function getUsers(req, res) {
   try {
@@ -111,5 +113,40 @@ export async function getProfile(req, res) {
   } catch (error) {
     console.error("Error en user.controller -> getProfile(): ", error);
     res.status(500).json({ message: "Error interno del servidor"})
+  }
+}
+
+//ojo
+import { registerCeeValidation } from "../validations/auth.validation.js";
+
+
+export async function registerCee(req, res) {
+  try {
+    const repo = AppDataSource.getRepository(User);
+
+   
+    const { error } = registerCeeValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    const { username, rut, email, password } = req.body;
+
+    
+    const dup = await repo.findOneBy([{ email }, { rut }, { username }]);
+    if (dup) return res.status(409).json({ message: "Datos ya registrados" });
+
+    
+    const nuevo = repo.create({
+      username,
+      rut,
+      email,
+      password: await encryptPassword(password),
+      role: "CEE"
+    });
+    await repo.save(nuevo);
+
+    res.status(201).json({ message: "Integrante CEE creado" });
+  } catch (err) {
+    console.error("registerCee:", err);
+    res.status(500).json({ message: "Error al registrar integrante CEE" });
   }
 }
