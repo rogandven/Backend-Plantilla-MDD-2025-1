@@ -822,3 +822,24 @@ export async function actualizarSolicitud(req, res) {
     res.status(500).json({ message: "Error al actualizar solicitud" });
   }
 }
+
+export async function eliminarSolicitud(req, res) {
+  try {
+    //se obtiene el repositorio para acceder a las solicitudes
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    //se extrae el id desde la URL 
+    const { id } = req.params;
+    //se realiza la busqueda de la solicitud por el id en la BD
+    const solicitud = await solicitudRepo.findOne({ where: { id } });
+    //si no existe la solicitud se responde con error 404 
+    if (!solicitud) return res.status(404).json({ message: "Solicitud no encontrada" });
+    //se elimina la solicitud
+    await solicitudRepo.remove(solicitud);
+    //se confirma al usuario que la solicitud fue eliminada
+    res.status(200).json({ message: "Solicitud eliminada correctamente" });
+  } catch (error) {
+    //en caso de existir errores se responde con error 500 
+    console.error("Error al eliminar solicitud:", error);
+    res.status(500).json({ message: "Error al eliminar solicitud" });
+  }
+}
