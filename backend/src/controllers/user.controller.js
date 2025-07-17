@@ -1,8 +1,8 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
-import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/other.validation.js";
-import updateValidation from "../validations/auth.validation.js";
+//
+import {encryptPassword} from "../helpers/bcrypt.helper.js"
 
 export async function getUsers(req, res) {
   try {
@@ -22,12 +22,6 @@ export async function getUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar un usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
-
-    assertValidIdResult = assertValidId(id, req, res);
-    if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
-        return assertValidIdResult;
-    }
-
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -47,19 +41,7 @@ export async function updateUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar un usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
-
-    assertValidIdResult = assertValidId(id, req, res);
-    if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
-        return assertValidIdResult;
-    }
-
-    const { error } = updateValidation.validate(req.body);
-    if (error) return res.status(400).json({
-      message: error.message
-    });
-
     const { username, email, rut } = req.body;
-    
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -71,7 +53,6 @@ export async function updateUserById(req, res) {
     user.username = username || user.username;
     user.email = email || user.email;
     user.rut = rut || user.rut;
-    user.role = role || user.role;
 
     // Guardar los cambios en la base de datos
     await userRepository.save(user);
@@ -90,12 +71,6 @@ export async function deleteUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar el usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
-
-    assertValidIdResult = assertValidId(id, req, res);
-    if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
-        return assertValidIdResult;
-    }
-
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -118,11 +93,6 @@ export async function getProfile(req, res) {
     // Obtener el repositorio de usuarios y buscar el perfil del usuario autenticado
     const userRepository = AppDataSource.getRepository(User);
     const userEmail = req.user.email;
-
-    if (isNull(userEmail)) {
-      return res.status(400).json({ message: "Email no proporcionado." });
-    }
-
     const user = await userRepository.findOne({ where: { email: userEmail } });
     
     // Si no se encuentra el usuario, devolver un error 404
@@ -143,5 +113,40 @@ export async function getProfile(req, res) {
   } catch (error) {
     console.error("Error en user.controller -> getProfile(): ", error);
     res.status(500).json({ message: "Error interno del servidor"})
+  }
+}
+
+//ojo
+import { registerCeeValidation } from "../validations/auth.validation.js";
+
+
+export async function registerCee(req, res) {
+  try {
+    const repo = AppDataSource.getRepository(User);
+
+   
+    const { error } = registerCeeValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    const { username, rut, email, password } = req.body;
+
+    
+    const dup = await repo.findOneBy([{ email }, { rut }, { username }]);
+    if (dup) return res.status(409).json({ message: "Datos ya registrados" });
+
+    
+    const nuevo = repo.create({
+      username,
+      rut,
+      email,
+      password: await encryptPassword(password),
+      role: "CEE"
+    });
+    await repo.save(nuevo);
+
+    res.status(201).json({ message: "Integrante CEE creado" });
+  } catch (err) {
+    console.error("registerCee:", err);
+    res.status(500).json({ message: "Error al registrar integrante CEE" });
   }
 }

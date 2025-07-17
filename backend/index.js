@@ -5,8 +5,10 @@ import morgan from "morgan";
 import indexRoutes from "./src/routes/index.routes.js";
 import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
-import { createUsers } from "./src/config/initDb.js";
-import { createOperacion } from "./src/controllers/operaciones.controller.js";
+
+// lo que yo implemente.
+import { createUsers, createEstados } from "./src/config/initDb.js";
+
 async function setupServer() {
   // Crea la instancia de Express
   const app = express();
@@ -20,7 +22,7 @@ async function setupServer() {
     })
   );
 
-  // Avisas a express que use JSON
+  // Avisa a express que use JSON
   app.use(express.json());
 
   // Configura el middleware de morgan para registrar las peticiones HTTP
@@ -31,7 +33,7 @@ async function setupServer() {
 
   // Enciende el servidor
   app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
+    console.log(`Servidor corriendo en ${HOST}:${PORT}`);
   });
 }
 
@@ -42,6 +44,10 @@ async function setupAPI() {
     await connectDB();
     // Crea los usuarios iniciales
     await createUsers();
+
+
+    // Crea los estados iniciales del sistema (implementación adicional)
+    await createEstados();
     // Configura el servidor
     await setupServer();
   } catch (error) {
