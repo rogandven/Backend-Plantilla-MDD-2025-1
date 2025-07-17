@@ -120,7 +120,7 @@ export async function updateOperacion(req, res) {
         return res.status(404).json({ message: "Operación no encontrada" });
     }
 
-    if (validatedDate === undefined) {
+    if (validatedData === undefined) {
         return res.status(400).json({ message: "Datos no definidos. Debe definir el ingreso o el egreso." });
     }
 
