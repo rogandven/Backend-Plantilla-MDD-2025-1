@@ -284,6 +284,10 @@ export const SolicitudEntity = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP",
       onUpdate: () => "CURRENT_TIMESTAMP",
     },
+
+    estadoId: {
+      default: 0
+    }
   },
 
   //se definen las relaciones con otras entidades
@@ -310,7 +314,7 @@ export const SolicitudEntity = new EntitySchema({
       //joinColumn permite la creacion de la columna de union con el gestor
       joinColumn: true,
       //nullable false indica que este campo es obligatorio por lo tanto es no nulo
-      nullable: false,//siguiendo buenas practicas 
+      nullable: true,//siguiendo buenas practicas 
       //eager indica que la relacion se carga automaticamente al realizar consulta 
       eager: true,
     },
