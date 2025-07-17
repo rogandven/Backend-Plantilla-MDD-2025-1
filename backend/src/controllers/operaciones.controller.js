@@ -2,36 +2,43 @@
 import { AppDataSource } from "../config/configDb.js";
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
 import { OperacionesEntity } from "../entity/Operaciones.entity.js";
-import { OperacionesBodyValidation } from "../validations/operaciones.validation.js";
+import { OperacionesBodyValidation,OperacionesQueryValidation} from "../validations/operaciones.validation.js";
 
 export async function createOperacion(req, res) {
     try {
         const operacionRepository = AppDataSource.getRepository("Operaciones");
-        const { nombre_actividad, monto,tipo} = req.body;
+        const { nombre_actividad,ingreso,egreso} = req.body;
         
         if (!nombre_actividad) {
             return res.status(400).json({ message: "el nombre de la actividad es necesario" });
         }
-        
-        if (monto === 0) {
-            return res.status(400).json({ message: "Debe ingresar un valor en el monto" });
+        if (egreso === 0) {
+            return res.status(400).json({ message: "el egreso es necesario" });
         }
-        // verifica que los daros esten bien 
+        if (egreso <= 0) {  // <= Si no quieres permitir 0, cambia a `< 0`
+            return res.status(400).json({ 
+                message: 'El egreso debe ser mayor a 0' 
+            });
+        }
+        // verifica que los datos esten bien 
         if (typeof nombre_actividad !== 'string' || nombre_actividad.trim() === '') {
             return res.status(400).json({ error: "Actividad inválida" });
         }
     
-        if (isNaN(parseFloat(monto))) {
-            return res.status(400).json({ error: "Monto debe ser número" });
+        if (isNaN(parseFloat(ingreso))) {
+            return res.status(400).json({ error: "Ingreso debe ser número" });
         }
-        const tipoUpper = tipo?.toUpperCase();
-        if (!['INGRESO', 'EGRESO'].includes(tipoUpper)) {
-            return res.status(400).json({ error: "Tipo debe ser INGRESO o EGRESO" });
+        if (isNaN(parseFloat(egreso))) {
+            return res.status(400).json({ error: "egreso debe ser número" });
         }
-        const newOperacion = operacionRepository.create({
+        const ingresoNum = parseFloat(ingreso);
+        const egresoNum = parseFloat(egreso);
+            const monto=ingresoNum-egresoNum
+           const newOperacion = operacionRepository.create({ 
             nombre_actividad,
-            monto: tipoUpper === 'EGRESO'?-Math.abs(parseFloat(monto)): Math.abs(parseFloat(monto)),
-            tipo:tipoUpper,
+            egreso:egresoNum,
+            monto,
+            ingreso:ingresoNum,
             userId: req.user.id
         });
         await operacionRepository.save(newOperacion);
@@ -40,7 +47,7 @@ export async function createOperacion(req, res) {
             message: "Operacion registrada exitosamente", 
             data: newOperacion 
         });
-    } catch (error) {
+   }  catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Error al registrar la Operacion" });
     }
@@ -157,23 +164,28 @@ export async function updateOperacion(req, res) {
 
 export async function deleteOperacion(req, res) {
     try {
-        const { id, nombre } = req.query;
+        const { id } = req.query;
 
-        const { error } = productQueryValidation.validate({ id, nombre });
-        if (error) {
-            return handleErrorClient(res, 400, "Error de validación", error.message);
+        const { error:Queryerror } = OperacionesQueryValidation.validate({ id });
+        const operacionRepository = AppDataSource.getRepository("Operaciones");
+        const existeActividad = await operacionRepository.findOneBy({ id: parseInt(id) });
+
+        if (!existeActividad) {
+            return res.status(404).json({ message: "Operación no encontrada" });
         }
-
-        if (!id) {
-            return handleErrorClient(res, 400, "Debe proporcionar ID de la actividad a eliminar");
+        if (Queryerror) {
+            const errores = Queryerror.details.map(detail => ({
+                campo: detail.path[0],
+                error: detail.message
+            }));
+            return res.status(400).json({
+                message: "Error de validación",
+                errors: errores
+            });
         }
-        const [deletedProduct, errorMessage] = await deletedProduct({ id, nombre });
-
-        if (errorMessage) return handleErrorClient(res, 404, errorMessage);
-
-        handleSuccess(res, 200, "Operacion eliminada con éxito", deletedProduct);
+        await operacionRepository.delete(id)
+        return res.status(200).json({ message: "Operacion eliminada con éxito" });
     } catch (error) {
-        handleErrorServer(res, 500, error.message);
         return res.status(500).json({ message: "Error al eliminar la operacion" });
     }
 }

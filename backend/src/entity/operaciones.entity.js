@@ -30,11 +30,6 @@ export const OperacionesEntity = new EntitySchema({
       type: Number,
       nullable: true,
     },
-    tipo: {
-      type: "enum",
-      enum: ["INGRESO", "EGRESO"],
-      default: "INGRESO"
-    },
     createdAt: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
