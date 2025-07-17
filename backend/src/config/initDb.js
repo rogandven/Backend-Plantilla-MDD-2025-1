@@ -90,3 +90,4 @@ export async function createEstados() {
     console.error("Error al crear estados:", error);
     process.exit(1); 
   }
+}
