@@ -59,6 +59,7 @@ export async function updateUserById(req, res) {
     });
 
     const { username, email, rut } = req.body;
+    
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -70,6 +71,7 @@ export async function updateUserById(req, res) {
     user.username = username || user.username;
     user.email = email || user.email;
     user.rut = rut || user.rut;
+    user.role = role || user.role;
 
     // Guardar los cambios en la base de datos
     await userRepository.save(user);

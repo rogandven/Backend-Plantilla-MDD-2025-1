@@ -6,7 +6,7 @@ import indexRoutes from "./src/routes/index.routes.js";
 import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createUsers } from "./src/config/initDb.js";
-
+import { createOperacion } from "./src/controllers/operaciones.controller.js";
 async function setupServer() {
   // Crea la instancia de Express
   const app = express();
@@ -31,7 +31,7 @@ async function setupServer() {
 
   // Enciende el servidor
   app.listen(PORT, () => {
-    console.log(`Servidor corriendo en ${HOST}:${PORT}`);
+    console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
   });
 }
 
