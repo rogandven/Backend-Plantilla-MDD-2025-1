@@ -1,4 +1,3 @@
-
 "use strict";
 
 //se importa la clase EntitySchema desde TypeORM
