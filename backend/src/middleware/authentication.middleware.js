@@ -19,8 +19,31 @@ export function authenticateJwt(req, res, next) {
     const decoded = jwt.verify(token, SESSION_SECRET);
     req.user = decoded;
     next();
-    
   } catch (error) {
     return res.status(403).json({ message: "Token inválido o expirado" });
+  }
+}   
+
+export function getToken(req) {
+  // Conseguir el token del encabezado Authorization
+  const authHeader = req.headers.authorization;
+  // console.log(authHeader)
+  
+  // Verificar si el token está presente y es un Bearer Token
+  if (!authHeader || !authHeader.startsWith("Bearer "))
+    return null
+
+  // Extraer el token del encabezado
+  return authHeader.split(" ")[1];
+}
+
+export function getUserId(token) {
+  try {
+    const decoded = jwt.verify(token, SESSION_SECRET);
+    // console.log(decoded)
+    return decoded.id;
+  } catch (error) {
+    console.log(error)
+    return null;
   }
 }
