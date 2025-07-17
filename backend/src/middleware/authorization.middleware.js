@@ -68,3 +68,25 @@ export function checkRole(roles) {
     }
   };
 }
+
+export async function isAdminOrCee(req, res, next) {
+  try {
+    //se verifica si el usuario está autenticado
+    if (!req.user)
+      return res.status(401).json({ message: "Usuario no autenticado" });
+
+    //se verifica si el rol del usuario no es ni 'administrador' ni 'CEE'
+    if (req.user.role !== "administrador" && req.user.role !== "CEE") {
+      return res.status(403).json({
+        message: "Acceso denegado. Se requiere rol ADMIN o CEE.",
+      });
+    }
+
+    //si cumple con alguno de los dos roles, se continúa con la siguiente función
+    next();
+  } catch (err) {
+    //se muestra el error en consola y se responde con error 500
+    console.error("isAdminOrCee:", err);
+    res.status(500).json({ message: "Error interno" });
+  }
+}
