@@ -16,7 +16,7 @@ export async function register(req, res) {
   try {
     // Obtener el repositorio de usuarios y validar los datos de entrada
     const userRepository = AppDataSource.getRepository(User);
-    const { username, rut, email, password } = req.body;
+    const { username, rut, email, password, role } = req.body;
     const { error } = registerValidation.validate(req.body);
     if (error) return res.status(400).json({ message: error.message });
 
@@ -83,10 +83,11 @@ export async function login(req, res) {
 
     // Generar un token JWT y enviarlo al cliente
     const payload = {
+      id: userFound.id,
       username: userFound.username,
       email: userFound.email,
       rut: userFound.rut,
-      rol: userFound.role,
+      role: userFound.role || 'usuario'
     };
     const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
 

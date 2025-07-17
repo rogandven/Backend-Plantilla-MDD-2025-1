@@ -2,38 +2,28 @@
 
 import { EntitySchema } from "typeorm";
 
-export const UserEntity = new EntitySchema({
-    name: "User",
-    tableName: "users",
+export const reclamoEntity = new EntitySchema({
+    name: "Reclamo",
+    tableName: "reclamos",
     columns: {
         id: {
             type: Number,
             primary: true,
             generated: true,
         },
-        username: {
-            type: String,
-            unique: true,
-            nullable: false,
-        },
-        rut: {
-            type: String,
-            unique: true,
-            nullable: false,
-        },
-        email: {
-            type: String,
-            unique: true,
-            nullable: false,
-        },
-        password: {
+        nombre_del_profesor: {
             type: String,
             nullable: false,
         },
-        role: {
+        descripcion: {
             type: String,
-            default: "usuario",
+            nullable: false,
         },
+        ramo: {
+            type: String,
+            nullable: false,
+        },
+
         createdAt: {
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP",
@@ -44,14 +34,6 @@ export const UserEntity = new EntitySchema({
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
     },
-    relatons: {
-        creator: {
-            type: 'one-to-many',
-            target: 'asambleas',
-            inverseSide: 'creator',
-            joinColumn: false
-        },
-    }
 });
 
-export default UserEntity;
+export default reclamoEntity;

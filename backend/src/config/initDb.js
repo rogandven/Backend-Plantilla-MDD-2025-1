@@ -14,17 +14,17 @@ export async function createUsers() {
         if (count > 0) return;
         const users = [
             {
-                username: "Administrador",
+                username: "Presidente",
                 rut: "12345678-9",
-                email: "admin@gmail.com",
-                password: await encryptPassword("admin123"),
+                email: "presidente@ubiobio.cl",
+                password: await encryptPassword("HalaMadridLukaModric2025"),
                 role: "administrador"
             },
             {
                 username: "Usuario",
                 rut: "98765432-1",
-                email: "usuario@gmail.com",
-                password: await encryptPassword("usuario123"),
+                email: "usuario@ubiobio.cl",
+                password: await encryptPassword("usuario12345"),
                 role: "usuario"
             }
         ]
