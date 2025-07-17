@@ -12,6 +12,7 @@ export const createValidation = Joi.object({
         "string.min": "el nombre debe tener al menos tres caracteres",
         "string.max": "el nombre debe tener menos de cincuenta caracteres",
         "string.empty": "el nombre es obligatorio",
+        "any.required": "el nombre es obligatorio",
     }),
 
     descripcion: Joi.string()
@@ -24,6 +25,7 @@ export const createValidation = Joi.object({
         "string.min": "La descripción debe tener al menos tres caracteres",
         "string.max": "La descripción debe tener menos de cincuenta caracteres",
         "string.empty": "La descripción es obligatoria",
+        "any.required": "La descripción es obligatoria"
     }),
 
     ramo: Joi.string()
@@ -36,6 +38,7 @@ export const createValidation = Joi.object({
         "string.min": "el ramo debe tener al menos tres caracteres",
         "string.max": "el ramo debe tener menos de cincuenta caracteres",
         "string.empty": "el ramo es obligatorio",
+        "any.required": "el ramo es obligatorio",
     }),
 })
     .unknown(false)
@@ -50,9 +53,10 @@ export const updateValidation = Joi.object({
     .required()
     .pattern(/^[a-zA-Z0-9_\s]+$/)
     .messages({
-        "string.pattern.base":"el titulo solo puede contener letras y numeros",
-        "string.min": "el titulo debe tener al menos tres caracteres",
-        "string.max": "el tiulo debe tener menos de cincuenta caracteres",
+        "string.pattern.base":"el nombre solo puede contener letras y numeros",
+        "string.min": "el nombre debe tener al menos tres caracteres",
+        "string.max": "el nombre debe tener menos de cincuenta caracteres",
+        "any.required": "el nombre es obligatorio"
     }),
 
     descripcion: Joi.string()
@@ -64,6 +68,7 @@ export const updateValidation = Joi.object({
         "string.pattern.base":"La descripción solo puede contener letras y numeros",
         "string.min": "La descripción debe tener al menos tres caracteres",
         "string.max": "La descripción debe tener menos de cincuenta caracteres",
+        "any.required": "La descripción es obligatoria"
     }),
 
     ramo: Joi.string()
@@ -75,6 +80,7 @@ export const updateValidation = Joi.object({
         "string.pattern.base":"el ramo solo puede contener letras y numeros",
         "string.min": "el ramo debe tener al menos tres caracteres",
         "string.max": "el ramo debe tener menos de cincuenta caracteres",
+        "any.required": "El ramo es obligatorio"
     }),
 
 })
