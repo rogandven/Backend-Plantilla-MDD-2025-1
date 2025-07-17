@@ -13,7 +13,9 @@ export async function createOperacion(req, res) {
             return res.status(400).json({ message: "el nombre de la actividad es necesario" });
         }
         
-        if (monto === 0) {
+        var monto2 = parseFloat(monto);
+
+        if (isNaN(monto2) || monto2 === 0) {
             return res.status(400).json({ message: "Debe ingresar un valor en el monto" });
         }
         // verifica que los daros esten bien 
@@ -21,16 +23,23 @@ export async function createOperacion(req, res) {
             return res.status(400).json({ error: "Actividad inválida" });
         }
     
-        if (isNaN(parseFloat(monto))) {
+        if (isNaN(parseFloat(monto2))) {
             return res.status(400).json({ error: "Monto debe ser número" });
         }
         const tipoUpper = tipo?.toUpperCase();
         if (!['INGRESO', 'EGRESO'].includes(tipoUpper)) {
             return res.status(400).json({ error: "Tipo debe ser INGRESO o EGRESO" });
         }
+
+        if (tipoUpper === 'EGRESO') {
+            monto2 = (0 - (Math.abs(monto2)));
+        } else {
+            monto2 = (Math.abs(monto2));
+        }
+
         const newOperacion = operacionRepository.create({
             nombre_actividad,
-            monto: tipoUpper === 'EGRESO'?-Math.abs(parseFloat(monto)): Math.abs(parseFloat(monto)),
+            monto: monto2,
             tipo:tipoUpper,
             userId: req.user.id
         });
@@ -92,9 +101,40 @@ export async function getOperacionResumenFinanciero(req, res) {
 
 export async function updateOperacion(req, res) {
  try {
+    var { id } = req.query;
+    
+    if (!id) {
+        return res.status(400).json({ message: "Debe proporcionar el id de la actividad a actualizar" });
+    }
+
+    // Cambiar después
+    id = Number(id);
+    if (isNaN(id) || id <= 0) {
+        return res.status(400).json({ message: "El ID no es válido" });
+    }
+
+    const { body } = req;
+    const { error: bodyError, value: validatedData } = OperacionesBodyValidation.validate(body);
+
+    if (bodyError) {
+        const errores = bodyError.details.map(detail => ({
+            campo: detail.path[0],
+            error: detail.message
+        }));
+        return res.status(400).json({
+            message: "Error de validación",
+            errors: errores
+        });
+    }
+
+    
+
+    /*
     const { id } = req.query;
     const { body } = req;
     
+    console.log(id);
+
     if (!id) {
         return res.status(400).json({ message: "Debe proporcionar el id de la actividad a actualizar" });
     }
@@ -130,6 +170,7 @@ export async function updateOperacion(req, res) {
         
         // Calcular el monto neto
         validatedData.monto = nuevoIngreso - nuevoEgreso;
+        console.log(validatedData.monto);
     }
 
     await operacionRepository.update(id, validatedData);
@@ -141,11 +182,11 @@ export async function updateOperacion(req, res) {
         message: "Operación actualizada exitosamente",
         data: operacionActualizada
     });
+    */
      } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Error al actualiza la Operacion" });
      }
-   
 };
 
 
