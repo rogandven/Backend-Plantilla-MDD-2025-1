@@ -50,7 +50,6 @@ export const updateValidation = Joi.object({
     nombre_del_profesor: Joi.string()
     .min(3)
     .max(50)
-    .required()
     .pattern(/^[a-zA-Z0-9_\s]+$/)
     .messages({
         "string.pattern.base":"el nombre solo puede contener letras y numeros",
@@ -61,8 +60,7 @@ export const updateValidation = Joi.object({
 
     descripcion: Joi.string()
     .min(3)
-    .max(50)
-    .required()
+    .max(500)
     .pattern(/^[a-zA-Z\s]+$/)
     .messages({
         "string.pattern.base":"La descripción solo puede contener letras y numeros",
@@ -74,7 +72,6 @@ export const updateValidation = Joi.object({
     ramo: Joi.string()
     .min(3)
     .max(50)
-    .required()
     .pattern(/^[a-zA-Z0-9_\s]+$/)
     .messages({
         "string.pattern.base":"el ramo solo puede contener letras y numeros",
