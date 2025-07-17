@@ -32,7 +32,7 @@ export const UserEntity = new EntitySchema({
         },
         role: {
             type: String,
-            default: "user",
+            default: "usuario",
         },
         createdAt: {
             type: "timestamp",
@@ -44,6 +44,14 @@ export const UserEntity = new EntitySchema({
             onUpdate: () => "CURRENT_TIMESTAMP",
         },
     },
+    relatons: {
+        creator: {
+            type: 'one-to-many',
+            target: 'asambleas',
+            inverseSide: 'creator',
+            joinColumn: false
+        },
+    }
 });
 
 export default UserEntity;
