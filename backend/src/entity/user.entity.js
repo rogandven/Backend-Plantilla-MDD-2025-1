@@ -68,17 +68,19 @@ export const UserEntity = new EntitySchema({
     createdAt: {
       //tipo de dato timestamp (fecha y hora)
       type: "timestamp",
+      createDate: true,
       //valor por defecto: fecha y hora actual al momento de crear el registro
-      default: () => "CURRENT_TIMESTAMP",
+      //default: () => "CURRENT_TIMESTAMP",
     },
     //se define la columna updatedAt que indica fecha de actualización
     updatedAt: {
       //tipo de dato timestamp (fecha y hora)
       type: "timestamp",
+      updateDate: true,
       //valor por defecto: fecha actual al crear el registro
-      default: () => "CURRENT_TIMESTAMP",
+      //default: () => "CURRENT_TIMESTAMP",
       //cada vez que se actualiza el registro, se cambia la fecha automáticamente
-      onUpdate: () => "CURRENT_TIMESTAMP",
+      //onUpdate: () => "CURRENT_TIMESTAMP",
     },
   },
 });

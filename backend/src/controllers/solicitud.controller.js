@@ -231,8 +231,10 @@ export async function cambiarEstado(req, res) {
   }
 }*/
 
+//pppppppppp
 
 
+/*
 "use strict";
 
 
@@ -328,7 +330,6 @@ export async function crearSolicitud(req, res) {
   }
 }
 
-
 export async function actualizarSolicitud(req, res) {
   try {
     const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
@@ -373,94 +374,13 @@ export async function actualizarSolicitud(req, res) {
   }
 }
 
-export async function gestionarSolicitud(req, res) {
+
+///ultimo cambio
+export async function cambiarEstado(req, res) {
   try {
     const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    const estadoRepo = AppDataSource.getRepository(EstadoEntity);
     const userRepo = AppDataSource.getRepository(User);
-    const { id } = req.params;
-
-    const solicitud = await solicitudRepo.findOne({
-      where: { id },
-      relations: ["gestor"],
-    });
-    if (!solicitud)
-      return res.status(404).json({ message: "Solicitud no encontrada" });
-
-    if (
-      solicitud.gestor &&
-      solicitud.gestor.email !== "gestor.por.asignar@gmail.com"
-    ) {
-      return res
-        .status(409)
-        .json({ message: "La solicitud ya tiene un gestor asignado." });
-    }
-
-    const gestorUsuario = await userRepo.findOneBy({ email: req.user.email });
-    if (!gestorUsuario)
-      return res.status(404).json({ message: "Usuario CEE no encontrado" });
-
-    solicitud.gestor = gestorUsuario;
-    await solicitudRepo.save(solicitud);
-
-    res
-      .status(200)
-      .json({ message: "Solicitud tomada para gestión", data: solicitud });
-  } catch (error) {
-    console.error("Error al gestionar solicitud: ", error);
-    res.status(500).json({ message: "Error al gestionar solicitud" });
-  }
-}
-/*
-
-export async function cambiarEstado(req, res) {
-  try {
-    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
-    const estadoRepo = AppDataSource.getRepository(EstadoEntity);
-
-    const { id } = req.params;
-    const { nuevoEstado, detalleResolucion } = req.body;
-
-    if (detalleResolucion && detalleResolucion.trim().length < 10) {
-      return res.status(400).json({
-        message:
-          "El detalle de resolución debe tener al menos 10 caracteres si se envía.",
-      });
-    }
-
-    const solicitud = await solicitudRepo.findOne({
-      where: { id },
-      relations: ["gestor"],
-    });
-    const estado = await estadoRepo.findOneBy({ nombre: nuevoEstado });
-
-    if (!solicitud || !estado)
-      return res.status(404).json({ message: "Datos no válidos" });
-
-    if (solicitud.gestor.email !== req.user.email)
-      return res
-        .status(403)
-        .json({ message: "No eres el gestor asignado a esta solicitud" });
-
-    solicitud.estado = estado;
-    if (detalleResolucion) solicitud.detalleResolucion = detalleResolucion;
-
-    await solicitudRepo.save(solicitud);
-
-    res
-      .status(200)
-      .json({ message: "Estado actualizado", data: solicitud });
-  } catch (error) {
-    console.error("Error al cambiar estado:", error);
-    res.status(500).json({ message: "Error al cambiar estado" });
-  }
-}
-*/
-
-
-export async function cambiarEstado(req, res) {
-  try {
-    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
-    const estadoRepo = AppDataSource.getRepository(EstadoEntity);
 
     const { id } = req.params;
     const { nuevoEstado, detalleResolucion } = req.body;
@@ -476,41 +396,55 @@ export async function cambiarEstado(req, res) {
       where: { id },
       relations: ["gestor", "estado"],
     });
+    if (!solicitud) {
+      return res.status(404).json({ message: "Solicitud no encontrada" });
+    }
 
     const estado = await estadoRepo.findOneBy({ nombre: nuevoEstado });
+    if (!estado) {
+      return res.status(404).json({ message: "Estado no válido" });
+    }
 
-    if (!solicitud || !estado)
-      return res.status(404).json({ message: "Datos no válidos" });
+    // Si aún no tiene un gestor asignado, se asigna el actual
+    if (
+      solicitud.gestor &&
+      solicitud.gestor.email === "gestor.por.asignar@gmail.com"
+    ) {
+      const usuarioActual = await userRepo.findOneBy({ email: req.user.email });
+      if (!usuarioActual) {
+        return res.status(403).json({ message: "Usuario no autorizado" });
+      }
+      solicitud.gestor = usuarioActual;
+    }
 
-    // Validar que el usuario actual sea el gestor asignado
-    if (solicitud.gestor.email !== req.user.email)
+    // Verifica si el usuario actual es el gestor
+    if (solicitud.gestor.email !== req.user.email) {
       return res
         .status(403)
         .json({ message: "No eres el gestor asignado a esta solicitud" });
+    }
 
     solicitud.estado = estado;
 
-    // Si el nuevo estado es "resuelta", registra la fecha de resolución
     if (nuevoEstado.toLowerCase() === "resuelta") {
-      solicitud.resueltaEn = new Date(); // Guarda timestamp actual
+      solicitud.fecha_resolucion = new Date();
     }
 
-    // Si se proporciona un detalle de resolución, lo actualiza
     if (detalleResolucion) {
       solicitud.detalleResolucion = detalleResolucion;
     }
 
     await solicitudRepo.save(solicitud);
 
-    res
-      .status(200)
-      .json({ message: "Estado actualizado", data: solicitud });
+    res.status(200).json({
+      message: "Solicitud gestionada correctamente",
+      data: solicitud,
+    });
   } catch (error) {
-    console.error("Error al cambiar estado:", error);
-    res.status(500).json({ message: "Error al cambiar estado" });
+    console.error("Error al gestionar solicitud:", error);
+    res.status(500).json({ message: "Error al gestionar solicitud" });
   }
 }
-
 
 export async function eliminarSolicitud(req, res) {
   try {
@@ -539,5 +473,352 @@ export async function eliminarSolicitud(req, res) {
   } catch (error) {
     console.error("Error al eliminar solicitud:", error);
     res.status(500).json({ message: "Error al eliminar solicitud" });
+  }
+}
+*/
+/*
+////////////
+"use strict";
+
+//se importa la configuración para conectarse a la base de datos
+import { AppDataSource } from "../config/configDb.js";
+//se importa la entidad que representa las solicitudes
+import { SolicitudEntity } from "../entity/solicitud.entity.js";
+//se importa la entidad que representa los estados (pendiente, resuelta, etc.)
+import { EstadoEntity } from "../entity/estado.entity.js";
+//se importa la entidad que representa a los usuarios
+import User from "../entity/user.entity.js";
+//se importan las validaciones para crear y actualizar solicitudes
+import {
+  crearSolicitudValidation,
+  updateSolicitudValidation,
+} from "../validations/solicitud.validation.js";
+
+//función para obtener solicitudes según el tipo de usuario y filtros
+export async function obtenerSolicitudes(req, res) {
+  try {
+    //se obtiene el repositorio de solicitudes
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    //se obtienen los filtros desde la URL (query string)
+    const { estado, carrera, fecha, descripcion } = req.query;
+
+    //si el usuario es un estudiante, solo ve sus propias solicitudes
+    if (req.user.role === "usuario" || req.user.role === "ESTUDIANTE") {
+      const propias = await solicitudRepo.find({
+        where: { correo_estudiante: req.user.email },
+      });
+      //se responde con las solicitudes del propio estudiante
+      return res
+        .status(200)
+        .json({ message: "Solicitudes encontradas", data: propias });
+    }
+
+    //se crea una consulta para buscar solicitudes con filtros
+    let query = solicitudRepo
+      .createQueryBuilder("solicitud")
+      .leftJoinAndSelect("solicitud.estado", "estado")
+      .leftJoinAndSelect("solicitud.creador", "creador")
+      .leftJoinAndSelect("solicitud.gestor", "gestor");
+
+    //se agregan los filtros si están presentes
+    if (estado) query = query.andWhere("estado.nombre = :estado", { estado });
+    if (carrera)
+      query = query.andWhere("solicitud.carrera ILIKE :carrera", {
+        carrera: `%${carrera}%`,
+      });
+    if (fecha)
+      query = query.andWhere("DATE(solicitud.fecha_creacion) = :fecha", {
+        fecha,
+      });
+    if (descripcion)
+      query = query.andWhere("solicitud.descripcion ILIKE :descripcion", {
+        descripcion: `%${descripcion}%`,
+      });
+
+    //se ejecuta la consulta y se obtienen los resultados
+    const resultados = await query.getMany();
+    //se devuelve la lista de solicitudes
+    res
+      .status(200)
+      .json({ message: "Solicitudes encontradas", data: resultados });
+  } catch (error) {
+    //si ocurre un error, se muestra en consola y se devuelve mensaje de error
+    console.error("Error al listar solicitudes: ", error);
+    res.status(500).json({ message: "Error al listar solicitudes" });
+  }
+}
+
+//función para crear una nueva solicitud
+export async function crearSolicitud(req, res) {
+  try {
+    //se obtienen los repositorios de solicitud, estado y usuario
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    const estadoRepo = AppDataSource.getRepository(EstadoEntity);
+    const userRepo = AppDataSource.getRepository(User);
+
+    //se valida el contenido enviado por el usuario
+    const { error } = crearSolicitudValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    //se busca al usuario que está creando la solicitud
+    const creadorUsuario = await userRepo.findOneBy({ email: req.user.email });
+    if (!creadorUsuario)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    //se busca el estado "pendiente"
+    const estadoPendiente = await estadoRepo.findOneBy({ nombre: "pendiente" });
+
+    //se busca el gestor por defecto (gestor ficticio hasta que alguien tome la solicitud)
+    const gestorPorDefecto = await userRepo.findOneBy({
+      email: "gestor.por.asignar@gmail.com",
+    });
+
+    //se crea la nueva solicitud con la información recibida y los datos adicionales
+    const nuevaSolicitud = solicitudRepo.create({
+      ...req.body,
+      creador: creadorUsuario,
+      estado: estadoPendiente,
+      gestor: gestorPorDefecto,
+    });
+
+    //se guarda la solicitud en la base de datos
+    await solicitudRepo.save(nuevaSolicitud);
+
+    //se responde con mensaje de éxito y los datos de la solicitud
+    res
+      .status(201)
+      .json({ message: "Solicitud creada", data: nuevaSolicitud });
+  } catch (error) {
+    //si ocurre un error, se muestra en consola y se devuelve mensaje de error
+    console.error("Error al crear solicitud: ", error);
+    res.status(500).json({ message: "Error al crear solicitud" });
+  }
+}
+
+//función para actualizar una solicitud (solo si no ha sido tomada por un gestor)
+export async function actualizarSolicitud(req, res) {
+  try {
+    //se accede al repositorio de solicitudes
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    const { id } = req.params;
+
+    //se valida la información enviada
+    const { error } = updateSolicitudValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    //se busca la solicitud y se cargan relaciones
+    const solicitud = await solicitudRepo.findOne({
+      where: { id },
+      relations: ["gestor", "creador"],
+    });
+    if (!solicitud)
+      return res.status(404).json({ message: "Solicitud no encontrada" });
+
+    //solo el creador puede modificar la solicitud
+    if (solicitud.creador.email !== req.user.email)
+      return res
+        .status(403)
+        .json({ message: "No eres el creador de esta solicitud" });
+
+    //si la solicitud ya tiene un gestor asignado, no se puede modificar
+    if (
+      solicitud.gestor &&
+      solicitud.gestor.email !== "gestor.por.asignar@gmail.com"
+    ) {
+      return res.status(409).json({
+        message:
+          "La solicitud ya está siendo gestionada: no se permite editar.",
+      });
+    }
+
+    //se actualiza la solicitud con los nuevos datos y se actualiza la fecha
+    Object.assign(solicitud, req.body);
+    solicitud.fecha_actualizacion = new Date();
+    await solicitudRepo.save(solicitud);
+
+    //se responde con mensaje de éxito y los datos actualizados
+    res.status(200).json({
+      message: "Solicitud actualizada correctamente",
+      data: solicitud,
+    });
+  } catch (error) {
+    console.error("Error al actualizar solicitud:", error);
+    res.status(500).json({ message: "Error al actualizar solicitud" });
+  }
+}
+*/
+/////
+"use strict";
+
+//se importa la configuración para conectarse a la base de datos
+import { AppDataSource } from "../config/configDb.js";
+//se importa la entidad que representa las solicitudes
+import { SolicitudEntity } from "../entity/solicitud.entity.js";
+//se importa la entidad que representa los estados de la solicitud (pendiente, resuelta, etc.)
+import { EstadoEntity } from "../entity/estado.entity.js";
+//se importa la entidad que representa a los usuarios
+import User from "../entity/user.entity.js";
+//se importan los esquemas de validación para crear y actualizar solicitudes
+import {
+  crearSolicitudValidation,
+  updateSolicitudValidation,
+} from "../validations/solicitud.validation.js";
+
+//función controladora para obtener solicitudes, filtrando según rol y parámetros
+export async function obtenerSolicitudes(req, res) {
+  try {
+    //se accede al repositorio de solicitudes para operar con la BD
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    //se extraen los posibles filtros enviados en la URL (?estado=x&carrera=y...)
+    const { estado, carrera, fecha, descripcion } = req.query;
+
+    //si el usuario autenticado es estudiante, solo puede ver sus propias solicitudes
+    if (req.user.role === "usuario" || req.user.role === "ESTUDIANTE") {
+      //se obtienen las solicitudes cuyo correo coincide con el del estudiante autenticado
+      const propias = await solicitudRepo.find({
+        where: { correo_estudiante: req.user.email },
+      });
+      //se responde con la lista de solicitudes del estudiante
+      return res
+        .status(200)
+        .json({ message: "Solicitudes encontradas", data: propias });
+    }
+
+    //se crea el QueryBuilder para construir la consulta dinámica con JOINs
+    let query = solicitudRepo
+      .createQueryBuilder("solicitud") //alias de la tabla solicitud
+      .leftJoinAndSelect("solicitud.estado", "estado") //se une con la tabla estado
+      .leftJoinAndSelect("solicitud.creador", "creador") //se une con la tabla usuario (creador)
+      .leftJoinAndSelect("solicitud.gestor", "gestor"); //se une con la tabla usuario (gestor)
+
+    //se agregan filtros opcionales solo si fueron enviados por la URL
+    if (estado) query = query.andWhere("estado.nombre = :estado", { estado });
+    if (carrera)
+      query = query.andWhere("solicitud.carrera ILIKE :carrera", {
+        carrera: `%${carrera}%`,
+      });
+    if (fecha)
+      query = query.andWhere("DATE(solicitud.fecha_creacion) = :fecha", {
+        fecha,
+      });
+    if (descripcion)
+      query = query.andWhere("solicitud.descripcion ILIKE :descripcion", {
+        descripcion: `%${descripcion}%`,
+      });
+
+    //se ejecuta la consulta y se obtienen las solicitudes
+    const resultados = await query.getMany();
+    //se envía la respuesta con las solicitudes encontradas
+    res
+      .status(200)
+      .json({ message: "Solicitudes encontradas", data: resultados });
+  } catch (error) {
+    //se captura cualquier error inesperado, se registra en consola y se retorna error 500
+    console.error("Error al listar solicitudes: ", error);
+    res.status(500).json({ message: "Error al listar solicitudes" });
+  }
+}
+
+//función controladora para crear una nueva solicitud
+export async function crearSolicitud(req, res) {
+  try {
+    //se obtienen los repositorios necesarios
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    const estadoRepo = AppDataSource.getRepository(EstadoEntity);
+    const userRepo = AppDataSource.getRepository(User);
+
+    //se valida la data enviada por el usuario con Joi
+    const { error } = crearSolicitudValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    //se busca al usuario que hace la solicitud a través de su correo
+    const creadorUsuario = await userRepo.findOneBy({ email: req.user.email });
+    if (!creadorUsuario)
+      return res.status(404).json({ message: "Usuario no encontrado" });
+
+    //se obtiene el estado "pendiente" para asignarlo por defecto
+    const estadoPendiente = await estadoRepo.findOneBy({ nombre: "pendiente" });
+
+    //se busca el usuario "gestor por asignar" para dejarlo como gestor temporal
+    const gestorPorDefecto = await userRepo.findOneBy({
+      email: "gestor.por.asignar@gmail.com",
+    });
+
+    //se crea la instancia de la nueva solicitud con los datos correspondientes
+    const nuevaSolicitud = solicitudRepo.create({
+      ...req.body, //se copian los campos enviados en el body
+      creador: creadorUsuario, //asigna el creador autenticado
+      estado: estadoPendiente, //asigna el estado pendiente
+      gestor: gestorPorDefecto, //asigna el gestor por defecto
+    });
+
+    //se guarda la nueva solicitud en la base de datos
+    await solicitudRepo.save(nuevaSolicitud);
+
+    //se responde con mensaje de éxito y los datos de la solicitud creada
+    res
+      .status(201)
+      .json({ message: "Solicitud creada", data: nuevaSolicitud });
+  } catch (error) {
+    //se captura el error, se imprime en consola y se retorna error 500
+    console.error("Error al crear solicitud: ", error);
+    res.status(500).json({ message: "Error al crear solicitud" });
+  }
+}
+
+//función controladora para actualizar una solicitud existente
+export async function actualizarSolicitud(req, res) {
+  try {
+    //se obtiene el repositorio de solicitudes
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    //se extrae el id de la solicitud desde los parámetros de la ruta
+    const { id } = req.params;
+
+    //se valida la data enviada por el usuario con Joi
+    const { error } = updateSolicitudValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+
+    //se busca la solicitud por su id incluyendo sus relaciones (gestor y creador)
+    const solicitud = await solicitudRepo.findOne({
+      where: { id },
+      relations: ["gestor", "creador"],
+    });
+    //si la solicitud no existe se retorna error 404
+    if (!solicitud)
+      return res.status(404).json({ message: "Solicitud no encontrada" });
+
+    //se verifica que el usuario autenticado sea el creador de la solicitud
+    if (solicitud.creador.email !== req.user.email)
+      return res
+        .status(403)
+        .json({ message: "No eres el creador de esta solicitud" });
+
+    //se impide la actualización si la solicitud ya está siendo gestionada por alguien
+    if (
+      solicitud.gestor &&
+      solicitud.gestor.email !== "gestor.por.asignar@gmail.com"
+    ) {
+      return res.status(409).json({
+        message:
+          "La solicitud ya está siendo gestionada: no se permite editar.",
+      });
+    }
+
+    //se fusionan los datos nuevos con la solicitud existente
+    Object.assign(solicitud, req.body);
+    //se actualiza el campo de fecha de actualización
+    solicitud.fecha_actualizacion = new Date();
+    //se guarda la solicitud actualizada en la BD
+    await solicitudRepo.save(solicitud);
+
+    //se responde con mensaje de éxito y la solicitud actualizada
+    res.status(200).json({
+      message: "Solicitud actualizada correctamente",
+      data: solicitud,
+    });
+  } catch (error) {
+    //se captura cualquier error y se retorna error 500
+    console.error("Error al actualizar solicitud:", error);
+    res.status(500).json({ message: "Error al actualizar solicitud" });
   }
 }

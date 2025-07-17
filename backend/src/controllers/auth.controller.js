@@ -164,7 +164,7 @@ export async function register(req, res) {
       email,
       rut,
       password: await encryptPassword(password), //se encripta la contraseña
-      role: "ESTUDIANTE", // Se fuerza el rol del usuario a ESTUDIANTE
+      role: "ESTUDIANTE", //se fuerza el rol del usuario a ESTUDIANTE
     });
 
     //se guarda el nuevo usuario en la BD

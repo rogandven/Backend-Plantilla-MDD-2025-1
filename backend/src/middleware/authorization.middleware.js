@@ -72,6 +72,7 @@ export async function isAdmin(req, res, next) {
 }
 */
 
+/*
 "use strict";
 
 
@@ -107,3 +108,60 @@ export async function isAdminOrCee(req, res, next) {
     res.status(500).json({ message: "Error interno" });
   }
 }
+*/
+"use strict"; //se activa el modo estricto para mejorar la calidad del código
+
+/*
+  Middleware: isAdmin
+  Verifica si el usuario autenticado tiene el rol de administrador.
+  Se utiliza para restringir el acceso a rutas exclusivas para administradores.
+*/
+export async function isAdmin(req, res, next) {
+  try {
+    //se verifica si el usuario está autenticado
+    if (!req.user)
+      return res.status(401).json({ message: "Usuario no autenticado" });
+
+    //se verifica si el rol del usuario es diferente de 'administrador'
+    if (req.user.role !== "administrador") {
+      return res.status(403).json({
+        message: "Acceso denegado. Se requiere rol de administrador.",
+      });
+    }
+
+    //si cumple con los requisitos, se continúa con la siguiente función
+    next();
+  } catch (err) {
+    //se muestra el error en consola y se responde con error 500
+    console.error("isAdmin:", err);
+    res.status(500).json({ message: "Error interno" });
+  }
+}
+
+/*
+  Middleware: isAdminOrCee
+  Verifica si el usuario tiene el rol de administrador o CEE.
+  Se utiliza para permitir acceso a rutas a ambos tipos de usuarios autorizados.
+*/
+export async function isAdminOrCee(req, res, next) {
+  try {
+    //se verifica si el usuario está autenticado
+    if (!req.user)
+      return res.status(401).json({ message: "Usuario no autenticado" });
+
+    //se verifica si el rol del usuario no es ni 'administrador' ni 'CEE'
+    if (req.user.role !== "administrador" && req.user.role !== "CEE") {
+      return res.status(403).json({
+        message: "Acceso denegado. Se requiere rol ADMIN o CEE.",
+      });
+    }
+
+    //si cumple con alguno de los dos roles, se continúa con la siguiente función
+    next();
+  } catch (err) {
+    //se muestra el error en consola y se responde con error 500
+    console.error("isAdminOrCee:", err);
+    res.status(500).json({ message: "Error interno" });
+  }
+}
+

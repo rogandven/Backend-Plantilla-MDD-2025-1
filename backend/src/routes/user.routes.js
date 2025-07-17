@@ -37,7 +37,7 @@ router.get("/", getUsers);
 router.get("/:id", getUserById);
 //se define la ruta PUT para actualizar los datos de un usuario específico por ID (solo para admin)
 router.put("/:id", updateUserById);
-// se define la ruta DELETE para eliminar un usuario específico por ID (solo para admin)
+//se define la ruta DELETE para eliminar un usuario específico por ID (solo para admin)
 router.delete("/:id", deleteUserById);
-// se exporta el enrutador para ser usado por el enrutador principal
+//se exporta el enrutador para ser usado por el enrutador principal
 export default router;
