@@ -81,7 +81,7 @@ const roleValidator = (value, helpers) => {
   }
 };
 
-export const updateValidation = Joi.object({
+/* export const updateValidation = Joi.object({
   username: Joi.string()
     .min(3)
     .max(30)
@@ -134,7 +134,7 @@ export const updateValidation = Joi.object({
   .unknown(false)
   .messages({
     "object.unknown": "No se permiten campos adicionales",
-  });
+  }); */
 
 
 // Esquema de validación para el inicio de sesión
