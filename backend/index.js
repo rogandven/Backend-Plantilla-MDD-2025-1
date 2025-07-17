@@ -20,7 +20,7 @@ async function setupServer() {
     })
   );
 
-  // Avisa a express que use JSON
+  // Avisas a express que use JSON
   app.use(express.json());
 
   // Configura el middleware de morgan para registrar las peticiones HTTP

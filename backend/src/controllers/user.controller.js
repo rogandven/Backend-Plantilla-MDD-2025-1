@@ -1,6 +1,8 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
+import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/other.validation.js";
+import updateValidation from "../validations/auth.validation.js";
 
 export async function getUsers(req, res) {
   try {
@@ -20,6 +22,12 @@ export async function getUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar un usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
+
+    assertValidIdResult = assertValidId(id, req, res);
+    if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+        return assertValidIdResult;
+    }
+
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -39,6 +47,17 @@ export async function updateUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar un usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
+
+    assertValidIdResult = assertValidId(id, req, res);
+    if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+        return assertValidIdResult;
+    }
+
+    const { error } = updateValidation.validate(req.body);
+    if (error) return res.status(400).json({
+      message: error.message
+    });
+
     const { username, email, rut } = req.body;
     const user = await userRepository.findOne({ where: { id } });
 
@@ -69,6 +88,12 @@ export async function deleteUserById(req, res) {
     // Obtener el repositorio de usuarios y buscar el usuario por ID
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
+
+    assertValidIdResult = assertValidId(id, req, res);
+    if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+        return assertValidIdResult;
+    }
+
     const user = await userRepository.findOne({ where: { id } });
 
     // Si no se encuentra el usuario, devolver un error 404
@@ -91,6 +116,11 @@ export async function getProfile(req, res) {
     // Obtener el repositorio de usuarios y buscar el perfil del usuario autenticado
     const userRepository = AppDataSource.getRepository(User);
     const userEmail = req.user.email;
+
+    if (isNull(userEmail)) {
+      return res.status(400).json({ message: "Email no proporcionado." });
+    }
+
     const user = await userRepository.findOne({ where: { email: userEmail } });
     
     // Si no se encuentra el usuario, devolver un error 404
