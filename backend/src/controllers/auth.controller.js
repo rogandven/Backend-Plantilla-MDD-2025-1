@@ -1,4 +1,3 @@
-
 /*"use strict";
 
 //se importa la entidad User, es decir la tabla de usuarios
@@ -206,6 +205,7 @@ export async function login(req, res) {
 
     //se define la informacion que se incluira en el token
     const payload = {
+      id: userFound.id,
       username: userFound.username,
       email: userFound.email,
       rut: userFound.rut,
@@ -232,4 +232,3 @@ export async function logout(req, res) {
     return res.status(500).json({ message: "Error al cerrar sesión" });
   }
 }
-
