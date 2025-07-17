@@ -8,7 +8,7 @@ export function assertValidId(id, req, res) {
     try {
         id = Number(id);
         if (isNaN(id) || id <= 0) {
-            throw new TypeError("expected positive integer")
+            throw new TypeError("expected  positive integer")
         }
     } catch (error) {
         return res.status(400).json({
