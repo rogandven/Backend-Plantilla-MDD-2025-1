@@ -1,5 +1,6 @@
 "use strict";
 
+
 import { EntitySchema } from "typeorm";
 
 export const OperacionesEntity = new EntitySchema({
@@ -13,22 +14,26 @@ export const OperacionesEntity = new EntitySchema({
     },
     nombre_actividad: {
       type: String,
-      nullable: false,
+      nullable: true,
     },
-    Monto: {
+    monto: {
       type: "decimal",
       precision: 10,
       scale: 2,
-      nullable: false,
+      nullable: true,
+    },
+    egreso: {
+      type: Number,
+      nullable: true,
+    },
+   ingreso: {
+      type: Number,
+      nullable: true,
     },
     tipo: {
       type: "enum",
       enum: ["INGRESO", "EGRESO"],
       default: "INGRESO"
-    },
-    userId: {  // Añade explícitamente la columna
-      type: Number,
-      nullable: false
     },
     createdAt: {
       type: "timestamp",
