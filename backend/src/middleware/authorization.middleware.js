@@ -3,6 +3,14 @@ import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
 // Función middleware para verificar si el usuario es administrador
+function lowercaseIfDefined(string) {
+    if (string !== undefined && string !== null && ((typeof(string).toLowerCase()) === "string")) {
+        return string.toLowerCase()
+    } else {
+        return "usuario";
+    }
+}
+
 export async function isAdmin(req, res, next) {
   try {
     // Buscar el usuario en la base de datos
@@ -13,7 +21,8 @@ export async function isAdmin(req, res, next) {
     if (!userFound) return res.status(404).json("Usuario no encontrado");
 
     // Verificar el rol del usuario
-    const rolUser = userFound.role;
+    var rolUser = userFound.role;
+    rolUser = lowercaseIfDefined(userFound.role);
     console.log(rolUser);
 
     // Si el rol no es administrador, devolver un error 403

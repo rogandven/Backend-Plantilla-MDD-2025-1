@@ -20,6 +20,22 @@ export async function createReclamo(req, res) {
   try {
     
     const reclamoRepository = AppDataSource.getRepository(Reclamo);
+    if (req.body.nombre_del_profesor === undefined) {
+      return res.status(400).json({ message: 
+        "Nombre del profesor no proporcionado"
+      });
+    }    
+    if (req.body.descripcion === undefined) {
+      return res.status(400).json({ message: 
+        "Descripción no proporcionada"
+      });
+    }  
+    if (req.body.ramo === undefined) {
+      return res.status(400).json({ message: 
+        "Asignatura no proporcionada"
+      });
+    }    
+
     const { nombre_del_profesor, descripcion,ramo } = req.body;
     const { error } = createValidation.validate(req.body);
     if (error) return res.status(400).json({ message: "Error al registrar reclamo", error: error});
