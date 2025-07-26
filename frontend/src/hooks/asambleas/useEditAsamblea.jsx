@@ -1,65 +1,104 @@
 import { editAsamblea } from "../../services/asamblea.service";
 import Swal from "sweetalert2";
 
+function returnEmptyIfNull(s) {
+  if (s === null || s === undefined) {
+    return "";
+  }
+  return s;
+}
+
+function convertDate(date) {
+  return date.split(".", 2)[0];
+}
+
 async function editAsambleaInfo(asamblea) {
   const { value: formValues } = await Swal.fire({
     title: "Editar Asamblea",
     html: `
     <div>
-      <label for="swal2-input1">Nombre de asamblea</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Nombre de asamblea" value = "${asamblea.asambleaname}">
+      <label for="swal2-input1">Descripción</label>  
+      <input id="swal2-input1" class="swal2-input" placeholder="Descripción" value = "${asamblea.description}">
     </div>
     <div>
-      <label for="swal2-input2">Correo electrónico</label>
-      <input id="swal2-input2" class="swal2-input" placeholder="Correo electrónico" value = "${asamblea.email}">
+      <label for="swal2-input2">Fecha</label>  
+      <input type="datetime-local" id="swal2-input2" class="swal2-input" placeholder="Fecha" value = "${convertDate(asamblea.date)}">
     </div>
+    <div>
+      <label for="swal2-input3">URL</label>  
+      <input type="url" id="swal2-input3" class="swal2-input" placeholder="URL" value = "${returnEmptyIfNull(asamblea.url)}">
+    </div>
+    <div>
+      <label for="swal2-input4">Lugar</label>  
+      <input id="swal2-input4" class="swal2-input" placeholder="Lugar" value = "${returnEmptyIfNull(asamblea.place)}">
+    </div>            
         `,
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Editar",
     preConfirm: () => {
-      const asambleaname = document.getElementById("swal2-input1").value;
-      const email = document.getElementById("swal2-input2").value;
+      var dataToSend = undefined;
+      const description = document.getElementById("swal2-input1").value;
+      const date = document.getElementById("swal2-input2").value;
+      var url = document.getElementById("swal2-input3").value;
+      var place = document.getElementById("swal2-input4").value;
 
-      if (!asambleaname || !email) {
+      if (!description || !date || !(url || place)) {
         Swal.showValidationMessage("Por favor, completa todos los campos");
         return false;
       }
 
-      if (asambleaname.length < 3 || asambleaname.length > 30) {
+      if (description.length < 1 || description.length > 50) {
         Swal.showValidationMessage(
-          "El nombre de asamblea debe tener entre 3 y 30 caracteres"
+          "La descripción de asamblea debe tener entre 1 y 50 caracteres"
         );
         return false;
       }
 
-      if (!/^[a-zA-Z0-9_]+$/.test(asambleaname)) {
+      if (description.length < 1 || description.length > 50) {
         Swal.showValidationMessage(
-          "El nombre de asamblea solo puede contener letras, números y guiones bajos"
+          "La descripción de asamblea debe tener entre 1 y 50 caracteres"
         );
         return false;
       }
 
-      if (!email || email.length < 15 || email.length > 50) {
+      if (!url && !place) {
         Swal.showValidationMessage(
-          "El correo electrónico debe tener entre 15 y 50 caracteres"
+          "El URL y el lugar no pueden ser ambos nulos"
         );
         return false;
       }
 
-      if (!/^[a-zA-Z0-9._%+-]+@(ubiobio|alumnos\.ubiobio)\.(com|cl)$/.test(email)) {
+      if (url && !(/[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/.test(url))) {
         Swal.showValidationMessage(
-          "Por favor, ingresa un correo de Gmail válido (@gmail.com o @gmail.cl)"
+          "El URL no es válido"
         );
         return false;
       }
-      return { asambleaname, email };
+
+      if (place && (place.length < 1 || place.length > 50)) {
+        Swal.showValidationMessage(
+          "El lugar debe tener entre 1 y 50 caracteres"
+        );
+        return false;
+      }
+
+      if (url && !place) {
+          place = null;
+      } else if (!url && place) {
+          url = null;
+      }
+      
+      dataToSend = { description, date, url, place };
+      return dataToSend
     },
   });
   if (formValues) {
     return {
-      asambleaname: formValues.asambleaname,
-      email: formValues.email,
+      description: formValues.description,
+      date: formValues.date,
+      url: formValues.url,
+      place: formValues.place,      
     };
   }
 }
