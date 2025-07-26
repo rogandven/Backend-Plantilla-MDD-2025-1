@@ -7,8 +7,12 @@ import "@styles/Sidebar.css";
 const Sidebar = () => {
   const navigate = useNavigate();
 
+  // console.log(sessionStorage.getItem("usuario"));
+
   const user = JSON.parse(sessionStorage.getItem("usuario")) || "";
   const userRole = user?.rol;
+
+  // console.log(userRole);
 
   const logoutSubmit = () => {
     try {
@@ -29,7 +33,7 @@ const Sidebar = () => {
               <FaHome className="icon"/> Inicio
             </NavLink>
           </li>
-          {userRole === "administrador" && (
+          {(userRole === "administrador" || userRole == "presidente") && (
             <li>
               <NavLink to="/users">
                 <FaUsers className="icon"/> Usuarios
