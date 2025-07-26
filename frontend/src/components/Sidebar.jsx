@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
-import { FaHome, FaUsers, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaUsers, FaSignOutAlt, FaWineGlass } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import "@styles/Sidebar.css";
 
@@ -37,6 +37,13 @@ const Sidebar = () => {
             <li>
               <NavLink to="/users">
                 <FaUsers className="icon"/> Usuarios
+              </NavLink>
+            </li>
+          )}
+          {(userRole === "administrador" || userRole == "presidente") && (
+            <li>
+              <NavLink to="/asambleas">
+                <FaWineGlass className="icon"/> Asambleas
               </NavLink>
             </li>
           )}
