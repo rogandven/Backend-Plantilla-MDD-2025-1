@@ -42,11 +42,18 @@ const Sidebar = () => {
           )}
           {(userRole === "administrador" || userRole == "presidente") && (
             <li>
+              <NavLink to="/asambleas-admin">
+                <FaWineGlass className="icon"/> Asambleas Admin
+              </NavLink>
+            </li>
+          )}
+          {(userRole !== "administrador" && userRole !== "presidente") && (
+            <li>
               <NavLink to="/asambleas">
                 <FaWineGlass className="icon"/> Asambleas
               </NavLink>
             </li>
-          )}
+          )}          
           <li>
             <NavLink to="/profile">
               <CgProfile className="icon"/> Perfil

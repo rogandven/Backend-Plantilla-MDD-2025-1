@@ -1,5 +1,8 @@
 import "@styles/asambleas.css";
 import useGetAsambleas from "@hooks/asambleas/useGetAsamblea.jsx";
+import useDeleteAsamblea from "@hooks/asambleas/useDeleteAsamblea.jsx";
+import useEditAsamblea from "@hooks/asambleas/useEditAsamblea.jsx";
+import useCreateAsamblea from "@hooks/asambleas/useCreateAsamblea.jsx";
 import { useEffect } from "react";
 
 
@@ -25,6 +28,10 @@ const googleMapsIntegration = (address) => {
 
 const Asambleas = () => {
   const { asambleas, fetchAsambleas } = useGetAsambleas();
+  const { handleDeleteAsamblea } = useDeleteAsamblea(fetchAsambleas);
+  const { handleEditAsamblea } = useEditAsamblea(fetchAsambleas);
+  const { handleCreateAsamblea } = useCreateAsamblea(fetchAsambleas);
+
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
     fetchAsambleas();
@@ -33,6 +40,7 @@ const Asambleas = () => {
   return (
     <div className="asambleas-page">
       <h2>Lista de Asambleas</h2>
+      <button className="create" onClick={() => handleCreateAsamblea()}>Crear</button>
       <table className="asambleas-table">
         <thead>
           <tr>
@@ -42,6 +50,7 @@ const Asambleas = () => {
             <th>Creador</th>
             <th>URL</th>
             <th>Lugar</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -54,6 +63,10 @@ const Asambleas = () => {
                 <td>{asamblea.creator.username + " (" + asamblea.creator.rut + ")"}</td>
                 <td><a href={reAddProtocool(asamblea.url)}>{reAddProtocool(asamblea.url)}</a></td>
                 <td>{asamblea.place}</td>
+                <td>
+                  <button className="edit" onClick={() => handleEditAsamblea(asamblea.id, asamblea)}>Editar</button>
+                  <button className="delete" onClick={() => handleDeleteAsamblea(asamblea.id)}>Eliminar</button>
+                </td>
               </tr>
             ))
           ) : (

@@ -9,7 +9,9 @@ import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 import Asambleas from '@pages/Asambleas';
-import ProtectedRoute from '@components/ProtectedRoute'
+import AsambleasAdmin from '@pages/Asambleas';
+import ProtectedRoute from '@components/ProtectedRoute';
+import AntiProtectedRoute from '@components/AntiProtectedRoute'
 
 const router = createBrowserRouter([
   {
@@ -30,13 +32,21 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/asambleas",
+        path: "/asambleas-admin",
         element: (
           <ProtectedRoute allowedRoles={["administrador", "presidente"]}>
-            <Asambleas />
+            <AsambleasAdmin />
           </ProtectedRoute>
         ),
-      },      
+      },
+      {
+        path: "/asambleas",
+        element: (
+          <AntiProtectedRoute bannedRoles={["administrador", "presidente"]}>
+            <Asambleas />
+          </AntiProtectedRoute>
+        ),
+      },        
       {
         path: "/profile",
         element: <Profile />,
