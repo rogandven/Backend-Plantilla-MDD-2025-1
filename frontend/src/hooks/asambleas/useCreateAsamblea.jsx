@@ -1,4 +1,4 @@
-import { createAsamblea } from "../../services/asamblea.service";
+import { createAsamblea, asambleaMatchesDate } from "../../services/asamblea.service";
 import Swal from "sweetalert2";
 
 function isFutureDate(date) {
@@ -8,6 +8,28 @@ function isFutureDate(date) {
       return false;
     }
     return true;
+}
+
+async function confirmCreation(text) {
+    var result2 = false;
+    await Swal.fire({
+      title: text,
+      showDenyButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Si',
+      denyButtonText: 'No',
+      customClass: {
+        actions: 'my-actions',
+        cancelButton: 'order-1 right-gap',
+        confirmButton: 'order-2',
+        denyButton: 'order-3',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        result2 = true;
+      }
+    })
+    return result2;
 }
 
 async function createAsambleaInfo() {
@@ -105,12 +127,22 @@ async function createAsambleaInfo() {
     },
   });
   if (formValues) {
-    return {
-      description: formValues.description,
-      date: formValues.date,
-      url: formValues.url,
-      place: formValues.place,      
-    };
+    var result2 = true;
+    const result = await asambleaMatchesDate(formValues.date);
+    if (result) {
+      result2 = await confirmCreation(result);
+      console.log(result2);
+    }
+    if (result2) {
+      return {
+        description: formValues.description,
+        date: formValues.date,
+        url: formValues.url,
+        place: formValues.place,      
+      };
+    } else {
+      return false;
+    }
   }
 }
 

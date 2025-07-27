@@ -1,5 +1,24 @@
 import axios from '@services/root.service.js';
 
+export async function asambleaMatchesDate(date) {
+    try {
+        const date1 = date.split("T");
+        var date2 = null;
+        const response = await axios.get('/asamblea');
+        const data = response.data.data;
+        for (var i = 0; i < data.length; i++) {
+            date2 = (data[i].date.split("T"))[0];
+            if (date1 == date2) {
+                return "¡Se encontró un conflicto! ¿Agregar de todos modos?";
+            }
+        }
+        return undefined;
+    } catch (error) {
+        console.error("Error al comparar asambleas:", error);
+        return "No se pudo concluír si se encontró un conflicto o no. ¿Agregar de todos modos?"
+    }
+}
+
 export async function getAsambleas() {
     try {
         const response = await axios.get('/asamblea');
