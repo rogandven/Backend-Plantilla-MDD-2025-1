@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from '@pages/Root'
 import Home from '@pages/Home'
 import Login from '@pages/Login'
+import Meeting from '@pages/Meeting'
 import Register from '@pages/Register'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/meeting",
+    element: <Meeting />,
   },
   {
     path: "/register",
