@@ -209,7 +209,7 @@ export async function login(req, res) {
       username: userFound.username,
       email: userFound.email,
       rut: userFound.rut,
-      role: userFound.role,
+      rol: userFound.role,
     };
     //se crea un token valido por un dia
     const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });

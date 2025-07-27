@@ -8,6 +8,7 @@ import Register from '@pages/Register'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
+import Asambleas from '@pages/Asambleas';
 import ProtectedRoute from '@components/ProtectedRoute'
 
 const router = createBrowserRouter([
@@ -23,11 +24,15 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: (
-          <ProtectedRoute allowedRoles={["administrador"]}>
+          <ProtectedRoute allowedRoles={["administrador", "presidente"]}>
             <Users />
           </ProtectedRoute>
         ),
       },
+      {
+        path: "/asambleas",
+        element: <Asambleas />,
+      },      
       {
         path: "/profile",
         element: <Profile />,
