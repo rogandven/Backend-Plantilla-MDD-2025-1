@@ -1,7 +1,8 @@
-// import "@styles/asambleas.css";
+import "@styles/asambleas.css";
 import useGetAsambleas from "@hooks/asambleas/useGetAsamblea.jsx";
 import useDeleteAsamblea from "@hooks/asambleas/useDeleteAsamblea.jsx";
 import useEditAsamblea from "@hooks/asambleas/useEditAsamblea.jsx";
+import useCreateAsamblea from "@hooks/asambleas/useCreateAsamblea.jsx";
 import { useEffect } from "react";
 
 
@@ -29,6 +30,7 @@ const Asambleas = () => {
   const { asambleas, fetchAsambleas } = useGetAsambleas();
   const { handleDeleteAsamblea } = useDeleteAsamblea(fetchAsambleas);
   const { handleEditAsamblea } = useEditAsamblea(fetchAsambleas);
+  const { handleCreateAsamblea } = useCreateAsamblea(fetchAsambleas);
 
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(() => {
@@ -38,6 +40,7 @@ const Asambleas = () => {
   return (
     <div className="asambleas-page">
       <h2>Lista de Asambleas</h2>
+      <button className="create" onClick={() => handleCreateAsamblea()}>Crear</button>
       <table className="asambleas-table">
         <thead>
           <tr>

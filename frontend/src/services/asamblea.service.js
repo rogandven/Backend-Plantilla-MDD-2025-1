@@ -18,6 +18,15 @@ export async function editAsamblea(asambleaId, asambleaData) {
     }
 }
 
+export async function createAsamblea(asambleaData) { 
+    try {
+        const response = await axios.post(`/asamblea`, asambleaData);
+        return response.data;
+    } catch (error) {
+        console.error("Error al editar asamblea:", error);
+    }
+}
+
 export async function deleteAsamblea(asambleaId) {
     try {
         const response = await axios.delete(`/asamblea/${asambleaId}`);

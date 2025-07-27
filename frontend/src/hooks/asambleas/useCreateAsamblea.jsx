@@ -1,16 +1,5 @@
-import { editAsamblea } from "../../services/asamblea.service";
+import { createAsamblea } from "../../services/asamblea.service";
 import Swal from "sweetalert2";
-
-function returnEmptyIfNull(s) {
-  if (s === null || s === undefined) {
-    return "";
-  }
-  return s;
-}
-
-function convertDate(date) {
-  return date.split(".", 2)[0];
-}
 
 function isFutureDate(date) {
     const today = Date.now();
@@ -21,30 +10,30 @@ function isFutureDate(date) {
     return true;
 }
 
-async function editAsambleaInfo(asamblea) {
+async function createAsambleaInfo() {
   const { value: formValues } = await Swal.fire({
-    title: "Editar Asamblea",
+    title: "Crear Asamblea",
     html: `
     <div>
       <label for="swal2-input1">Descripción</label>  
-      <input id="swal2-input1" class="swal2-input" placeholder="Descripción" value = "${asamblea.description}">
+      <input id="swal2-input1" class="swal2-input" placeholder="Descripción" value = "">
     </div>
     <div>
       <label for="swal2-input2">Fecha</label>  
-      <input type="datetime-local" id="swal2-input2" class="swal2-input" placeholder="Fecha" value = "${convertDate(asamblea.date)}">
+      <input type="datetime-local" id="swal2-input2" class="swal2-input" placeholder="Fecha" value = "">
     </div>
     <div>
       <label for="swal2-input3">URL</label>  
-      <input type="url" id="swal2-input3" class="swal2-input" placeholder="URL" value = "${returnEmptyIfNull(asamblea.url)}">
+      <input type="url" id="swal2-input3" class="swal2-input" placeholder="URL" value = "">
     </div>
     <div>
       <label for="swal2-input4">Lugar</label>  
-      <input id="swal2-input4" class="swal2-input" placeholder="Lugar" value = "${returnEmptyIfNull(asamblea.place)}">
+      <input id="swal2-input4" class="swal2-input" placeholder="Lugar" value = "">
     </div>            
         `,
     focusConfirm: false,
     showCancelButton: true,
-    confirmButtonText: "Editar",
+    confirmButtonText: "Crear",
     preConfirm: () => {
       var dataToSend = undefined;
       const description = document.getElementById("swal2-input1").value;
@@ -52,10 +41,15 @@ async function editAsambleaInfo(asamblea) {
       var url = document.getElementById("swal2-input3").value;
       var place = document.getElementById("swal2-input4").value;
 
-      if (!description || !date || !(url || place)) {
-        Swal.showValidationMessage("Por favor, completa todos los campos");
+      if (!description) {
+        Swal.showValidationMessage("La descripción es obligatoria");
         return false;
       }
+
+      if (!date) {
+        Swal.showValidationMessage("La fecha y hora son obligatorias");
+        return false;
+      }      
 
       if (description.length < 1 || description.length > 50) {
         Swal.showValidationMessage(
@@ -100,12 +94,13 @@ async function editAsambleaInfo(asamblea) {
       }
 
       if (url && !place) {
-          place = null;
+          dataToSend = { description, date, url }
       } else if (!url && place) {
-          url = null;
+          dataToSend = { description, date, place }
+      } else {
+          dataToSend = { description, date, url, place };
       }
       
-      dataToSend = { description, date, url, place };
       return dataToSend
     },
   });
@@ -119,22 +114,22 @@ async function editAsambleaInfo(asamblea) {
   }
 }
 
-export const useEditAsamblea = (fetchAsambleas) => {
-  const handleEditAsamblea = async (asambleaId, asamblea) => {
+export const useCreateAsamblea = (fetchAsambleas) => {
+  const handleCreateAsamblea = async () => {
     try {
-      const formValues = await editAsambleaInfo(asamblea);
+      const formValues = await createAsambleaInfo();
       if (!formValues) return;
 
-      const response = await editAsamblea(asambleaId, formValues);
+      const response = await createAsamblea(formValues);
       if (response) {
         await fetchAsambleas();
       }
     } catch (error) {
-      console.error("Error al editar asamblea:", error);
+      console.error("Error al crear asamblea:", error);
     }
   };
 
-  return { handleEditAsamblea };
+  return { handleCreateAsamblea };
 };
 
-export default useEditAsamblea;
+export default useCreateAsamblea;
