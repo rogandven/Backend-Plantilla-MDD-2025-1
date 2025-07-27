@@ -40,6 +40,13 @@ const Sidebar = () => {
               </NavLink>
             </li>
           )}
+          {(userRole === "administrador" || userRole == "presidente") && (
+            <li>
+              <NavLink to="/meeting">
+                <FaUsers className="icon"/> Reuniones
+              </NavLink>
+            </li>
+          )}
           <li>
             <NavLink to="/asambleas">
               <FaWineGlass className="icon"/> Asambleas
