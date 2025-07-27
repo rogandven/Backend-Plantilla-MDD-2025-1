@@ -31,11 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/asambleas",
-        element: (
-          <ProtectedRoute allowedRoles={["administrador", "presidente"]}>
-            <Asambleas />
-          </ProtectedRoute>
-        ),
+        element: <Asambleas />,
       },      
       {
         path: "/profile",
