@@ -32,6 +32,18 @@ async function confirmCreation(text) {
     return result2;
 }
 
+function convertToISOFormat(date, time) {
+    if (time === undefined || time === null) {
+      return undefined;
+    }
+    if (date === undefined || date === null) {
+      return undefined;
+    }
+    const returnValue = date + "T" + time + ":00.000Z";
+    console.log(returnValue);
+    return returnValue;
+}
+
 async function createAsambleaInfo() {
   const { value: formValues } = await Swal.fire({
     title: "Crear Asamblea",
@@ -41,9 +53,13 @@ async function createAsambleaInfo() {
       <input id="swal2-input1" class="swal2-input" placeholder="Descripción" value = "">
     </div>
     <div>
-      <label for="swal2-input2">Fecha</label>  
-      <input type="datetime-local" id="swal2-input2" class="swal2-input" placeholder="Fecha" value = "">
+      <label for="swal2-input20">Fecha</label>  
+      <input type="date" id="swal2-input20" class="swal2-input" placeholder="Fecha" value = "">
     </div>
+    <div>
+      <label for="swal2-input21">Hora</label>  
+      <input type="time" id="swal2-input21" class="swal2-input" placeholder="Hora" value = "">
+    </div>    
     <div>
       <label for="swal2-input3">URL</label>  
       <input type="url" id="swal2-input3" class="swal2-input" placeholder="URL" value = "">
@@ -59,7 +75,7 @@ async function createAsambleaInfo() {
     preConfirm: () => {
       var dataToSend = undefined;
       const description = document.getElementById("swal2-input1").value;
-      const date = document.getElementById("swal2-input2").value;
+      const date = convertToISOFormat(document.getElementById("swal2-input20").value, document.getElementById("swal2-input21").value);
       var url = document.getElementById("swal2-input3").value;
       var place = document.getElementById("swal2-input4").value;
 
@@ -114,7 +130,7 @@ async function createAsambleaInfo() {
         );
         return false;
       }
-
+      
       if (url && !place) {
           dataToSend = { description, date, url }
       } else if (!url && place) {
