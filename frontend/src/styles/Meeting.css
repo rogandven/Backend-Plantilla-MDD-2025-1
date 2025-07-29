@@ -123,6 +123,7 @@ td.text-right {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .meeting-page button {
   padding: 6px 12px;
   margin: 5px;
@@ -131,6 +132,7 @@ td.text-right {
   border-radius: 4px;
   cursor: pointer;
 }
+
 .meeting-page button.create {
   background-color: blue;
 }

@@ -57,7 +57,6 @@ export const useCreateMeeting=(fetchMeeting) =>{
   const handleCreateMeeting = async ()=>{
     try {
       const formValues = await Createmeeting();
-      console.log(formValues);
       if(!formValues) return;
 
       const response = await createMeetings(formValues);
