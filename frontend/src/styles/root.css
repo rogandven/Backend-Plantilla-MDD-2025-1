@@ -10,6 +10,7 @@ body{
 
 .page-content{
     flex: 1;
-    padding: 20px;
+    padding: 5%;
+    height: 90%;
     margin-left: 28vh; /* Ajustado para la Sidebar*/
 }

@@ -37,16 +37,16 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
-      }
+      },
+      {
+        path: "/meeting",
+        element: <Meeting />,
+      },
     ],
   },
   {
     path: "/login",
     element: <Login />,
-  },
-  {
-    path: "/meeting",
-    element: <Meeting />,
   },
   {
     path: "/register",
