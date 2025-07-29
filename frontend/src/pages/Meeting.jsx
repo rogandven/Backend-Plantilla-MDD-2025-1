@@ -6,6 +6,7 @@ import EditMeeting from "@hooks/meeting/meetingUpdate.jsx";
 import { useEffect } from "react";
 
 const Meetings = () => {
+
   const { meeting, fetchMeeting } = GetMeeting();
   const {handleCreateMeeting} = Createmeeting (fetchMeeting);
   const { handleDeleteMeeting } = DeleteMeeting(fetchMeeting);
@@ -30,6 +31,7 @@ const Meetings = () => {
             <th>Creada por</th>
             <th>Descripcion</th>
             <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
