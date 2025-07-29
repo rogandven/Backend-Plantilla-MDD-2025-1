@@ -123,6 +123,17 @@ td.text-right {
   border-radius: 4px;
   cursor: pointer;
 }
+.meeting-page button {
+  padding: 6px 12px;
+  margin: 5px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.meeting-page button.create {
+  background-color: blue;
+}
 
 .meeting-table button.edit {
   background-color: #4caf50;
@@ -130,6 +141,10 @@ td.text-right {
 
 .meeting-table button.delete {
   background-color: #f44336;
+}
+
+.meeting-page button.create:hover {
+  background-color: #303d9e;
 }
 
 .meeting-table button.edit:hover {

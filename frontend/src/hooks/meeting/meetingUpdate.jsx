@@ -20,7 +20,7 @@ async function editMeetingInfo(meeting) {
       <input id="swal2-input2" class="swal2-input" placeholder="HH:MM" value = "${meeting.time}">
     </div>
     <div>
-      <label for="swal2-input2">Ingrese una nueva descripcion de la asamblea (opcional): </label>
+      <label for="swal2-input2">Ingrese una nueva descripcion de la reunion (opcional): </label>
       <label for="swal2-input2">Tiene que tener entre 10 y 500 caracteres (no se puede exceder de los 500)</label>
       <input id="swal2-input2" class="swal2-input" placeholder="Descripcion" value = "${meeting.description}">
     </div>

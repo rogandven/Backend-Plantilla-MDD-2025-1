@@ -6,10 +6,10 @@ const meetingRepository = AppDataSource.getRepository(Meeting);
 
 // Función para validar el formato de fecha (DD/MM/YYYY)
 const isValidDateFormat = (dateStr) => {
-    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-    if (!regex.test(dateStr)) return false;
-    
-    const [, day, month, year] = dateStr.match(regex);
+    const originalDate = dateStr; // del input
+    if (!originalDate.test(dateStr)) return false;
+    const formattedDate = originalDate.split("-").reverse().join("/"); // "20/07/2025"
+    const [, day, month, year] = dateStr.match(formattedDate);
     const date = new Date(year, month - 1, day);
     
     return date.getDate() == day && 

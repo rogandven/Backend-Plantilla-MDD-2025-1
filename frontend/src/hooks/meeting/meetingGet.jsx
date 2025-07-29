@@ -7,14 +7,14 @@ export const GetMeeting = () => {
     const fetchMeeting = async () => {
         try {
             const data = await getAllMeeting();
-            dataLogged(data);
+            // dataLogged(data);
             setMeeting(data);
         } catch (error) {
             console.error("Error al conseguir reuniones:", error);
         }
     };
-    
-    const dataLogged = (data) => {
+
+  /*   const dataLogged = (data) => {
         try {
             const { id } = JSON.parse(sessionStorage.getItem("Meetings"));
             for (let i = 0; i < data.length; i++) {
@@ -26,7 +26,7 @@ export const GetMeeting = () => {
         } catch (error) {
             console.error("Error procesando datos de reuniones agendadas:", error);
         }
-    }
+    } */
 
     return { meeting, setMeeting, fetchMeeting };
 }
