@@ -11,7 +11,9 @@ export async function getAllMeeting() {
 
 export async function createMeetings(data) {
     try {
+        console.log("-- START OF DATA --");
         console.log(data);
+        console.log("-- END OF DATA --");
         const response = await axios.post(`/meetings`, data);
         return response.data;
     } catch (error) {
@@ -19,9 +21,9 @@ export async function createMeetings(data) {
     }
 }
 
-export async function editMeeting(date, time, description) { 
+export async function editMeeting(id, data) { 
     try {
-        const response = await axios.put(`/meetings`, date, time, description);
+        const response = await axios.put(`/meetings/${id}`, data);
         return response.data;
     } catch (error) {
         console.error("Error al editar reunion:", error);

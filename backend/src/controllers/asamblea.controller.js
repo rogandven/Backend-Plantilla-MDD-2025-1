@@ -124,7 +124,7 @@ export async function updateAsamblea(req, res) {
             .status(200)
             .json({ message: "Asamblea actualizada correctamente", data: asamblea });
     } catch (error) {
-        console.error("Error al acutalizar asamblea", error);
+        console.error("Error al actualizar asamblea", error);
         res.status(500).json({ message: "Error al actualizar asamblea." });
     }
 }

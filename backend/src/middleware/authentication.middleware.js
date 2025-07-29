@@ -47,3 +47,14 @@ export function getUserId(token) {
     return null;
   }
 }
+
+export function getUsername(token) {
+  try {
+    const decoded = jwt.verify(token, SESSION_SECRET);
+    // console.log(decoded)
+    return decoded.username;
+  } catch (error) {
+    console.log(error)
+    return null;
+  }
+}

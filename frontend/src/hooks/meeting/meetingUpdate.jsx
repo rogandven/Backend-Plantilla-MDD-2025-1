@@ -6,6 +6,24 @@ async function editMeetingInfo(meeting) {
     title: "Editar Reunion",
     html: `
     <div>
+      <label for="swal2-input1">Ingrese la fecha de la reunion: </label>
+      <label for="swal2-input1">Tiene que estar en formato dd-mm-aa</label>
+      <input id="swal2-input1" class="swal2-input" type="date" placeholder="dd-mm-aa" value = "${meeting.date}">
+    </div>
+    <div>
+      <label for="swal2-input2">Ingrese el horario de la reunion: </label>
+      <label for="swal2-input2">Tiene que estar en formato 24 horas HH:MM</label>
+      <input id="swal2-input2" class="swal2-input" placeholder="HH:MM" value = "${meeting.time}">
+    </div>
+    <div>
+      <label for="swal2-input3">Ingrese una descripcion de la reunion: </label>
+      <label for="swal2-input3">Tiene que tener entre 10 y 500 caracteres (no se puede exceder de los 500)</label>
+      <input id="swal2-input3" class="swal2-input" placeholder="Descripcion" value = "${meeting.description}">
+    </div>
+    `,
+
+    /* html: `
+    <div>
       <label for="swal2-input1">Ingrese el ID de la reunion a editar:</label>  
       <input id="swal2-input1" class="swal2-input" placeholder="Ejemplo: 10" value = "${meeting.id}">
     </div>
@@ -25,10 +43,30 @@ async function editMeetingInfo(meeting) {
       <input id="swal2-input2" class="swal2-input" placeholder="Descripcion" value = "${meeting.description}">
     </div>
         `,
+    */
+
     focusConfirm: false,
     showCancelButton: true,
     confirmButtonText: "Editar",
     preConfirm: () => {
+      var date = document.getElementById("swal2-input1").value;
+      const time = document.getElementById("swal2-input2").value;
+      const description = document.getElementById("swal2-input3").value;
+
+      if (!date || !time || !description) {
+        Swal.showValidationMessage("Por favor, completa todos los campos");
+        return false;
+      }
+
+      if (description.length < 10 || description.length > 500) {
+        Swal.showValidationMessage(
+          "La descripción debe tener al menos 10 caracteres"
+        );
+        return false;
+      }
+
+      return { date, time, description };
+      /*
       const id = document.getElementById("swal2-input1").value;
       const date = document.getElementById("swal2-input2").value;
       const time = document.getElementById("swal2-input2").value;
@@ -45,8 +83,7 @@ async function editMeetingInfo(meeting) {
         );
         return false;
       }
-
-      return { id, date, time, description };
+      */
     },
   });
   if (formValues) {
