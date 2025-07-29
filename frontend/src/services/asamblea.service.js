@@ -42,7 +42,7 @@ export async function createAsamblea(asambleaData) {
         const response = await axios.post(`/asamblea`, asambleaData);
         return response.data;
     } catch (error) {
-        console.error("Error al editar asamblea:", error);
+        console.error("Error al crear asamblea:", error);
     }
 }
 
