@@ -104,6 +104,15 @@ export const EditMeeting = (fetchMeeting) => {
 
       const response = await editMeeting(id, formValues);
       if (response) {
+        if(response)
+              {
+                Swal.fire({
+                  title:"Reunion editada exitosamente",
+                  icon: "success",
+                  confirmButtonText: "Aceptar"
+                })
+                await fetchMeeting();
+              }
         await fetchMeeting();
       }
     } catch (error) {
