@@ -19,3 +19,4 @@ router.use("/asamblea", asambleaRoutes);
 router.use("/solicitudes", solicitudRoutes);
 
 export default router;
+

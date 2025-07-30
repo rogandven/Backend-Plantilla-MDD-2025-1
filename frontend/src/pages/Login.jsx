@@ -9,6 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState("");
 
+  /*
   // Función que maneja el envío del formulario de inicio de sesión
   const loginSubmit = async (data) => {
     try {
@@ -25,7 +26,25 @@ const Login = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  };*/
+
+const loginSubmit = async (data) => {
+  try {
+    const response = await loginService(data);
+    if (response.request.status === 200) {
+      sessionStorage.setItem(
+        "usuario",
+        JSON.stringify(response.data.user)
+      );
+      navigate("/home");
+    } else {
+      setLoginError("Usuario o contraseña incorrectos");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <main className="page-root">
