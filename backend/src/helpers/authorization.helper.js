@@ -3,10 +3,17 @@
 
 import { AppDataSource } from "../config/configDb.js";
 import { SolicitudEntity } from "../entity/solicitud.entity.js";
-
+import { globalIsAdmin } from "../algo/globalIsAdmin.js";
 
 export function isCee(req, res, next) {
-  if (req.user.role !== "CEE") {
+  console.log("== REQ ==");
+  console.log(req.user);
+  // console.log("== RES ==");
+  // console.log(res);
+  console.log("== NEXT ==");
+  console.log(next);
+  console.log(globalIsAdmin(req.user.rol));
+  if (!globalIsAdmin(req.user.rol)) {
     return res
       .status(403)
       .json({ message: "Solo los integrantes del CEE pueden realizar esta acción." });

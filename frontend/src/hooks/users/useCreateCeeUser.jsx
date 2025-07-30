@@ -26,8 +26,8 @@ export const useCreateCeeUser = (fetchUsers) => {
           Swal.showValidationMessage("Completa todos los campos.");
           return false;
         }
-        if (!email.endsWith("@cee.ubiobio.cl")) {
-          Swal.showValidationMessage("El correo debe terminar en @cee.ubiobio.cl");
+        if (!email.endsWith("ubiobio.cl")) {
+          Swal.showValidationMessage("El correo debe terminar en ubiobio.cl");
           return false;
         }
         if (!/^\d{2}\.\d{3}\.\d{3}-[\dkK]$/.test(rut)) {

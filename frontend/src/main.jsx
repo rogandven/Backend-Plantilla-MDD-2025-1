@@ -36,7 +36,11 @@ const router = createBrowserRouter([
       },
       {
        path:"/Operaciones",
-       element :<Operaciones/>
+        element: (
+          <ProtectedRoute allowedRoles={getAllowedRoles()}>
+            <Operaciones/>
+          </ProtectedRoute>
+        ),
       },
       {
         path: "/asambleas",

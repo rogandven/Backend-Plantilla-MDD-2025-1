@@ -641,7 +641,7 @@ const Solicitudes = () => {
       </div>
 
       {/* Boton para crear solicitud (solo estudiantes) */}
-      {isEstudiante() && (
+      {(isEstudiante() || isCee()) && (
         <div className="solicitud-button-container">
           <button
             className="solicitud-addbtn"
@@ -670,9 +670,9 @@ const Solicitudes = () => {
             {Array.isArray(solicitudes) && solicitudes.length > 0 ? (
               solicitudes.map((solicitud) => {
                 const puedeEditar =
-                  isEstudiante() &&
+                  (isEstudiante() &&
                   solicitud.correo_estudiante === user.email &&
-                  solicitud.estado?.nombre === "pendiente";
+                  solicitud.estado?.nombre === "pendiente") || isCee();
                 const puedeEliminar =
                   isEstudiante()
                     ? solicitud.correo_estudiante === user.email &&

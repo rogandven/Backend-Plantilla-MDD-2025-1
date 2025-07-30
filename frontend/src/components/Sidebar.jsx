@@ -48,25 +48,25 @@ const Sidebar = () => {
             </div>
           )}
           {(globalIsAdmin(userRole)) && (
-          <div>
-            <li>
-              <NavLink to="/meeting">
-                <FaUsers className="icon"/> Reuniones
-              </NavLink>
-            </li>
+            <div>
+              <li>
+                <NavLink to="/meeting">
+                  <FaUsers className="icon"/> Reuniones
+                </NavLink>
+              </li>
+            </div>
+          )}
             <li>
               <NavLink to="/Inquietudes">
               <FaBookOpen className="icon"/>   Reclamos
               </NavLink>
             </li>
-          </div>
-          )}
           <li>
             <NavLink to="/asambleas">
               <FaWineGlass className="icon"/> Asambleas
             </NavLink>
           </li>
-          {userRole && (
+          {(
             <li>
               <NavLink to="/solicitudes">
                 <span className="icon">📋</span> Solicitudes
@@ -79,9 +79,12 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
+          { ((globalIsAdmin(userRole))) && (
             <NavLink to="/Operaciones">
             <FaMoneyBillTransfer className="icon"/> Operacion          
             </NavLink>
+            )
+          }
           </li>
           <li style={{ height: "70%" }}/>
           <li className="logout">

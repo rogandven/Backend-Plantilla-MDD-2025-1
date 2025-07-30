@@ -8,7 +8,7 @@ import { connectDB } from "./src/config/configDb.js";
 import { createUsers } from "./src/config/initDb.js";
 
 // lo que yo implemente.
-import { createUsers, createEstados } from "./src/config/initDb.js";
+import { createEstados } from "./src/config/initDb.js";
 
 async function setupServer() {
   // Crea la instancia de Express
