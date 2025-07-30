@@ -7,6 +7,9 @@ import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createUsers } from "./src/config/initDb.js";
 
+// lo que yo implemente.
+import { createEstados } from "./src/config/initDb.js";
+
 async function setupServer() {
   // Crea la instancia de Express
   const app = express();
@@ -42,6 +45,10 @@ async function setupAPI() {
     await connectDB();
     // Crea los usuarios iniciales
     await createUsers();
+
+
+    // Crea los estados iniciales del sistema (implementación adicional)
+    await createEstados();
     // Configura el servidor
     await setupServer();
   } catch (error) {
@@ -53,3 +60,4 @@ async function setupAPI() {
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((error) => console.log("Error en index.js -> setupAPI(): ", error));
+

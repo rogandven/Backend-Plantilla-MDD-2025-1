@@ -4,11 +4,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from '@pages/Root'
 import Home from '@pages/Home'
 import Login from '@pages/Login'
+import Meeting from '@pages/Meeting'
 import Register from '@pages/Register'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
+import Operaciones from '@pages/Operaciones';
+import Inquietudes from '@pages/Inquietudes'
+import Asambleas from '@pages/Asambleas';
+import Solicitudes from '@pages/Solicitudes';
+import { getAllowedRoles } from "../algo/globalIsAdmin.js";
 
 const router = createBrowserRouter([
   {
@@ -23,15 +29,44 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: (
-          <ProtectedRoute allowedRoles={["administrador"]}>
+          <ProtectedRoute allowedRoles={getAllowedRoles()}>
             <Users />
           </ProtectedRoute>
         ),
       },
       {
+       path:"/Operaciones",
+        element: (
+          <ProtectedRoute allowedRoles={getAllowedRoles()}>
+            <Operaciones/>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/asambleas",
+        element: <Asambleas />,
+      },      
+      {
         path: "/profile",
         element: <Profile />,
-      }
+      },
+      {
+        path: "/inquietudes",
+        element: <Inquietudes />,
+      },
+      {
+
+        path: "/meeting",
+        element: (
+          <ProtectedRoute allowedRoles={getAllowedRoles()}>
+            <Meeting />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/solicitudes",
+        element: <Solicitudes />,
+      },
     ],
   },
   {
