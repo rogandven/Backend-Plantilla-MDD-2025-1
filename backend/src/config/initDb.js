@@ -21,11 +21,11 @@ export async function createUsers() {
         if (count > 0) return;
         const users = [
             {
-                username: "Administrador",
+                username: "Presidente",
                 rut: "12345678-9",
-                email: "admin@gmail.com",
+                email: "presidente@gmail.com",
                 password: await encryptPassword("admin123"),//Se encripta la contraseña
-                role: "administrador"
+                role: "presidente"
             },
             {
                 username: "Usuario",

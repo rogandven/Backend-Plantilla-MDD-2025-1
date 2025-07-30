@@ -56,6 +56,7 @@ import { isCee, isOwner } from "../helpers/authorization.helper.js";
 
 const router = Router();
 
+// 🔐 Todas las rutas requieren JWT válido
 router.use(authenticateJwt);
 
 // ------------------------------------------------------------------

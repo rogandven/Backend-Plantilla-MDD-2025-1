@@ -1,4 +1,5 @@
-/*"use strict";
+/*
+"use strict";
 import bcrypt from "bcrypt";
 
 // Función helper para encriptar y contraseñas
@@ -21,35 +22,43 @@ export async function comparePassword(password, receivedPassword) {
     console.error("Error en bcrypt.helper.js -> comparePassword(): ", error);
     throw new Error("Error al comparar las contraseñas");
   }
-}*/
+}
+*/
 
-"use strict"; 
+"use strict"; //se activa el modo estricto para evitar errores silenciosos y mejorar el rendimiento
 
-//se importa la librería bcrypt para manejo de contraseñas seguras
+//se importa la librería bcrypt para encriptar y comparar contraseñas
 import bcrypt from "bcrypt";
-//se declara la función helper encryptPassword para encriptar contraseñas
+
+/*
+  Función helper: encryptPassword
+  Se encarga de encriptar la contraseña de texto plano antes de guardarla en la BD
+*/
 export async function encryptPassword(password) {
   try {
-    //se genera un salt de 10 rondas para aumentar la seguridad del hash
+    //se genera un "salt" (valor aleatorio) con 10 rondas de procesamiento
     const salt = await bcrypt.genSalt(10);
-    //se devuelve la contraseña encriptada usando el salt generado
+    //se retorna la contraseña encriptada usando el salt generado
     return await bcrypt.hash(password, salt);
   } catch (error) {
-    //se muestra un mensaje de error en consola si ocurre un problema
+    //si ocurre un error, se registra en consola y se lanza una excepción personalizada
     console.error("Error en bcrypt.helper.js -> encryptPassword(): ", error);
-    //se lanza un error personalizado para el flujo de la aplicación
     throw new Error("Error al encriptar la contraseña");
   }
 }
-//se declara la función helper comparePassword para comparar contraseñas
+
+/*
+  Función helper: comparePassword
+  Compara una contraseña ingresada (password) con la contraseña encriptada almacenada (receivedPassword)
+  Retorna true si coinciden, false si no
+*/
 export async function comparePassword(password, receivedPassword) {
   try {
-    //se compara la contraseña de texto plano con la encriptada
+    //se compara la contraseña ingresada con la encriptada
     return await bcrypt.compare(password, receivedPassword);
   } catch (error) {
-    //se muestra un mensaje de error en consola si ocurre un problema
+    //si ocurre un error, se registra en consola y se lanza una excepción personalizada
     console.error("Error en bcrypt.helper.js -> comparePassword(): ", error);
-    //se lanza un error personalizado indicando problema al comparar
     throw new Error("Error al comparar las contraseñas");
   }
 }

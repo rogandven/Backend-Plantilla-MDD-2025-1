@@ -1,4 +1,3 @@
-
 /*"use strict";
 
 //se importa la entidad User, es decir la tabla de usuarios
@@ -164,7 +163,7 @@ export async function register(req, res) {
       email,
       rut,
       password: await encryptPassword(password), //se encripta la contraseña
-      role: "ESTUDIANTE", //Se fuerza el rol del usuario a ESTUDIANTE
+      role: "ESTUDIANTE", //se fuerza el rol del usuario a ESTUDIANTE
     });
 
     //se guarda el nuevo usuario en la BD
@@ -184,7 +183,6 @@ export async function register(req, res) {
   }
 }
 
-/*
 export async function login(req, res) {
   try {
     //se obtiene el repositorio de usuarios
@@ -207,10 +205,11 @@ export async function login(req, res) {
 
     //se define la informacion que se incluira en el token
     const payload = {
+      id: userFound.id,
       username: userFound.username,
       email: userFound.email,
       rut: userFound.rut,
-      role: userFound.role,
+      rol: userFound.role,
     };
     //se crea un token valido por un dia
     const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
@@ -222,45 +221,6 @@ export async function login(req, res) {
     return res.status(500).json({ message: "Error al iniciar sesión" });
   }
 }
-*/
-export async function login(req, res) {
-  try {
-    const userRepository = AppDataSource.getRepository(User);
-    const { email, password } = req.body;
-    const { error } = loginValidation.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
-    const userFound = await userRepository.findOne({ where: { email } });
-    if (!userFound)
-      return res.status(404).json({ message: "El correo electrónico no está registrado" });
-    const isMatch = await comparePassword(password, userFound.password);
-    if (!isMatch)
-      return res.status(401).json({ message: "La contraseña ingresada no es correcta" });
-
-    const payload = {
-      username: userFound.username,
-      email: userFound.email,
-      rut: userFound.rut,
-      role: userFound.role,
-    };
-    const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
-
-    // NUEVA RESPUESTA: incluye el usuario con el campo "rol"
-    res.status(200).json({
-      message: "Inicio de sesión exitoso",
-      accessToken,
-      user: {
-        username: userFound.username,
-        email: userFound.email,
-        rut: userFound.rut,
-        rol: userFound.role,   // <- OBLIGATORIO para el frontend
-      }
-    });
-  } catch (error) {
-    console.error("Error en auth.controller.js -> login(): ", error);
-    return res.status(500).json({ message: "Error al iniciar sesión" });
-  }
-}
-
 
 export async function logout(req, res) {
   try {
