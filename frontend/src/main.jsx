@@ -4,12 +4,14 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from '@pages/Root'
 import Home from '@pages/Home'
 import Login from '@pages/Login'
+import Meeting from '@pages/Meeting'
 import Register from '@pages/Register'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Inquietudes from '@pages/Inquietudes'
+import Asambleas from '@pages/Asambleas';
 
 const router = createBrowserRouter([
   {
@@ -24,11 +26,15 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: (
-          <ProtectedRoute allowedRoles={["administrador"]}>
+          <ProtectedRoute allowedRoles={["administrador", "presidente"]}>
             <Users />
           </ProtectedRoute>
         ),
       },
+      {
+        path: "/asambleas",
+        element: <Asambleas />,
+      },      
       {
         path: "/profile",
         element: <Profile />,
@@ -37,7 +43,10 @@ const router = createBrowserRouter([
         path: "/inquietudes",
         element: <Inquietudes />,
       },
-
+      {
+        path: "/meeting",
+        element: <Meeting />,
+      },
     ],
   },
   {

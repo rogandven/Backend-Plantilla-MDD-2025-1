@@ -231,8 +231,6 @@ export async function cambiarEstado(req, res) {
   }
 }*/
 
-
-
 "use strict";
 
 
@@ -327,7 +325,6 @@ export async function crearSolicitud(req, res) {
     res.status(500).json({ message: "Error al crear solicitud" });
   }
 }
-
 
 export async function actualizarSolicitud(req, res) {
   try {

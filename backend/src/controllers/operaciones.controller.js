@@ -81,15 +81,18 @@ export async function getOperacionResumenFinanciero(req, res) {
         //por areglar
         const result = await operacionRepository
             .createQueryBuilder("operaciones") // Inicia el query builder
-            .select(["SUM(CASE WHEN operaciones.tipo = 'EGRESO' THEN -ABS(operaciones.monto) ELSE 0 END) AS egreso",
-                "SUM(CASE WHEN operaciones.tipo = 'INGRESO' THEN operaciones.monto ELSE 0 END) AS ingreso",
+            .select(["SUM(CASE WHEN operaciones.egreso != NULL THEN -ABS(operaciones.egreso) ELSE 0 END) AS egreso",
+                "SUM(CASE WHEN operaciones.ingreso != NULL THEN operaciones.ingreso ELSE 0 END) AS ingreso",
                 "SUM(operaciones.monto) AS balance"
             ])
             .getRawOne();
 
-        return res.json({
+        /* return res.json({
             balanceTotal: parseFloat(result.balance) || 0
         
+        }); */
+        return res.json({
+            balance: parseFloat(result.balance) || 0,
         });
     } catch (error) {
         console.error(error);
@@ -132,16 +135,19 @@ export async function updateOperacion(req, res) {
     }
 
     // Calcular nuevo monto si se está actualizando ingreso o egreso
-    if (validatedData.ingreso !== undefined && validatedData.egreso !== undefined) {
+    // if (validatedData.ingreso !== undefined && validatedData.egreso !== undefined) {
         // Usar los valores nuevos si vienen en el body, o los existentes si no
         const nuevoIngreso = validatedData.ingreso !== undefined ? 
                             validatedData.ingreso : existeActividad.ingreso;
         const nuevoEgreso = validatedData.egreso !== undefined ? 
                             validatedData.egreso : existeActividad.egreso;
         
+        // console.log(nuevoIngreso);
+        // console.log(nuevoEgreso);
+
         // Calcular el monto neto
         validatedData.monto = nuevoIngreso - nuevoEgreso;
-    }
+    // }
 
     await operacionRepository.update(id, validatedData);
 

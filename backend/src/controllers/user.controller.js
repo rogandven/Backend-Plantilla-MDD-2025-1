@@ -3,6 +3,7 @@ import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/other.validation.js";
 import updateValidation from "../validations/auth.validation.js";
+import { registerCeeValidation } from "../validations/auth.validation.js";
 
 export async function getUsers(req, res) {
   try {
@@ -14,6 +15,37 @@ export async function getUsers(req, res) {
   } catch (error) {
     console.error("Error en user.controller.js -> getUsers(): ", error);
     res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
+
+export async function registerCee(req, res) {
+  try {
+    //se obtiene el repositorio de usuarios
+    const repo = AppDataSource.getRepository(User);
+    //se valida la información recibida con Joi
+    const { error } = registerCeeValidation.validate(req.body);
+    if (error) return res.status(400).json({ message: error.message });
+    //se extraen los datos del cuerpo de la solicitud
+    const { username, rut, email, password } = req.body;
+    //se verifica si ya existen usuarios con los mismos datos
+    const dup = await repo.findOneBy([{ email }, { rut }, { username }]);
+    if (dup) return res.status(409).json({ message: "Datos ya registrados" });
+    //se crea un nuevo usuario con rol CEE y se encripta la contraseña
+    const nuevo = repo.create({
+      username,
+      rut,
+      email,
+      password: await encryptPassword(password),
+      role: "CEE"
+    });
+    //se guarda el nuevo usuario en la base de datos
+    await repo.save(nuevo);
+    //se retorna respuesta exitosa
+    res.status(201).json({ message: "Integrante CEE creado" });
+  } catch (err) {
+    //manejo de error interno
+    console.error("registerCee:", err);
+    res.status(500).json({ message: "Error al registrar integrante CEE" });
   }
 }
 
