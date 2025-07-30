@@ -9,7 +9,7 @@ import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
-
+import Operaciones from '@pages/Operaciones';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +28,12 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+       path:"/Operaciones",
+       element :<Operaciones/>
+      },
+      
+      
       {
         path: "/profile",
         element: <Profile />,

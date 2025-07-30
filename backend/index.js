@@ -6,7 +6,6 @@ import indexRoutes from "./src/routes/index.routes.js";
 import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createUsers } from "./src/config/initDb.js";
-
 async function setupServer() {
   // Crea la instancia de Express
   const app = express();
