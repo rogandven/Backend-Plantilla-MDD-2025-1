@@ -7,7 +7,9 @@ import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/oth
 export async function getAsambleas(req, res) {
     try {
         const asambleaRepository = AppDataSource.getRepository(Asamblea);
-        const asambleas = await asambleaRepository.find();
+        const asambleas = await asambleaRepository.find({
+            relations: ["creator"],
+        });
 
         res.status(200).json({ message: "Asambleas encontradas", data: asambleas });
     } catch (error) {
@@ -67,7 +69,7 @@ export async function getAsambleaById(req, res) {
             return assertValidIdResult
         }
 
-        const asamblea = await asambleaRepository.findOne({ where: { id } });
+        const asamblea = await asambleaRepository.findOne({ where: { id }, relations: ["creator"] });
         if (!asamblea) return res.status(404).json({ message: "Asamblea no encontrada." });
 
         res.status(200).json({ message: "Asamblea encontrada: ", data: asamblea });
@@ -122,7 +124,7 @@ export async function updateAsamblea(req, res) {
             .status(200)
             .json({ message: "Asamblea actualizada correctamente", data: asamblea });
     } catch (error) {
-        console.error("Error al acutalizar asamblea", error);
+        console.error("Error al actualizar asamblea", error);
         res.status(500).json({ message: "Error al actualizar asamblea." });
     }
 }

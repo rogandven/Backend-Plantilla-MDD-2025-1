@@ -284,7 +284,6 @@ export const SolicitudEntity = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP",
       onUpdate: () => "CURRENT_TIMESTAMP",
     },
-
     estadoId: {
       default: 0
     }

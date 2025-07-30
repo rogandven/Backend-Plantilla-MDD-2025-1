@@ -1,21 +1,27 @@
 "use strict";
 import { AppDataSource } from "../config/configDb.js";
 import { Meeting } from "../entity/meeting.entity.js";
+import { createValidation, updateValidation } from "../validations/meeting.validation.js"
+import { getToken, getUsername } from "../middleware/authentication.middleware.js";
+// const createValidation = createMeetingValidation;
 
 const meetingRepository = AppDataSource.getRepository(Meeting);
 
 // Función para validar el formato de fecha (DD/MM/YYYY)
+/*
 const isValidDateFormat = (dateStr) => {
-    const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
-    if (!regex.test(dateStr)) return false;
-    
-    const [, day, month, year] = dateStr.match(regex);
+    console.log(dateStr);
+    const originalDate = /^(\d{2})\/(\d{2})\/(\d{4})$/; // del input
+    if (!originalDate.test(dateStr)) return false;
+    const formattedDate = originalDate.split("-").reverse().join("/"); // "20/07/2025"
+    const [, day, month, year] = dateStr.match(formattedDate);
     const date = new Date(year, month - 1, day);
     
     return date.getDate() == day && 
            date.getMonth() == month - 1 && 
            date.getFullYear() == year;
 };
+*/
 
 // Función para validar el formato de hora (HH:mm)
 const isValidTimeFormat = (timeStr) => {
@@ -26,88 +32,38 @@ const isValidTimeFormat = (timeStr) => {
     return hours >= 0 && hours <= 23 && minutes >= 0 && minutes <= 59;
 };
 
+/*
 // Función para convertir fecha de formato DD/MM/YYYY a Date
 const parseDate = (dateStr, timeStr) => {
     const [day, month, year] = dateStr.split('/');
     const [hours, minutes] = timeStr.split(':');
     return new Date(year, month - 1, day, hours, minutes);
 };
+*/
 
 // Crear una nueva reunión
 export const createMeeting = async (req, res) => {
     try {
+        const meetingRepository = AppDataSource.getRepository(Meeting);
         const { date, time, description } = req.body;
 
-        // Validaciones de fecha
-        if (!date) {
-            return res.status(400).json({
-                message: "La fecha es requerida"
-            });
-        }
+        const { error } = createValidation.validate(req.body);
 
-        if (!isValidDateFormat(date)) {
-            return res.status(400).json({
-                message: "El formato de fecha debe ser DD/MM/YYYY (ejemplo: 20/07/2025)"
-            });
-        }
+        if (error) return res.status(400).json({ message: error.message });
 
-        // Validaciones de hora
-        if (!time) {
-            return res.status(400).json({
-                message: "La hora es requerida"
-            });
-        }
-
-        if (!isValidTimeFormat(time)) {
-            return res.status(400).json({
-                message: "El formato de hora debe ser HH:mm en formato 24 horas (ejemplo: 15:30)"
-            });
-        }
-
-        // Validaciones de descripción
-        if (!description) {
-            return res.status(400).json({
-                message: "La descripción es requerida"
-            });
-        }
-
-        if (description.length < 10) {
-            return res.status(400).json({
-                message: "La descripción debe tener al menos 10 caracteres"
-            });
-        }
-
-        if (description.length > 500) {
-            return res.status(400).json({
-                message: "La descripción no puede exceder los 500 caracteres"
-            });
-        }
-          // Convertir y verificar la fecha/hora
-        const meetingDateTime = parseDate(date, time);
-        const now = new Date();
-
-        if (meetingDateTime < now) {
-            return res.status(400).json({
-                message: "No se pueden agendar reuniones con fecha y hora anterior a la actual"
-            });
-        }
-
-        // Crear la reunión
-        const meeting = await meetingRepository.create({
-            date: date,
-            time: time,
-            description,
-            createdBy: req.user.username,// Asumiendo que el middleware de autenticación agrega el usuario a req
-            status: "scheduled"
+        const newMeeting = meetingRepository.create({
+            date,
+            time,
+            description
         });
 
-        // Guardar la reunión
-        await meetingRepository.save(meeting);
+        newMeeting.createdBy = getUsername(getToken(req));
 
-        return res.status(201).json({
-            message: "Reunión agendada exitosamente",
-            meeting
-        });
+        const savedMeeting = await meetingRepository.save(newMeeting);
+
+        return res
+            .status(201)
+            .json({ message: "Meeting creada correctamente", data: savedMeeting });
     } catch (error) {
         console.error("Error al crear reunión:", error);
         return res.status(500).json({
@@ -157,7 +113,66 @@ export const getMeetingById = async (req, res) => {
     }
 };
 
+export async function updateMeeting(req, res) {
+    try {
+        const meetingRepository = AppDataSource.getRepository(Meeting);
+        const { date, time, description } = req.body;
+        const { id } = req.params;
+
+        /*
+        const assertValidIdResult = assertValidId(id, req, res);
+        if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
+            return assertValidIdResult
+        }
+
+        const creatorId = getUserId(getToken(req))
+        if (isNull(creatorId)) {
+            return res.status(401).json({
+                message: "No es un usuario válido"
+            })
+        }
+        */ 
+        
+        const { error } = updateValidation.validate(req.body);
+
+        if (error) return res.status(400).json({ message: error.message });
+
+        const meeting = await meetingRepository.findOne({ where: { id } });
+        if (!meeting) return res.status(404).json({ message: "Meeting no encontrada." });
+
+        meeting.date = date || meeting.date;
+        meeting.time = time || meeting.time;
+        meeting.description = description || meeting.description;
+
+        /*
+        if (url !== undefined) {
+            meeting.url = url
+        }
+        if (place !== undefined) {
+            meeting.place = place 
+        }
+        if (meeting.place === null && meeting.url === null) {
+            return res.status(400).json({ message: "El URL y el lugar no pueden ser ambos nulos" });
+        }
+        */
+        
+        await meetingRepository.save(meeting);
+
+        return res
+            .status(200)
+            .json({ message: "Meeting actualizada correctamente", data: meeting });
+    } catch (error) {
+        console.log(error)
+        console.error("Error al actualizar meeting", error);
+        return res.status(500).json({ message: "Error al actualizar meeting.", error: error });
+    }
+}
+
 // Actualizar una reunión
+/*
+
+
+
 export const updateMeeting = async (req, res) => {
     try {
         const { id } = req.params;
@@ -248,6 +263,7 @@ export const updateMeeting = async (req, res) => {
         });
     }
 };
+*/
 
 // Eliminar una reunión
 export const deleteMeeting = async (req, res) => {
