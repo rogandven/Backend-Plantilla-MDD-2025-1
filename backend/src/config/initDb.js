@@ -21,6 +21,13 @@ export async function createUsers() {
         if (count > 0) return;
         const users = [
             {
+                username: "Administrador",
+                rut: "12345678-9",
+                email: "admin@gmail.com",
+                password: await encryptPassword("admin123"),//Se encripta la contraseña
+                role: "administrador"
+            },
+            {
                 username: "Presidente",
                 rut: "12345678-9",
                 email: "presidente@gmail.com",

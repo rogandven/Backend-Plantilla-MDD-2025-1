@@ -56,7 +56,6 @@ import { isCee, isOwner } from "../helpers/authorization.helper.js";
 
 const router = Router();
 
-// 🔐 Todas las rutas requieren JWT válido
 router.use(authenticateJwt);
 
 // ------------------------------------------------------------------
@@ -112,10 +111,10 @@ router.use(authenticateJwt);
 router.get("/", obtenerSolicitudes);
 router.post("/", crearSolicitud);
 
-
+// Solo el dueño puede actualizar si no está tomada
 router.put("/:id", isOwner, actualizarSolicitud);
 
-
+//SOLO esta ruta es necesaria para gestionar
 router.put("/estado/:id", isCee, cambiarEstado);
 
 // DELETE con lógica de permisos
@@ -128,59 +127,41 @@ router.delete("/:id", (req, res, next) => {
 export default router;
 */
 
-"use strict"; //se activa el modo estricto para evitar errores silenciosos y mejorar la calidad del código
+"use strict"; 
 
-//se importa la función Router desde express para definir las rutas del módulo
+//se importa el módulo Router de Express para definir rutas separadas
 import { Router } from "express";
-
-//se importan los controladores que manejan la lógica de las solicitudes
+//se importan las funciones del controlador de solicitudes para manejar las rutas
 import {
-  crearSolicitud,         //controlador para crear una solicitud
-  obtenerSolicitudes,     //controlador para obtener todas las solicitudes
-  //cambiarEstado,          //controlador para cambiar el estado de una solicitud
-  eliminarSolicitud,      //controlador para eliminar una solicitud
-  actualizarSolicitud     //controlador para actualizar una solicitud
+  crearSolicitud,        //función para crear una nueva solicitud
+  obtenerSolicitudes,    //función para listar todas las solicitudes
+  cambiarEstado,         //función para cambiar el estado de una solicitud
+  eliminarSolicitud,     //función para eliminar una solicitud
+  actualizarSolicitud,   //función para actualizar una solicitud
 } from "../controllers/solicitud.controller.js";
-
-//se importa el middleware de autenticación para verificar el token JWT
+//se importa el middleware que verifica el token JWT y autentica al usuario
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
-
-//se importan los middlewares de autorización para verificar roles y propiedad
+//se importan los middlewares de autorización: uno para validar si es CEE, otro si es dueño de la solicitud
 import { isCee, isOwner } from "../helpers/authorization.helper.js";
-
-//se crea una nueva instancia del router de Express
+//se crea un nuevo router para las rutas de solicitudes
 const router = Router();
-
-//se aplica el middleware de autenticación a todas las rutas de este router
+//se aplica el middleware de autenticación a todas las rutas de este archivo
 router.use(authenticateJwt);
-
-//ruta GET para obtener todas las solicitudes (con filtros si se envían)
+//ruta GET para obtener todas las solicitudes (según permisos del usuario)
 router.get("/", obtenerSolicitudes);
-
 //ruta POST para crear una nueva solicitud
 router.post("/", crearSolicitud);
-
-//ruta PUT para actualizar una solicitud (solo si es el dueño y no ha sido tomada)
-//se aplica el middleware isOwner antes de llamar al controlador
+//ruta PUT para actualizar una solicitud específica solo si el usuario es su creador y aún no ha sido tomada
 router.put("/:id", isOwner, actualizarSolicitud);
-
-//ruta PUT para cambiar el estado de una solicitud (solo miembros del CEE pueden hacerlo)
-//se aplica el middleware isCee
-//router.put("/estado/:id", isCee, cambiarEstado);
-
+//ruta PUT para cambiar el estado de una solicitud (solo puede hacerlo un CEE)
+router.put("/estado/:id", isCee, cambiarEstado);
 //ruta DELETE para eliminar una solicitud
-//puede hacerlo el administrador, un CEE o el propio dueño
-router.delete("/:id", 
-  (req, res, next) => {
-    //si el usuario es administrador, se permite
-    if (req.user.role === "administrador") return next();
-    //si el usuario es CEE, también se permite
-    if (req.user.role === "CEE") return next();
-    //si no es ninguno de los anteriores, se verifica si es el dueño
-    return isOwner(req, res, next);
-  },
-  eliminarSolicitud //controlador que realiza la eliminación
-);
-
-//se exporta el router para usarlo en el archivo principal de rutas
+//si el usuario es administrador o CEE puede hacerlo directamente
+//si no, se verifica que sea el creador con el middleware isOwner
+router.delete("/:id", (req, res, next) => {
+  if (req.user.role === "administrador") return next(); //permite si es admin
+  if (req.user.role === "CEE") return next();           //permite si es CEE
+  return isOwner(req, res, next);                       //si no, valida si es el dueño
+}, eliminarSolicitud);
+//se exporta el router para usarlo en el archivo principal
 export default router;

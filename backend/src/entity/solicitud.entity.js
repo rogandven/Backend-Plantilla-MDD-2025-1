@@ -286,6 +286,9 @@ export const SolicitudEntity = new EntitySchema({
       default: () => "CURRENT_TIMESTAMP",
       onUpdate: () => "CURRENT_TIMESTAMP",
     },
+    estadoId: {
+      default: 0
+    }
   },
 
   //se definen las relaciones con otras entidades
@@ -312,6 +315,7 @@ export const SolicitudEntity = new EntitySchema({
       //joinColumn permite la creacion de la columna de union con el gestor
       joinColumn: true,
       //nullable false indica que este campo es obligatorio por lo tanto es no nulo
+
       nullable: false,//siguiendo buenas practicas 
       //eager indica que la relacion se carga automaticamente al realizar consulta 
       eager: true,
@@ -419,7 +423,6 @@ export const SolicitudEntity = new EntitySchema({
 
 export default SolicitudEntity;
 */
-
 /*
 "use strict";
 
@@ -507,94 +510,77 @@ export default SolicitudEntity;
 "use strict";
 
 //se importa la clase EntitySchema desde TypeORM
-//esta clase permite definir entidades mediante objetos 
 import { EntitySchema } from "typeorm";
 
 //se exporta la constante SolicitudEntity que define la entidad Solicitud
-//esto permite usar esta entidad en otros archivos del proyecto
 export const SolicitudEntity = new EntitySchema({
-  //se define el nombre de la entidad que se usará internamente
+  //se define el nombre lógico de la entidad
   name: "Solicitud",
   //se define el nombre real de la tabla que se creará en la base de datos
   tableName: "solicitudes",
 
-  //se definen las columnas de la tabla, cada clave representa una columna distinta
+  //se definen las columnas que tendrá la tabla solicitudes
   columns: {
-    //se define la columna id
+    //se define la columna id como clave primaria y autoincremental
     id: {
-      //con tipo de dato Integer
       type: Number,
-      //se indica que esta columna es la clave primaria
       primary: true,
-      //se indica que el valor se genera automáticamente (auto-incremental)
       generated: true,
     },
-    //se define la columna nombre_estudiante
+    //se define la columna para guardar el nombre del estudiante
     nombre_estudiante: {
-      //tipo de dato String
       type: String,
-      //no se permite que este campo quede vacío
       nullable: false,
     },
-    //se define la columna correo_estudiante
+    //se define la columna para guardar el correo del estudiante
     correo_estudiante: {
       type: String,
       nullable: false,
     },
-    //se define la columna carrera
+    //se define la columna para guardar la carrera del estudiante
     carrera: {
       type: String,
       nullable: false,
     },
-    //se define la columna descripcion (texto de la solicitud o queja)
+    //se define la columna para guardar la descripción del caso
     descripcion: {
       type: String,
       nullable: false,
     },
-    //se define la columna detalleResolucion (respuesta que entrega el CEE)
+    //se define la columna para guardar el detalle de la resolución del caso
     detalleResolucion: {
       type: String,
-      //se establece que el valor por defecto será un texto indicando que aún no existe resolución
-      default: "no existe aun",
       nullable: false,
+      default: "no existe aun",
     },
-    //se define la columna fecha_resolucion
+    //se define la columna para registrar la fecha de resolución de la solicitud
     fecha_resolucion: {
-      //se especifica que el tipo es timestamp (fecha y hora)
       type: "timestamp",
-      //se permite que este campo quede vacío
       nullable: true,
     },
-    //se define la columna fecha_creacion
+    //se define la columna que se llenará automáticamente al crear la solicitud
     fecha_creacion: {
       type: "timestamp",
-      //se usa createDate para que se complete automáticamente con la fecha al crear
       createDate: true,
     },
-    //se define la columna fecha_actualizacion
+    //se define la columna que se actualizará automáticamente al modificar la solicitud
     fecha_actualizacion: {
       type: "timestamp",
-      //se usa updateDate para que se actualice automáticamente cada vez que se modifica la solicitud
       updateDate: true,
     },
   },
 
   //se definen las relaciones con otras entidades
   relations: {
-    //relación con la entidad User como creador de la solicitud
+    //se define la relación con el usuario que creó la solicitud
     creador: {
-      //una solicitud pertenece a un usuario (muchas solicitudes - un usuario)
       type: "many-to-one",
-      //se indica el nombre de la entidad con la que se relaciona
       target: "User",
-      //se crea una columna con la clave foránea
       joinColumn: true,
-      //el campo no puede ser nulo, debe haber un creador
       nullable: false,
-      //la relación se carga automáticamente al consultar solicitudes
       eager: true,
     },
-    //relación con la entidad User como gestor que tomará la solicitud
+    //se define la relación con el usuario que gestiona la solicitud
     gestor: {
       type: "many-to-one",
       target: "User",
@@ -602,7 +588,7 @@ export const SolicitudEntity = new EntitySchema({
       nullable: false,
       eager: true,
     },
-    //relación con la entidad Estado para indicar el estado actual de la solicitud
+    //se define la relación con el estado actual de la solicitud
     estado: {
       type: "many-to-one",
       target: "Estado",
@@ -613,5 +599,5 @@ export const SolicitudEntity = new EntitySchema({
   },
 });
 
-//se exporta la entidad con valor por defecto para facilitar su importación
+//se exporta la entidad como valor por defecto
 export default SolicitudEntity;
