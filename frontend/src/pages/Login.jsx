@@ -14,6 +14,10 @@ const Login = () => {
   const loginSubmit = async (data) => {
     try {
       const response = await loginService(data);
+      if (response.request === undefined) {
+        setLoginError("Error al conectar con el backend");
+        return;
+      }
       if (response.request.status === 200) {
         navigate("/home");
       } else {

@@ -53,4 +53,3 @@ export async function comparePassword(password, receivedPassword) {
     throw new Error("Error al comparar las contraseñas");
   }
 }
-

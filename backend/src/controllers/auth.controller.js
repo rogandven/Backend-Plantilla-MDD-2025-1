@@ -1,4 +1,3 @@
-
 /*"use strict";
 
 //se importa la entidad User, es decir la tabla de usuarios
@@ -184,45 +183,6 @@ export async function register(req, res) {
   }
 }
 
-/*
-export async function login(req, res) {
-  try {
-    //se obtiene el repositorio de usuarios
-    const userRepository = AppDataSource.getRepository(User);
-    //se extraen los datos del formulario de inicio de sesion
-    const { email, password } = req.body;
-    //se valida el formato de los datos
-    const { error } = loginValidation.validate(req.body);
-    if (error) return res.status(400).json({ message: error.message });
-    //se busca al usuario por su correo en la BD
-    const userFound = await userRepository.findOne({ where: { email } });
-    //si no se encuentra el correo se lanza un error 404 indicando que no esta registrado
-    if (!userFound)
-      return res.status(404).json({ message: "El correo electrónico no está registrado" });
-    //se compara la contraseña ingresada con la que esta registrada en BD
-    const isMatch = await comparePassword(password, userFound.password);
-    //si la contraseña es distinta a la que esta en BD se muestra un error 401 indicando que contraseña es incorrecta
-    if (!isMatch)
-      return res.status(401).json({ message: "La contraseña ingresada no es correcta" });
-
-    //se define la informacion que se incluira en el token
-    const payload = {
-      username: userFound.username,
-      email: userFound.email,
-      rut: userFound.rut,
-      role: userFound.role,
-    };
-    //se crea un token valido por un dia
-    const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
-    //se da el token al usuario
-    res.status(200).json({ message: "Inicio de sesión exitoso", accessToken });
-  } catch (error) {
-    //si ocurre algun error se muestra un error 500 se indica error al iniciar sesion.
-    console.error("Error en auth.controller.js -> login(): ", error);
-    return res.status(500).json({ message: "Error al iniciar sesión" });
-  }
-}
-*/
 export async function login(req, res) {
   try {
     const userRepository = AppDataSource.getRepository(User);
@@ -237,10 +197,11 @@ export async function login(req, res) {
       return res.status(401).json({ message: "La contraseña ingresada no es correcta" });
 
     const payload = {
+      id: userFound.id,
       username: userFound.username,
       email: userFound.email,
       rut: userFound.rut,
-      role: userFound.role,
+      rol: userFound.role,
     };
     const accessToken = jwt.sign(payload, SESSION_SECRET, { expiresIn: "1d" });
 
@@ -249,6 +210,7 @@ export async function login(req, res) {
       message: "Inicio de sesión exitoso",
       accessToken,
       user: {
+        id: userFound.id, // <- OBLIGATORIO para el frontend
         username: userFound.username,
         email: userFound.email,
         rut: userFound.rut,
@@ -261,7 +223,6 @@ export async function login(req, res) {
   }
 }
 
-
 export async function logout(req, res) {
   try {
     //se elimina la cookie jwt si existe
@@ -272,4 +233,3 @@ export async function logout(req, res) {
     return res.status(500).json({ message: "Error al cerrar sesión" });
   }
 }
-

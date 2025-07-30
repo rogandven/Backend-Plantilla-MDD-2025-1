@@ -657,13 +657,13 @@ export async function cambiarEstado(req, res) {
     //se extraen los datos enviados en el cuerpo de la solicitud
     const { nuevoEstado, detalleResolucion } = req.body;
     //si se envía un detalle de resolución, se valida que tenga al menos 10 caracteres
+
     if (detalleResolucion && detalleResolucion.trim().length < 10) {
       return res.status(400).json({
         message:
           "El detalle de resolución debe tener al menos 10 caracteres si se envía.",
       });
     }
-
     //se busca la solicitud junto a sus relaciones de gestor y estado
     const solicitud = await solicitudRepo.findOne({
       where: { id },

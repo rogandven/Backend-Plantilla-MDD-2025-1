@@ -28,6 +28,13 @@ export async function createUsers() {
                 role: "administrador"
             },
             {
+                username: "Presidente",
+                rut: "12345678-9",
+                email: "presidente@gmail.com",
+                password: await encryptPassword("admin123"),//Se encripta la contraseña
+                role: "presidente"
+            },
+            {
                 username: "Usuario",
                 rut: "98765432-1",
                 email: "usuario@gmail.com",
