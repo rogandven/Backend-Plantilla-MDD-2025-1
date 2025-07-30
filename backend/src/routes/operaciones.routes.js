@@ -12,4 +12,5 @@ router.get('/obtener',isAdmin,getOperacion);
 router.get("/resumen",isAdmin,getOperacionResumenFinanciero);
 router.put("/Actualizacion",isAdmin,updateOperacion);
 router.delete("/Eliminar",isAdmin,deleteOperacion);
+
 export default router;

@@ -1,6 +1,6 @@
-# 🚀 Plantilla de Proyecto Metodología del Desarrollo IECI 2025-1
+# 🚀 Plantilla de Proyecto CEE IECI 2025-1
 
-Este repositorio contiene el backend de la plantilla base para el proyecto semestral de Metodología del Desarrollo usando Node.js, Express y PostgreSQL. Sigue estos pasos para clonar, configurar y ejecutar el servidor localmente.
+Este repositorio contiene el backend de la plantilla base para el proyecto semestral de CEE usando Node.js, Express y PostgreSQL. Sigue estos pasos para clonar, configurar y ejecutar el servidor localmente.
 
 ---
 

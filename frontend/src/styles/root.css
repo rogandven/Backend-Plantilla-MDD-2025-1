@@ -1,15 +1,30 @@
-body{
+body {
     background-color: #fff0dd;
+    margin: 0;
+    padding: 0;
 }
-
 
 .page-root {
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
+    min-height: 100vh;
 }
 
-.page-content{
+.page-content {
     flex: 1;
     padding: 20px;
-    margin-left: 28vh; /* Ajustado para la Sidebar*/
+    margin-left: 250px;   /* Ajusta este valor según el ancho real de tu sidebar, típicamente 250px es seguro */
+    overflow-x: auto;     /* Para que puedas hacer scroll si la tabla es muy ancha */
+    min-width: 0;         /* Para que el flexbox funcione bien y no desborde */
+    box-sizing: border-box;
+    height: 99%;
 }
+
+/* Ajusta el ancho de la tabla para que nunca salga de la vista */
+.users-table, .solicitud-table, .books-table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: auto;
+    overflow-x: auto;
+}
+
