@@ -5,6 +5,7 @@ import useEditAsamblea from "@hooks/asambleas/useEditAsamblea.jsx";
 import useCreateAsamblea from "@hooks/asambleas/useCreateAsamblea.jsx";
 import { useEffect } from "react";
 import { useAuth } from '@context/AuthContext';
+import { globalIsAdmin } from "../../../backend/src/algo/globalIsAdmin";
 
 const reAddProtocool = (link) => {
   if (typeof link !== 'string') {
@@ -41,7 +42,7 @@ const Asambleas = () => {
 
   const isReallyAuthenticated = () => {
     // console.log(user.rol == "presidente");
-    return user.rol === "presidente";
+    return globalIsAdmin(user.rol);
   }
 
   const returnCreateButtonIfAuthenticated = () => {

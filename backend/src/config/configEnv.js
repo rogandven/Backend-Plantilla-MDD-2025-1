@@ -17,3 +17,6 @@ export const DB_USERNAME = process.env.DB_USERNAME;
 export const PASSWORD = process.env.PASSWORD;
 export const DATABASE = process.env.DATABASE;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
+export const EMAIL_PROVIDER = process.env.EMAIL_PROVIDER;
+export const EMAIL = process.env.EMAIL;
+export const EMAIL_PASSWORD = process.env.EMAIL_PASSWORD;

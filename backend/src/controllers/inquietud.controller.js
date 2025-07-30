@@ -2,6 +2,7 @@
 import Reclamo from "../entity/inquietudes.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 import { createValidation,updateValidation } from "../validations/inquietud.validation.js";
+import { sendMailToAllUsers } from "./user.controller.js";
 
 export async function getReclamos(req, res) {
   try {
@@ -18,7 +19,7 @@ export async function getReclamos(req, res) {
 
 export async function createReclamo(req, res) {
   try {
-    
+    var count = 0;
     const reclamoRepository = AppDataSource.getRepository(Reclamo);
     if (req.body.nombre_del_profesor === undefined) {
       return res.status(400).json({ message: 
@@ -49,11 +50,14 @@ export async function createReclamo(req, res) {
     await reclamoRepository.save(newReclamo);
 
     console.log(nombre_del_profesor);
-
-    if (countReclamoByTeacher(nombre_del_profesor) >= 5) {
-      // Por agregar
-      console.log("Placeholder. Se debería citar a reunión.");
-  }
+    try {
+      count = await countReclamoByTeacher(nombre_del_profesor);
+      console.log(count);
+      if (Number(count) === 5) {
+        sendMailToAllUsers("Aviso", "El profesor " + nombre_del_profesor + " ha llegado a 5 reclamos, ¡Se debe citar a reunión!");
+        // console.log("Placeholder. Se debería citar a reunión.");
+      }
+    } catch (error) {}
 
     res.status(201).json({ message: "Reclamo registrado exitosamente!", data: newReclamo, });
   } catch (error) {

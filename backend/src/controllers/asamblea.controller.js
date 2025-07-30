@@ -3,6 +3,8 @@ import Asamblea from "../entity/asamblea.entity.js";
 import { createValidation, NULL_INDICATOR, updateValidation } from "../validations/asamblea.validation.js"
 import { getUserId, getToken } from "../middleware/authentication.middleware.js";
 import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/other.validation.js";
+import sendMail from "../email/emailHandler.js";
+import { sendMailToAllUsers } from "./user.controller.js";
 
 export async function getAsambleas(req, res) {
     try {
@@ -49,6 +51,8 @@ export async function createAsamblea(req, res) {
             place,
         });
         const savedAsamblea = await asambleaRepository.save(newAsamblea);
+        
+        sendMailToAllUsers("Nueva asamblea", ("Descripción: " + description + "\n" + "Fecha: " + date + "\n" + "URL: " + url + "\n" + "Lugar: " + place + "\n"));
 
         res
             .status(201)
