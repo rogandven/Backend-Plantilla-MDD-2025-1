@@ -16,7 +16,7 @@ useEffect(() =>{
 fetchOperaciones();
 
 },[])
-console.log(Operaciones);
+// console.log(Operaciones);
 const balanceTotal = Operaciones.reduce((acc, op) => acc + (op.balance || 0), 0);
 return (
 <div className="Operaciones-page">

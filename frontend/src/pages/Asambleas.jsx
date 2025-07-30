@@ -41,7 +41,7 @@ const Asambleas = () => {
   }, []);
 
   const isReallyAuthenticated = () => {
-    // console.log(user.rol == "presidente");
+    // // console.log(user.rol == "presidente");
     return globalIsAdmin(user.rol);
   }
 

@@ -34,7 +34,7 @@ try {
 
 export async function CreateOperacion(operacionData) {
     try {
-        console.log(operacionData);
+        // console.log(operacionData);
          if (!operacionData.nombre_actividad) {
             throw new Error("El nombre de la actividad es necesario");
         }

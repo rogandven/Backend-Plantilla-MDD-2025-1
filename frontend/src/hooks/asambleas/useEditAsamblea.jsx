@@ -26,15 +26,15 @@ function isFutureDate(date) {
 function convertToISOFormat(date, time) {
     
     if (time === undefined || time === null) {
-      console.log(undefined);
+      // console.log(undefined);
       return undefined;
     }
     if (date === undefined || date === null) {
-      console.log(undefined);
+      // console.log(undefined);
       return undefined;
     }
     const returnValue = date + "T" + time + ":00.000Z";
-    console.log(returnValue);
+    // console.log(returnValue);
     return returnValue;
 }
 
@@ -46,7 +46,7 @@ function returnEmptyStringIfUndefined(str) {
 }
 
 function convertFromISOFormat(ISOdate) {
-    console.log(ISOdate);
+    // console.log(ISOdate);
     // 2021-10-25T18:36:27Z
     var date = "";
     var time = "";
@@ -62,7 +62,7 @@ function convertFromISOFormat(ISOdate) {
       time = ISOdate[1].split(":");
       time = time[0] + ":" + time[1];
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       time = "";
     }
 
@@ -70,7 +70,7 @@ function convertFromISOFormat(ISOdate) {
       date: date,
       time: time
     };
-    console.log(returnValue);
+    // console.log(returnValue);
     return returnValue;
 }
 

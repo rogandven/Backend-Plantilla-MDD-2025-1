@@ -12,7 +12,7 @@ const Sidebar = () => {
   try {
     preUser = JSON.parse(sessionStorage.getItem("usuario"));
   } catch (error) {
-    console.log("Error en Sidebar:" + error); 
+    // console.log("Error en Sidebar:" + error); 
   }
 
 

@@ -6,7 +6,7 @@ export const useGetReclamos= ()=>{
     const fetchReclamos =async() =>{
         try {
             const data =await GetReclamos();
-            console.log(data.data);
+            // console.log(data.data);
             setReclamos(data.data);
         } catch (error) {
             console.error("Error al conseguir quejas",error);

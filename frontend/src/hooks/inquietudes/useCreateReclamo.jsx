@@ -49,7 +49,7 @@ export const useCreateReclamo=(fetchReclamos) =>{
   const handleCreateReclamo = async ()=>{
     try {
       const formValues = await addReclamoPopup();
-      console.log(formValues);
+      // console.log(formValues);
       if(!formValues) return;
 
       const response = await CreateReclamo(formValues);
@@ -63,7 +63,7 @@ export const useCreateReclamo=(fetchReclamos) =>{
         await fetchReclamos();
       }
     } catch (error) {
-      console.log("Error al crear libro",error)
+      // console.log("Error al crear libro",error)
     }
   };
   return { handleCreateReclamo}
