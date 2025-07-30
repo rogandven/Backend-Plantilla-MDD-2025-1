@@ -12,3 +12,5 @@ export function globalIsAdmin(rolUser) {
 export function getAllowedRoles() {
     return ["presidente", "vicepresidente", "tesorero", "secretaria", "vocalia", "administrador", "cee", "CEE"];
 }
+
+export default globalIsAdmin;
