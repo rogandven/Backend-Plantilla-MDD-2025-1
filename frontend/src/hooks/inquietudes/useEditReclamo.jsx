@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 
 async function editReclamoInfo(reclamo) {
-  console.log(reclamo);
+  // console.log(reclamo);
     const { value: formValues }= await Swal.fire({
         title: "Editar reclamo",
         html: `

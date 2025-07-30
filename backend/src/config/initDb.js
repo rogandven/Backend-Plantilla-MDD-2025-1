@@ -22,17 +22,52 @@ export async function createUsers() {
         const users = [
             {
                 username: "Presidente",
-                rut: "12345678-9",
+                rut: "15128019-6",
                 email: "presidente@ubiobio.cl",
-                password: await encryptPassword("admin123"),//Se encripta la contraseña
+                password: await encryptPassword("presidente123"),//Se encripta la contraseña
                 role: "presidente"
             },
             {
-                username: "Usuario",
-                rut: "98765432-1",
-                email: "usuario@ubiobio.cl",
+                username: "Vicepresidente",
+                rut: "19370788-2",
+                email: "vicepresidente@ubiobio.cl",
+                password: await encryptPassword("vicepresidente123"),//Se encripta la contraseña
+                role: "vicepresidente"
+            },
+            {
+                username: "Tesorero",
+                rut: "10800422-3",
+                email: "tesorero@ubiobio.cl",
+                password: await encryptPassword("tesorero123"),//Se encripta la contraseña
+                role: "tesorero"
+            },
+            {
+                username: "Secretaria",
+                rut: "18185910-5",
+                email: "secretaria@ubiobio.cl",
+                password: await encryptPassword("secretaria123"),//Se encripta la contraseña
+                role: "secretaria"
+            },
+            {
+                username: "Vocalia",
+                rut: "57288988-2",
+                email: "vocalia@ubiobio.cl",
+                password: await encryptPassword("vocalia123"),//Se encripta la contraseña
+                role: "vocalia"
+            },
+            {
+                username: "Administrador",
+                rut: "34537637-4",
+                email: "administrador@ubiobio.cl",
+                password: await encryptPassword("admin123"),//Se encripta la contraseña
+                role: "administrador"
+            },
+            {
+                username: "Estudiante",
+                rut: "68884996-9",
+                email: "estudiante@ubiobio.cl",
                 password: await encryptPassword("usuario123"),
-                role: "usuario"
+                role: "estudiante"
             },
             {//aqui esta el usuario gestor por asignar para evitar tener valores nulos en la BD
                 username: "Gestor por asignar",

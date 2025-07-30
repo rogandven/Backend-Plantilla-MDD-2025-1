@@ -70,7 +70,7 @@ export const useCreateMeeting=(fetchMeeting) =>{
         await fetchMeeting();
       }
     } catch (error) {
-      console.log("Error al crear la reunion",error)
+      // console.log("Error al crear la reunion",error)
     }
   };
   return { handleCreateMeeting}

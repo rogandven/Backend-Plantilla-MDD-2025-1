@@ -11,9 +11,9 @@ export async function getAllMeeting() {
 
 export async function createMeetings(data) {
     try {
-        console.log("-- START OF DATA --");
-        console.log(data);
-        console.log("-- END OF DATA --");
+        // console.log("-- START OF DATA --");
+        // console.log(data);
+        // console.log("-- END OF DATA --");
         const response = await axios.post(`/meetings`, data);
         return response.data;
     } catch (error) {

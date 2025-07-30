@@ -567,7 +567,7 @@ const isAdmin = () =>
       }
       return role;
     } catch (error) {
-      console.log("Error en la verificación de rol: " + error);
+      // console.log("Error en la verificación de rol: " + error);
       return "estudiante";
     }
   }

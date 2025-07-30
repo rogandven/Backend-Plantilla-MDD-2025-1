@@ -40,7 +40,7 @@ function convertToISOFormat(date, time) {
       return undefined;
     }
     const returnValue = date + "T" + time + ":00.000Z";
-    console.log(returnValue);
+    // console.log(returnValue);
     return returnValue;
 }
 
@@ -147,7 +147,7 @@ async function createAsambleaInfo() {
     const result = await asambleaMatchesDate(formValues.date);
     if (result) {
       result2 = await confirmCreation(result);
-      console.log(result2);
+      // console.log(result2);
     }
     if (result2) {
       return {
