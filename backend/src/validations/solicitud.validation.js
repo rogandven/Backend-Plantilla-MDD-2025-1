@@ -176,74 +176,65 @@ export const updateSolicitudValidation = Joi.object({
   .messages({
     "object.unknown": "No se permiten campos adicionales.",
   });
+
 */
 
-"use strict"; //se activa el modo estricto para evitar errores silenciosos y mejorar el código
+"use strict"; 
 
 //se importa la librería Joi para realizar validaciones de datos
 import Joi from "joi";
 
-/*
-  Esquema de validación: crearSolicitudValidation
-  Se utiliza para validar los datos cuando un estudiante crea una nueva solicitud
-  Todos los campos son obligatorios y tienen restricciones de formato y longitud
-*/
+//Validación para crear una solicitud (todos los campos son requeridos)
 export const crearSolicitudValidation = Joi.object({
-  //nombre del estudiante: obligatorio, solo letras y espacios, entre 3 y 50 caracteres
+  // se valida el nombre del estudiante
   nombre_estudiante: Joi.string()
-    .trim()
-    .pattern(/^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,50}$/)
-    .required()
+    .trim() // elimina espacios al inicio y final
+    .pattern(/^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,50}$/) // solo letras y espacios, entre 3 y 50 caracteres
+    .required() // el campo es obligatorio
     .messages({
       "string.pattern.base": "El nombre debe tener entre 3 y 50 letras o espacios, sin dejarlo en blanco.",
       "string.empty": "El nombre del estudiante es obligatorio.",
     }),
-
-  //correo institucional: obligatorio, debe terminar en @alumnos.ubiobio.cl
+  //se valida el correo institucional del estudiante
   correo_estudiante: Joi.string()
-    .trim()
-    .pattern(/^[\w.-]+@alumnos\.ubiobio\.cl$/)
-    .required()
+    .trim() // elimina espacios al inicio y final
+    .pattern(/^[\w.-]+@alumnos\.ubiobio\.cl$/) // solo se permiten correos que terminen en @alumnos.ubiobio.cl
+    .required() // el campo es obligatorio
     .messages({
       "string.pattern.base": "Debe ingresar un correo institucional válido con dominio @alumnos.ubiobio.cl.",
       "string.empty": "El correo institucional es obligatorio.",
     }),
 
-  //carrera: obligatorio, solo letras y espacios, entre 3 y 100 caracteres
+  //se valida la carrera del estudiante
   carrera: Joi.string()
-    .trim()
-    .pattern(/^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,100}$/)
-    .required()
+    .trim() // elimina espacios innecesarios
+    .pattern(/^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,100}$/) // solo letras y espacios, entre 3 y 100 caracteres
+    .required() // el campo es obligatorio
     .messages({
       "string.pattern.base": "La carrera debe tener entre 3 y 100 letras o espacios.",
       "string.empty": "La carrera es obligatoria.",
     }),
 
-  //descripción: obligatorio, entre 10 y 500 caracteres
+  //se valida la descripción de la solicitud
   descripcion: Joi.string()
-    .trim()
-    .min(10)
-    .max(500)
-    .required()
+    .trim() // elimina espacios innecesarios
+    .min(10) // mínimo 10 caracteres
+    .max(500) // máximo 500 caracteres
+    .required() // el campo es obligatorio
     .messages({
       "string.min": "La descripción debe tener al menos 10 caracteres.",
       "string.max": "La descripción no puede exceder los 500 caracteres.",
       "string.empty": "La descripción del caso es obligatoria.",
     }),
 })
-  //se prohíben campos que no estén definidos en el esquema
-  .unknown(false)
+  .unknown(false) // no se permiten campos que no estén definidos en el esquema
   .messages({
     "object.unknown": "No se permiten campos adicionales.",
   });
 
-/*
-  Esquema de validación: updateSolicitudValidation
-  Se utiliza para validar los datos al momento de actualizar una solicitud
-  Todos los campos son opcionales, pero si se envían deben cumplir los mismos requisitos
-*/
+//Validación para actualizar una solicitud (todos los campos son opcionales)
 export const updateSolicitudValidation = Joi.object({
-  //nombre del estudiante: opcional, mismo formato que al crear
+  // el nombre del estudiante puede ser modificado si cumple con el patrón
   nombre_estudiante: Joi.string()
     .trim()
     .pattern(/^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,50}$/)
@@ -251,15 +242,15 @@ export const updateSolicitudValidation = Joi.object({
       "string.pattern.base": "El nombre debe tener entre 3 y 50 letras o espacios.",
     }),
 
-  //correo institucional: opcional, debe terminar en @alumnos.ubiobio.cl
+  //el correo institucional puede modificarse si mantiene el formato correcto
   correo_estudiante: Joi.string()
     .trim()
-    .pattern(/^[\w.-]+@alumnos\.ubiobio\.cl$/)
+    .pattern(/^[\w.-]+@alumnos\.ubiobio\.cl$/) // debe ser correo institucional
     .messages({
       "string.pattern.base": "Debe ingresar un correo institucional válido con dominio @ubiobio.cl.",
     }),
 
-  //carrera: opcional, solo letras y espacios, entre 3 y 100 caracteres
+  //la carrera también puede modificarse si cumple con el formato
   carrera: Joi.string()
     .trim()
     .pattern(/^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]{3,100}$/)
@@ -267,7 +258,7 @@ export const updateSolicitudValidation = Joi.object({
       "string.pattern.base": "La carrera debe tener entre 3 y 100 letras o espacios.",
     }),
 
-  //descripción: opcional, entre 10 y 500 caracteres
+  //la descripción puede ser modificada dentro de los límites de longitud
   descripcion: Joi.string()
     .trim()
     .min(10)
@@ -277,8 +268,7 @@ export const updateSolicitudValidation = Joi.object({
       "string.max": "La descripción no puede exceder los 500 caracteres.",
     }),
 })
-  //se prohíben campos que no estén definidos en el esquema
-  .unknown(false)
+  .unknown(false) // no se permite enviar campos que no estén definidos
   .messages({
     "object.unknown": "No se permiten campos adicionales.",
   });
