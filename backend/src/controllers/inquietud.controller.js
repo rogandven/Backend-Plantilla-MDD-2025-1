@@ -137,3 +137,5 @@ export async function countReclamoByTeacher(nombre_del_profesor) {
       return 0;
   }
 }
+
+

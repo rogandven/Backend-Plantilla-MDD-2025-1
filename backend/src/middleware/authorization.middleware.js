@@ -68,3 +68,21 @@ export function checkRole(roles) {
     }
   };
 }
+
+export async function isAdmin2(userFound) {
+  try {
+    // Verificar el rol del usuario
+    var rolUser = userFound.role;
+    rolUser = lowercaseIfDefined(userFound.role);
+    console.log(rolUser);
+
+    // Si el rol no es administrador, devolver un error 403
+    if (rolUser !== "presidente"&& rolUser !== "vicepresidente" && rolUser !== "tesorero" && rolUser !== "secretaria" && rolUser !== "vocalia")
+      return false
+
+    // Si el rol es administrador, continuar
+   return true
+  } catch (error) {
+    return false
+  }
+}

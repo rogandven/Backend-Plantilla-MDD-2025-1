@@ -145,3 +145,14 @@ export async function getProfile(req, res) {
     res.status(500).json({ message: "Error interno del servidor"})
   }
 }
+
+export async function getUsers2() {
+  try {
+    // Obtener el repositorio de usuarios y buscar todos los usuarios
+    const userRepository = AppDataSource.getRepository(User);
+    const users = await userRepository.find();
+    return users;
+  } catch (error) {
+    return null;
+  }
+}
