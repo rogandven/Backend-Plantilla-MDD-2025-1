@@ -1,6 +1,7 @@
 "use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
+import { globalIsAdmin } from "../algo/globalIsAdmin.js";
 
 // Función middleware para verificar si el usuario es administrador
 function lowercaseIfDefined(string) {
@@ -26,7 +27,7 @@ export async function isAdmin(req, res, next) {
     console.log(rolUser);
 
     // Si el rol no es administrador, devolver un error 403
-    if (rolUser !== "presidente"&& rolUser !== "vicepresidente" && rolUser !== "tesorero" && rolUser !== "secretaria" && rolUser !== "vocalia")
+    if (!globalIsAdmin(rolUser))
       return res
         .status(403)
         .json({
@@ -76,7 +77,7 @@ export async function isAdminOrCee(req, res, next) {
       return res.status(401).json({ message: "Usuario no autenticado" });
 
     //se verifica si el rol del usuario no es ni 'administrador' ni 'CEE'
-    if (req.user.role !== "administrador" && req.user.role !== "CEE") {
+    if (!globalIsAdmin(req.user.role)) {
       return res.status(403).json({
         message: "Acceso denegado. Se requiere rol ADMIN o CEE.",
       });

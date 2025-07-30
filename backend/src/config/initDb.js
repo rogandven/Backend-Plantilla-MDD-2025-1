@@ -23,21 +23,21 @@ export async function createUsers() {
             {
                 username: "Presidente",
                 rut: "12345678-9",
-                email: "presidente@gmail.com",
+                email: "presidente@ubiobio.cl",
                 password: await encryptPassword("admin123"),//Se encripta la contraseña
                 role: "presidente"
             },
             {
                 username: "Usuario",
                 rut: "98765432-1",
-                email: "usuario@gmail.com",
+                email: "usuario@ubiobio.cl",
                 password: await encryptPassword("usuario123"),
                 role: "usuario"
             },
             {//aqui esta el usuario gestor por asignar para evitar tener valores nulos en la BD
                 username: "Gestor por asignar",
                 rut: "000000000-0",
-                email: "gestor.por.asignar@gmail.com",
+                email: "gestor.por.asignar@ubiobio.cl",
                 password: await encryptPassword("gestor123"),
                 role: "gestor"
             }

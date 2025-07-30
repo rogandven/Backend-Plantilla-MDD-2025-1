@@ -254,9 +254,9 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError }) => {
               },
               pattern: {
                 value:
-                  /^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio\.cl|cee\.ubiobio\.cl|gmail\.com|gmail\.cl)$/,
+                  /^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio\.cl|ubiobio\.cl)$/,
                 message:
-                  "El correo debe ser institucional (@alumnos.ubiobio.cl, @cee.ubiobio.cl) o Gmail válido (@gmail.com, @gmail.cl)",
+                  "Debe entrar con el correo institucional",
               },
             })}
           />

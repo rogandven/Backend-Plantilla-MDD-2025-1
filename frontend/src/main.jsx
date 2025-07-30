@@ -1,4 +1,4 @@
-/*"use strict";
+"use strict";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from '@pages/Root'
@@ -12,6 +12,8 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Inquietudes from '@pages/Inquietudes'
 import Asambleas from '@pages/Asambleas';
+import Solicitudes from '@pages/Solicitudes';
+import { getAllowedRoles } from "../algo/globalIsAdmin.js";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +28,7 @@ const router = createBrowserRouter([
       {
         path: "/users",
         element: (
-          <ProtectedRoute allowedRoles={["administrador", "presidente"]}>
+          <ProtectedRoute allowedRoles={getAllowedRoles()}>
             <Users />
           </ProtectedRoute>
         ),
@@ -44,8 +46,17 @@ const router = createBrowserRouter([
         element: <Inquietudes />,
       },
       {
+
         path: "/meeting",
-        element: <Meeting />,
+        element: (
+          <ProtectedRoute allowedRoles={getAllowedRoles()}>
+            <Meeting />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/solicitudes",
+        element: <Solicitudes />,
       },
     ],
   },
@@ -62,70 +73,3 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <RouterProvider router={router} />
 );
-*/
-
-"use strict";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Root from '@pages/Root'
-import Home from '@pages/Home'
-import Login from '@pages/Login'
-import Register from '@pages/Register'
-import Error404 from '@pages/Error404'
-import Users from '@pages/Users'
-import Profile from '@pages/Profile'
-//import Books from '@pages/Books'; // Si aún usas Books
-import Solicitudes from '@pages/Solicitudes'; 
-import ProtectedRoute from '@components/ProtectedRoute'
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Root />,
-    errorElement: <Error404 />,
-    children: [
-      {
-        path: "/home",
-        element: <Home />,
-      },
-      {
-        path: "/users",
-        element: (
-          <ProtectedRoute allowedRoles={["administrador"]}>
-            <Users />
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: "/profile",
-        element: <Profile />,
-      },
-      {
-        path: "/solicitudes", 
-        element: (
-          <ProtectedRoute allowedRoles={["ESTUDIANTE", "CEE", "administrador"]}>
-            <Solicitudes />
-          </ProtectedRoute>
-        ),
-      },
-      // Si quieres, puedes dejar Books solo para pruebas o retirarlo si ya no lo usas
-      // {
-      //   path: "/books",
-      //   element: <Books />,
-      // },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-]);
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
-);
-

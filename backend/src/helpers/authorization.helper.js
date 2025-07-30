@@ -35,7 +35,7 @@ export async function isOwner(req, res, next) {
     // Verifica que no haya sido gestionada aún
     if (
       solicitud.gestor &&
-      solicitud.gestor.email !== "gestor.por.asignar@gmail.com"
+      solicitud.gestor.email !== "gestor.por.asignar@ubiobio.cl"
     ) {
       return res.status(409).json({
         message: "La solicitud ya está siendo gestionada y no puede ser modificada",
@@ -49,4 +49,4 @@ export async function isOwner(req, res, next) {
   }
 }
 
-export {isCee, isOwner};
+// export {isCee, isOwner};

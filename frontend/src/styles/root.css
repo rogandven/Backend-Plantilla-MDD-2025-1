@@ -17,6 +17,7 @@ body {
     overflow-x: auto;     /* Para que puedas hacer scroll si la tabla es muy ancha */
     min-width: 0;         /* Para que el flexbox funcione bien y no desborde */
     box-sizing: border-box;
+    height: 99%;
 }
 
 /* Ajusta el ancho de la tabla para que nunca salga de la vista */

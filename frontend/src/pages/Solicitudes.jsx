@@ -547,15 +547,42 @@ import useCreateSolicitud from "@hooks/solicitudes/useCreateSolicitud.jsx";
 import useEditSolicitud from "@hooks/solicitudes/useEditSolicitud.jsx";
 import useDeleteSolicitud from "@hooks/solicitudes/useDeleteSolicitud.jsx";
 import useChangeSolicitudEstado from "@hooks/solicitudes/useChangeSolicitudEstado.jsx";
+import { globalIsAdmin } from "../../algo/globalIsAdmin.js";
 
 //funciones para identificar el rol del usuario
 const getUser = () => JSON.parse(sessionStorage.getItem("usuario")) || {};
+/*
 const isEstudiante = () =>
   getUser()?.rol === "ESTUDIANTE" || getUser()?.role === "ESTUDIANTE";
 const isCee = () =>
   getUser()?.rol === "CEE" || getUser()?.role === "CEE";
 const isAdmin = () =>
   getUser()?.rol === "administrador" || getUser()?.role === "administrador";
+*/
+
+  const returnEstudianteIfUndefined = (role) => {
+    try {
+      if (role === null || role === undefined) {
+        return "estudiante";
+      }
+      return role;
+    } catch (error) {
+      console.log("Error en la verificación de rol: " + error);
+      return "estudiante";
+    }
+  }
+
+const isEstudiante = () => {
+  return !(globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol)));
+}
+  
+const isCee = () => {
+  return (globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol)));
+}
+  
+const isAdmin = () => {
+  return (globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol)));
+}
 
 const Solicitudes = () => {
   const { solicitudes, fetchSolicitudes } = useGetSolicitudes();

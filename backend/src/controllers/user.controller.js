@@ -80,9 +80,11 @@ export async function updateUserById(req, res) {
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
 
-    assertValidIdResult = assertValidId(id, req, res);
+    var assertValidIdResult = assertValidId(id, req, res);
     if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
-        return assertValidIdResult;
+        return res.status(404).json({
+          message: "No se encontró el ID"
+        });
     }
 
     const { error } = updateValidation.validate(req.body);
@@ -103,7 +105,6 @@ export async function updateUserById(req, res) {
     user.username = username || user.username;
     user.email = email || user.email;
     user.rut = rut || user.rut;
-    user.role = role || user.role;
 
     // Guardar los cambios en la base de datos
     await userRepository.save(user);
@@ -123,7 +124,7 @@ export async function deleteUserById(req, res) {
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
 
-    assertValidIdResult = assertValidId(id, req, res);
+    var assertValidIdResult = assertValidId(id, req, res);
     if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
         return assertValidIdResult;
     }

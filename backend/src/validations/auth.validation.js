@@ -1,5 +1,6 @@
 "use strict";
 import Joi from "joi";
+import { globalIsAdmin } from "../algo/globalIsAdmin.js";
 
 // Función para validar que el correo electrónico termine en @ubiobio.cl
 const domainEmailValidator = (value, helpers) => {
@@ -68,6 +69,7 @@ export const registerValidation = Joi.object({
     "object.unknown": "No se permiten campos adicionales",
   });
 
+/*
 const roleValidator = (value, helpers) => {
   value = value.toLowerCase();
   switch(value) {
@@ -80,6 +82,16 @@ const roleValidator = (value, helpers) => {
       );
   }
 };
+*/
+
+const roleValidator = (value, helpers) => {
+    if (globalIsAdmin(value) || value === "estudiante" || value === "ESTUDIANTE") {
+      return true;
+    }
+    return helpers.message(
+      "Rol no válido"
+    );
+}
 
 /* export const updateValidation = Joi.object({
   username: Joi.string()
@@ -272,5 +284,5 @@ export const registerCeeValidation = Joi.object({
     "object.unknown": "No se permiten campos adicionales",
   });
 
-export default null;
+export default updateValidation;
 

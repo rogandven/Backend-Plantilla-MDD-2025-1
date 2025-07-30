@@ -198,7 +198,7 @@ export const crearSolicitudValidation = Joi.object({
   //se valida el correo institucional del estudiante
   correo_estudiante: Joi.string()
     .trim() // elimina espacios al inicio y final
-    .pattern(/^[\w.-]+@alumnos\.ubiobio\.cl$/) // solo se permiten correos que terminen en @alumnos.ubiobio.cl
+    .pattern(/^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio\.cl|ubiobio\.cl)$/) // solo se permiten correos que terminen en @alumnos.ubiobio.cl
     .required() // el campo es obligatorio
     .messages({
       "string.pattern.base": "Debe ingresar un correo institucional válido con dominio @alumnos.ubiobio.cl.",
@@ -245,7 +245,7 @@ export const updateSolicitudValidation = Joi.object({
   //el correo institucional puede modificarse si mantiene el formato correcto
   correo_estudiante: Joi.string()
     .trim()
-    .pattern(/^[\w.-]+@alumnos\.ubiobio\.cl$/) // debe ser correo institucional
+    .pattern(/^[a-zA-Z0-9._%+-]+@(alumnos\.ubiobio\.cl|ubiobio\.cl)$/) // debe ser correo institucional
     .messages({
       "string.pattern.base": "Debe ingresar un correo institucional válido con dominio @ubiobio.cl.",
     }),

@@ -48,7 +48,7 @@ async function editUserInfo(user) {
       }
       if (!/^[a-zA-Z0-9._%+-]+@(ubiobio|alumnos\.ubiobio)\.(com|cl)$/.test(email)) {
         Swal.showValidationMessage(
-          "Por favor, ingresa un correo de Gmail válido (@gmail.com o @gmail.cl)"
+          "Por favor, ingresa un correo de ubiobio válido (@ubiobio.cl o @ubiobio.cl)"
         );
         return false;
       }

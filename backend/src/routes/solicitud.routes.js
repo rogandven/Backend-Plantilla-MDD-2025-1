@@ -143,6 +143,7 @@ import {
 import { authenticateJwt } from "../middleware/authentication.middleware.js";
 //se importan los middlewares de autorización: uno para validar si es CEE, otro si es dueño de la solicitud
 import { isCee, isOwner } from "../helpers/authorization.helper.js";
+import { globalIsAdmin } from "../algo/globalIsAdmin.js";
 //se crea un nuevo router para las rutas de solicitudes
 const router = Router();
 //se aplica el middleware de autenticación a todas las rutas de este archivo
@@ -159,8 +160,7 @@ router.put("/estado/:id", isCee, cambiarEstado);
 //si el usuario es administrador o CEE puede hacerlo directamente
 //si no, se verifica que sea el creador con el middleware isOwner
 router.delete("/:id", (req, res, next) => {
-  if (req.user.role === "administrador") return next(); //permite si es admin
-  if (req.user.role === "CEE") return next();           //permite si es CEE
+  if (globalIsAdmin(req.user.role)) return next(); //permite si es admin        //permite si es CEE
   return isOwner(req, res, next);                       //si no, valida si es el dueño
 }, eliminarSolicitud);
 //se exporta el router para usarlo en el archivo principal
