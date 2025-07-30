@@ -4,6 +4,7 @@ import { AppDataSource } from "../config/configDb.js";
 import { isNull, assertValidId, ASSERTVALIDID_SUCCESS } from "../validations/other.validation.js";
 import updateValidation from "../validations/auth.validation.js";
 import { registerCeeValidation } from "../validations/auth.validation.js";
+import { sendMail } from "../email/emailHandler.js";
 
 export async function getUsers(req, res) {
   try {
@@ -15,6 +16,16 @@ export async function getUsers(req, res) {
   } catch (error) {
     console.error("Error en user.controller.js -> getUsers(): ", error);
     res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
+
+export async function getUsers2() {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+    const users = await userRepository.find();
+    return users;
+  } catch (error) {
+    return null;
   }
 }
 
@@ -177,4 +188,19 @@ export async function getProfile(req, res) {
     console.error("Error en user.controller -> getProfile(): ", error);
     res.status(500).json({ message: "Error interno del servidor"})
   }
+}
+
+export async function sendMailToAllUsers(subject, text) {
+  try {
+    const users = await getUsers2();
+    if (users !== null){
+      users.map((user) => {
+        try {
+          sendMail(user.email, subject, text);
+        } catch (error) {
+          console.log(error);
+        }
+      })
+    }
+  } catch (error) {};
 }

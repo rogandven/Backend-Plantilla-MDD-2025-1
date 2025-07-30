@@ -6,6 +6,7 @@ import indexRoutes from "./src/routes/index.routes.js";
 import { PORT, HOST } from "./src/config/configEnv.js";
 import { connectDB } from "./src/config/configDb.js";
 import { createUsers } from "./src/config/initDb.js";
+// import { sendAsambleaMailToAllUsers } from "./src/controllers/user.controller.js";
 
 // lo que yo implemente.
 import { createEstados } from "./src/config/initDb.js";
@@ -36,6 +37,8 @@ async function setupServer() {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en ${HOST}:${PORT}`);
   });
+
+  // sendAsambleaMailToAllUsers();
 }
 
 // Función para configurar la API
