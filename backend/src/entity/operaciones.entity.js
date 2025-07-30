@@ -22,14 +22,12 @@ export const OperacionesEntity = new EntitySchema({
       scale: 2,
       nullable: true,
     },
-    egreso: {
-      type: Number,
-      nullable: true,
+    tipo: {
+      type: "enum",
+      enum: ["INGRESO", "EGRESO"],
+      default: "INGRESO"
     },
-   ingreso: {
-      type: Number,
-      nullable: true,
-    },
+    
     createdAt: {
       type: "timestamp",
       default: () => "CURRENT_TIMESTAMP",
