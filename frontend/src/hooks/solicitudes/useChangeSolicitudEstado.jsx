@@ -50,7 +50,7 @@ export const useChangeSolicitudEstado = (fetchSolicitudes) => {
     if (detalleResolucion) {
       try {
         await changeSolicitudEstado(solicitud.id, {
-          nuevoEstado: "resuelta",  // Cambié "estado" por "nuevoEstado"
+          nuevoEstado: "resuelta",  
           detalleResolucion,
         });
         Swal.fire("Resuelta", "Solicitud marcada como resuelta", "success");

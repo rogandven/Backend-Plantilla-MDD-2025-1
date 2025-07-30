@@ -28,7 +28,6 @@ const loginSubmit = async (data) => {
   try {
     const response = await loginService(data);
     if (response.request.status === 200) {
-      // 👇 ¡Agrega esta línea!
       sessionStorage.setItem(
         "usuario",
         JSON.stringify(response.data.user)

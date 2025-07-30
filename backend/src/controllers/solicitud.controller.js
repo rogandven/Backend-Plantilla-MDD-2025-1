@@ -487,6 +487,8 @@ import {
   updateSolicitudValidation,
 } from "../validations/solicitud.validation.js";
 
+/*
+
 //funcion para obtener las solicitudes según el rol del usuario y filtros opcionales
 export async function obtenerSolicitudes(req, res) {
   try {
@@ -540,7 +542,57 @@ export async function obtenerSolicitudes(req, res) {
     //se retorna error 500 al cliente
     res.status(500).json({ message: "Error al listar solicitudes" });
   }
+}*/
+
+export async function obtenerSolicitudes(req, res) {
+  try {
+    const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
+    const { estado, descripcion, carrera, fecha, correo_estudiante, nombre_estudiante, filtro } = req.query;
+
+    let query = solicitudRepo
+      .createQueryBuilder("solicitud")
+      .leftJoinAndSelect("solicitud.estado", "estado")
+      .leftJoinAndSelect("solicitud.creador", "creador")
+      .leftJoinAndSelect("solicitud.gestor", "gestor");
+
+    //si es estudiante, filtra por su propio correo
+    if (req.user.role === "usuario" || req.user.role === "ESTUDIANTE") {
+      query = query.andWhere("solicitud.correo_estudiante = :correo", { correo: req.user.email });
+    }
+
+    //se filtro por estado
+    if (estado) query = query.andWhere("estado.nombre = :estado", { estado });
+
+    //se filtro por fecha
+    if (fecha)
+      query = query.andWhere("DATE(solicitud.fecha_creacion) = :fecha", { fecha });
+
+    //busqueda descripción, carrera, correo, nombre, filtro general
+    if (descripcion || carrera || correo_estudiante || nombre_estudiante || filtro) {
+      const busqueda =
+        filtro ||
+        descripcion ||
+        carrera ||
+        correo_estudiante ||
+        nombre_estudiante;
+
+      query = query.andWhere(
+        `(solicitud.descripcion ILIKE :busqueda
+        OR solicitud.carrera ILIKE :busqueda
+        OR solicitud.correo_estudiante ILIKE :busqueda
+        OR solicitud.nombre_estudiante ILIKE :busqueda)`,
+        { busqueda: `%${busqueda}%` }
+      );
+    }
+
+    const resultados = await query.getMany();
+    res.status(200).json({ message: "Solicitudes encontradas", data: resultados });
+  } catch (error) {
+    console.error("Error al listar solicitudes: ", error);
+    res.status(500).json({ message: "Error al listar solicitudes" });
+  }
 }
+
 
 //función para crear una nueva solicitud
 export async function crearSolicitud(req, res) {

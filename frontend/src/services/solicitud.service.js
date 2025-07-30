@@ -1,6 +1,6 @@
 import axios from '@services/root.service.js';
 
-// Obtener todas las solicitudes
+//obtener todas las solicitudes
 export async function getSolicitudes(query = '') {
   try {
     const response = await axios.get(`/solicitudes${query}`);
@@ -11,7 +11,7 @@ export async function getSolicitudes(query = '') {
   }
 }
 
-// Crear solicitud nueva
+//crear solicitud nueva
 export async function createSolicitud(solicitudData) {
   try {
     const response = await axios.post('/solicitudes', solicitudData);
@@ -22,7 +22,7 @@ export async function createSolicitud(solicitudData) {
   }
 }
 
-// Editar solicitud (solo estudiante dueño y si no está tomada)
+//editar solicitud (solo estudiante dueño y si no está tomada)
 export async function editSolicitud(id, solicitudData) {
   try {
     const response = await axios.put(`/solicitudes/${id}`, solicitudData);
@@ -33,7 +33,7 @@ export async function editSolicitud(id, solicitudData) {
   }
 }
 
-// Eliminar solicitud (admin, CEE, o estudiante dueño si no está tomada)
+//eliminar solicitud (admin, CEE, o estudiante dueño si no está tomada)
 export async function deleteSolicitud(id) {
   try {
     const response = await axios.delete(`/solicitudes/${id}`);
@@ -44,7 +44,7 @@ export async function deleteSolicitud(id) {
   }
 }
 
-// Cambiar estado (gestionar, resolver) — solo CEE
+//cambiar estado (gestionar, resolver) — solo CEE
 export async function changeSolicitudEstado(id, data) {
   try {
     const response = await axios.put(`/solicitudes/estado/${id}`, data);

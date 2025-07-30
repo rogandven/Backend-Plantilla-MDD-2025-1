@@ -60,7 +60,7 @@ import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 //import Books from '@pages/Books'; // Si aún usas Books
-import Solicitudes from '@pages/Solicitudes'; // IMPORTANTE: importa la nueva página
+import Solicitudes from '@pages/Solicitudes'; 
 import ProtectedRoute from '@components/ProtectedRoute'
 
 const router = createBrowserRouter([
@@ -86,7 +86,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/solicitudes", // <-- NUEVA RUTA PARA SOLICITUDES
+        path: "/solicitudes", 
         element: (
           <ProtectedRoute allowedRoles={["ESTUDIANTE", "CEE", "administrador"]}>
             <Solicitudes />

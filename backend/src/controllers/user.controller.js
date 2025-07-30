@@ -175,6 +175,9 @@ import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 //se importa la función para encriptar contraseñas
 import { encryptPassword } from "../helpers/bcrypt.helper.js";
+
+
+/*
 //función para obtener todos los usuarios del sistema
 export async function getUsers(req, res) {
   try {
@@ -191,6 +194,8 @@ export async function getUsers(req, res) {
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
+*/
+
 
 //función para obtener un usuario por su ID
 export async function getUserById(req, res) {
@@ -214,6 +219,36 @@ export async function getUserById(req, res) {
     res.status(500).json({ message: "Error interno del servidor." });
   }
 }
+
+//ultima modificacion de la funcion
+// función para obtener todos los usuarios, con soporte de filtro por query string
+export async function getUsers(req, res) {
+  try {
+    const userRepository = AppDataSource.getRepository(User);
+
+    // Lee filtros desde query params
+    const { username, email, rut, role } = req.query;
+    let query = userRepository.createQueryBuilder("user");
+
+    if (username)
+      query = query.andWhere("user.username ILIKE :username", { username: `%${username}%` });
+    if (email)
+      query = query.andWhere("user.email ILIKE :email", { email: `%${email}%` });
+    if (rut)
+      query = query.andWhere("user.rut ILIKE :rut", { rut: `%${rut}%` });
+    if (role)
+      query = query.andWhere("user.role = :role", { role });
+
+    // Devuelve todos o los filtrados
+    const users = await query.getMany();
+
+    res.status(200).json({ message: "Usuarios encontrados: ", data: users });
+  } catch (error) {
+    console.error("Error en user.controller.js -> getUsers(): ", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+}
+
 
 //función para actualizar un usuario por su ID
 export async function updateUserById(req, res) {

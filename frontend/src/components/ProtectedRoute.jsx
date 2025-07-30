@@ -24,7 +24,6 @@ import { Navigate } from 'react-router-dom';
 const ProtectedRoute = ({ children, allowedRoles }) => {
     const { isAuthenticated, user } = useAuth();
 
-    // 👇 Agrega estos logs
     console.log("ProtectedRoute usuario:", user);
     const role = user?.rol || user?.role;
     console.log("ProtectedRoute rol:", role);
