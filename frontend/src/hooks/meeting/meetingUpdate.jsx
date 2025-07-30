@@ -116,7 +116,7 @@ export const EditMeeting = (fetchMeeting) => {
         await fetchMeeting();
       }
     } catch (error) {
-      console.error("Error al editar usuario:", error);
+      console.error("Error al editar reunion:", error);
     }
   };
 

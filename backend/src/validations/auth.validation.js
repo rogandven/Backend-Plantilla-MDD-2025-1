@@ -272,4 +272,4 @@ export const registerCeeValidation = Joi.object({
     "object.unknown": "No se permiten campos adicionales",
   });
 
-export default null;
+export default updateValidation;

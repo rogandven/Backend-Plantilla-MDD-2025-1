@@ -37,16 +37,23 @@ const Sidebar = () => {
             </li>
           )}
           {(userRole === "administrador" || userRole == "presidente") && (
-            <li>
-              <NavLink to="/meeting">
-                <FaUsers className="icon"/> Reuniones
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/Inquietudes">
-              <FaBookOpen className="icon"/>   Reclamos
-              </NavLink>
-            </li>
+            <div>
+              <li>
+                <NavLink to="/meeting">
+                  <FaUsers className="icon"/> Reuniones
+                </NavLink>
+             </li>
+              <li>
+                <NavLink to="/Inquietudes">
+                <FaBookOpen className="icon"/>   Reclamos
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/solicitudes">
+                  <span className="icon">📋</span> Solicitudes
+                </NavLink>
+              </li>
+            </div>
           )}
           <li>
             <NavLink to="/asambleas">

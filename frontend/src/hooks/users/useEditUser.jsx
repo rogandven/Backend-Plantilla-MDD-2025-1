@@ -74,6 +74,7 @@ export const useEditUser = (fetchUsers) => {
         await fetchUsers();
       }
     } catch (error) {
+      console.log(error);
       console.error("Error al editar usuario:", error);
     }
   };

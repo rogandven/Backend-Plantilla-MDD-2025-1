@@ -80,7 +80,7 @@ export async function updateUserById(req, res) {
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
 
-    assertValidIdResult = assertValidId(id, req, res);
+    var assertValidIdResult = assertValidId(id, req, res);
     if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
         return assertValidIdResult;
     }
@@ -90,7 +90,7 @@ export async function updateUserById(req, res) {
       message: error.message
     });
 
-    const { username, email, rut } = req.body;
+    const { username, email, rut, role } = req.body;
     
     const user = await userRepository.findOne({ where: { id } });
 

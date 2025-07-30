@@ -49,4 +49,4 @@ export async function isOwner(req, res, next) {
   }
 }
 
-export {isCee, isOwner};
+export default {isCee, isOwner};

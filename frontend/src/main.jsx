@@ -12,6 +12,7 @@ import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
 import Inquietudes from '@pages/Inquietudes'
 import Asambleas from '@pages/Asambleas';
+import Solicitudes from "@pages/Solicitudes";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute allowedRoles={["administrador", "presidente"]}>
             <Users />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/solicitudes", // <-- NUEVA RUTA PARA SOLICITUDES
+        element: (
+          <ProtectedRoute allowedRoles={["presidente"]}>
+            <Solicitudes />
           </ProtectedRoute>
         ),
       },

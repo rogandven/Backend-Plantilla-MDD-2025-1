@@ -14,6 +14,7 @@ export async function editUser(userId, userData) {
         const response = await axios.put(`/users/${userId}`, userData);
         return response.data;
     } catch (error) {
+        console.log(error);
         console.error("Error al editar usuario:", error);
     }
 }
