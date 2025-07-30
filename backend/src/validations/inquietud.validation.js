@@ -6,7 +6,7 @@ export const createValidation = Joi.object({
     .min(3)
     .max(50)
     .required()
-    .pattern(/^[a-zA-Z0-9_\s]+$/)
+    .pattern(/^[a-zA-Z\s:;,.áéíóúàèìòù]+$/)
     .messages({
         "string.pattern.base":"el nombre solo puede contener letras y numeros",
         "string.min": "el nombre debe tener al menos tres caracteres",
@@ -19,7 +19,7 @@ export const createValidation = Joi.object({
     .min(3)
     .max(500)
     .required()
-    .pattern(/^[a-zA-Z\s]+$/)
+    .pattern(/^[a-zA-Z\s:;,.áéíóúàèìòù]+$/)
     .messages({
         "string.pattern.base":"La descripción solo puede contener letras y numeros",
         "string.min": "La descripción debe tener al menos tres caracteres",
@@ -32,7 +32,7 @@ export const createValidation = Joi.object({
     .min(3)
     .max(50)
     .required()
-    .pattern(/^[a-zA-Z0-9_\s]+$/)
+    .pattern(/^[a-zA-Z\s:;,.áéíóúàèìòù]+$/)
     .messages({
         "string.pattern.base":"el ramo solo puede contener letras y numeros",
         "string.min": "el ramo debe tener al menos tres caracteres",
@@ -50,8 +50,7 @@ export const updateValidation = Joi.object({
     nombre_del_profesor: Joi.string()
     .min(3)
     .max(50)
-    .required()
-    .pattern(/^[a-zA-Z0-9_\s]+$/)
+    .pattern(/^[a-zA-Z\s:;,.áéíóúàèìòù]+$/)
     .messages({
         "string.pattern.base":"el nombre solo puede contener letras y numeros",
         "string.min": "el nombre debe tener al menos tres caracteres",
@@ -61,9 +60,8 @@ export const updateValidation = Joi.object({
 
     descripcion: Joi.string()
     .min(3)
-    .max(50)
-    .required()
-    .pattern(/^[a-zA-Z\s]+$/)
+    .max(500)
+    .pattern(/^[a-zA-Z\s:;,.áéíóúàèìòù]+$/)
     .messages({
         "string.pattern.base":"La descripción solo puede contener letras y numeros",
         "string.min": "La descripción debe tener al menos tres caracteres",
@@ -74,8 +72,7 @@ export const updateValidation = Joi.object({
     ramo: Joi.string()
     .min(3)
     .max(50)
-    .required()
-    .pattern(/^[a-zA-Z0-9_\s]+$/)
+    .pattern(/^[a-zA-Z\s:;,.áéíóúàèìòù]+$/)
     .messages({
         "string.pattern.base":"el ramo solo puede contener letras y numeros",
         "string.min": "el ramo debe tener al menos tres caracteres",

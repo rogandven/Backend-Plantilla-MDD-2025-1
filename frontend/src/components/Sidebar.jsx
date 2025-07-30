@@ -1,18 +1,14 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
-import { FaHome, FaUsers, FaSignOutAlt, FaWineGlass } from "react-icons/fa";
+import { FaHome, FaUsers, FaSignOutAlt,FaBookOpen, FaWineGlass} from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import "@styles/Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
 
-  // console.log(sessionStorage.getItem("usuario"));
-
   const user = JSON.parse(sessionStorage.getItem("usuario")) || "";
   const userRole = user?.rol;
-
-  // console.log(userRole);
 
   const logoutSubmit = () => {
     try {
@@ -44,6 +40,11 @@ const Sidebar = () => {
             <li>
               <NavLink to="/meeting">
                 <FaUsers className="icon"/> Reuniones
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/Inquietudes">
+              <FaBookOpen className="icon"/>   Reclamos
               </NavLink>
             </li>
           )}

@@ -176,7 +176,6 @@ export const updateSolicitudValidation = Joi.object({
   .messages({
     "object.unknown": "No se permiten campos adicionales.",
   });
-
 */
 
 "use strict"; //se activa el modo estricto para evitar errores silenciosos y mejorar el código

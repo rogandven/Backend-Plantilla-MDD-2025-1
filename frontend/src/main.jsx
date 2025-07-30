@@ -9,8 +9,9 @@ import Register from '@pages/Register'
 import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
-import Asambleas from '@pages/Asambleas';
 import ProtectedRoute from '@components/ProtectedRoute'
+import Inquietudes from '@pages/Inquietudes'
+import Asambleas from '@pages/Asambleas';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/inquietudes",
+        element: <Inquietudes />,
       },
       {
         path: "/meeting",

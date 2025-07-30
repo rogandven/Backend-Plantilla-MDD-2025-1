@@ -87,7 +87,7 @@ const LoginRegisterForm = ({ mode = "login", onSubmit, loginError}) => {
               pattern: {
                 value: /^[a-zA-Z0-9._%+-]+@(ubiobio|alumnos\.ubiobio)\.(com|cl)$/,
                 message:
-                  "El correo debe ser un correo de Gmail válido (@gmail.com o @gmail.cl)",
+                  "Debe entrar con el correo institucional (@alumnos.ubiobio.cl)",
               },
             })}
           />
