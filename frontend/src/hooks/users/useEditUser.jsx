@@ -53,7 +53,7 @@ async function editUserInfo(user) {
         return false;
       }
       return { username, email };
-    },
+    }
   });
   if (formValues) {
     return {

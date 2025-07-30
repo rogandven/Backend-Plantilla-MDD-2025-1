@@ -10,6 +10,7 @@ import Error404 from '@pages/Error404'
 import Users from '@pages/Users'
 import Profile from '@pages/Profile'
 import ProtectedRoute from '@components/ProtectedRoute'
+import Operaciones from '@pages/Operaciones';
 import Inquietudes from '@pages/Inquietudes'
 import Asambleas from '@pages/Asambleas';
 import Solicitudes from '@pages/Solicitudes';
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
             <Users />
           </ProtectedRoute>
         ),
+      },
+      {
+       path:"/Operaciones",
+       element :<Operaciones/>
       },
       {
         path: "/asambleas",

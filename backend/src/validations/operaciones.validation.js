@@ -22,19 +22,23 @@ export const OperacionesBodyValidation = Joi.object({
             'string.empty': "El nombre no puede estar vacío.",
             'string.base': "El nombre debe ser de tipo texto.",
         }),
-        egreso: Joi.number()
+        monto: Joi.number()
         .min(1)
         .messages({
             'number.min':"el egreso debe ser por lo menos de 1 caracter",
             'number.empty': "El egreso no puede estar vacío.",
             'number.base': "El egreso debe ser de tipo numero.",
         }),
-        ingreso: Joi.number()
+        tipo: Joi.string()
         .min(1)
+        .uppercase()
+        .valid('INGRESO', 'EGRESO')
+        .required()
         .messages({
-             'number.min':"el egreso debe ser por lo menos de 1 caracter",
-            'number.empty': "El ingreso no puede estar vacío.",
-            'number.base': "El ingreso debe ser de tipo numero.",
+             'string.min':"el egreso debe ser por lo menos de 1 caracter",
+            'string.empty': "El ingreso no puede estar vacío.",
+            'string.base': "El ingreso debe ser de tipo numero.",
+            'any.only':"El tipo debe ser INGRESO o EGRESO.",
         }),
 }).unknown(false).messages({
     "object.unknown": "No se permiten propiedades adicionales.",

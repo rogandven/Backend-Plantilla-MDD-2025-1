@@ -34,8 +34,8 @@ const Users = () => {
                 <td>{user.email}</td>
                 <td>{user.role}</td>
                 <td>
-                  <button className="edit" onClick={() => handleEditUser(user.id, user)}>Editar</button>
-                  <button className="delete" onClick={() => handleDeleteUser(user.id)}>Eliminar</button>
+                  <button className="edit">Editar</button>
+                  <button className="delete">Eliminar</button>
                 </td>
               </tr>
             ))

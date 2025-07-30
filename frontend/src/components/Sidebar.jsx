@@ -3,6 +3,7 @@ import { logout } from "@services/auth.service.js";
 import { FaHome, FaUsers, FaSignOutAlt,FaBookOpen, FaWineGlass} from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import "@styles/Sidebar.css";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
 import { globalIsAdmin } from "../../algo/globalIsAdmin.js";
 
 const Sidebar = () => {
@@ -75,6 +76,11 @@ const Sidebar = () => {
           <li>
             <NavLink to="/profile">
               <CgProfile className="icon"/> Perfil
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/Operaciones">
+            <FaMoneyBillTransfer className="icon"/> Operacion          
             </NavLink>
           </li>
           <li style={{ height: "70%" }}/>
