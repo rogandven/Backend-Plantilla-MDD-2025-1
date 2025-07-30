@@ -1,5 +1,9 @@
+<<<<<<< frontend2seba
 
 /*"use strict";
+=======
+"use strict";
+>>>>>>> NEWprefinalNEW
 
 
 import { AppDataSource } from "../config/configDb.js";
@@ -49,6 +53,7 @@ export async function isOwner(req, res, next) {
     res.status(500).json({ message: "Error al verificar propiedad de la solicitud" });
   }
 }
+<<<<<<< frontend2seba
 */
 
 /*
@@ -221,3 +226,7 @@ export async function isOwner(req, res, next) {
     res.status(500).json({ message: "Error interno" });
   }
 }
+=======
+
+export {isCee, isOwner};
+>>>>>>> NEWprefinalNEW

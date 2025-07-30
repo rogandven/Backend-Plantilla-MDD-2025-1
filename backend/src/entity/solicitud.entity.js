@@ -597,3 +597,4 @@ export const SolicitudEntity = new EntitySchema({
 
 //se exporta la entidad como valor por defecto
 export default SolicitudEntity;
+

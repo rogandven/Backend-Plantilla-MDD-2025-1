@@ -1,4 +1,5 @@
-/*"use strict"
+// <<<<<<< sebastianCopiaPreFinal2
+"use strict"
 import cors from "cors";
 import express from "express";
 import morgan from "morgan";
@@ -59,68 +60,62 @@ async function setupAPI() {
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((error) => console.log("Error en index.js -> setupAPI(): ", error));
-*/
 
-"use strict";
-
-//se importan las dependencias externas necesarias
-import cors from "cors";                    //se importa CORS para permitir peticiones entre dominios
-import express from "express";              //se importa Express para crear el servidor HTTP
-import morgan from "morgan";                //se importa Morgan para registrar las peticiones en consola
-//se importan las rutas principales de la API
+/*
+"use strict"
+import cors from "cors";
+import express from "express";
+import morgan from "morgan";
 import indexRoutes from "./src/routes/index.routes.js";
-//se importan las variables de entorno (puerto y host)
 import { PORT, HOST } from "./src/config/configEnv.js";
-//se importa la función para conectar a la base de datos
 import { connectDB } from "./src/config/configDb.js";
-//implementación propia: funciones para inicializar la BD con datos por defecto
-import { createUsers, createEstados } from "./src/config/initDb.js";
-
-
- //setupServer()
- //se encarga de crear y configurar la instancia de Express
+import { createUsers } from "./src/config/initDb.js";
+import { createOperacion } from "./src/controllers/operaciones.controller.js";
 async function setupServer() {
-  //se crea la app de Express
+  // Crea la instancia de Express
   const app = express();
-  //se deshabilita el header X-Powered-By por seguridad
   app.disable("x-powered-by");
-  //se configura CORS para aceptar solicitudes desde cualquier origen
+
+  // Habilita el CORS para permitir solicitudes desde otros dominios (frontend)
   app.use(
     cors({
-      credentials: true, //se permite el envío de credenciales (cookies, headers)
-      origin: true,      //se permite cualquier origen
+      credentials: true,
+      origin: true,
     })
   );
-  //se indica a Express que procese el body de las peticiones como JSON
+
+  // Avisas a express que use JSON
   app.use(express.json());
-  //se configura Morgan en modo "dev" para mostrar logs de las peticiones HTTP
+
+  // Configura el middleware de morgan para registrar las peticiones HTTP
   app.use(morgan("dev"));
-  //se monta el enrutador principal bajo /api
+
+  // Configura las rutas de la API
   app.use("/api", indexRoutes);
-  //se inicia el servidor escuchando en el puerto especificado
+
+  // Enciende el servidor
   app.listen(PORT, () => {
-    console.log(`Servidor corriendo en ${HOST}:${PORT}`);
+    console.log(`Servidor corriendo en http://${HOST}:${PORT}`);
   });
 }
 
-//setupAPI()
-//se encarga de conectar la base de datos, inicializar datos y arrancar el servidor
+// Función para configurar la API
 async function setupAPI() {
   try {
-    //se conecta a la base de datos
+    // Conecta la base de datos
     await connectDB();
-    //se crean los usuarios iniciales (admin, CEE, etc.)
+    // Crea los usuarios iniciales
     await createUsers();
-    //se crean los estados iniciales de la aplicación
-    await createEstados();
-    //se configura y arranca el servidor Express
+    // Configura el servidor
     await setupServer();
   } catch (error) {
-    //se muestra cualquier error que ocurra durante la configuración
     console.error("Error en index.js -> setupAPI(): ", error);
   }
 }
-//se inicia todo el proceso y se maneja cualquier error inesperado
+
+// Inicia la configuración de la API
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((error) => console.log("Error en index.js -> setupAPI(): ", error));
+*/
+

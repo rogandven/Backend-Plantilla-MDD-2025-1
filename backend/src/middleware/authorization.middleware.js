@@ -1,156 +1,92 @@
-
-/*"use strict";
-
+"use strict";
 import User from "../entity/user.entity.js";
 import { AppDataSource } from "../config/configDb.js";
 
-// Middleware para verificar si el usuario es administrador
+// Función middleware para verificar si el usuario es administrador
+function lowercaseIfDefined(string) {
+    if (string !== undefined && string !== null && ((typeof(string).toLowerCase()) === "string")) {
+        return string.toLowerCase()
+    } else {
+        return "usuario";
+    }
+}
+
 export async function isAdmin(req, res, next) {
   try {
-    // Obtener el repositorio de usuarios
+    // Buscar el usuario en la base de datos
     const userRepository = AppDataSource.getRepository(User);
-
-    // Buscar al usuario por su email desde el token decodificado
-    const userFound = await userRepository.findOneBy({ email: req.user?.email });
-    if (!userFound)
-      return res.status(404).json({ message: "Usuario no encontrado" });
+    const userFound = await userRepository.findOneBy({
+      email: req.user?.email,
+    });
+    if (!userFound) return res.status(404).json("Usuario no encontrado");
 
     // Verificar el rol del usuario
-    if (userFound.role !== "administrador")
-      return res.status(403).json({
-        message:
-          "Acceso denegado. Se requiere rol de administrador para esta acción.",
-      });
+    var rolUser = userFound.role;
+    rolUser = lowercaseIfDefined(userFound.role);
+    console.log(rolUser);
 
-    // El usuario tiene permiso, continuar
+    // Si el rol no es administrador, devolver un error 403
+    if (rolUser !== "presidente"&& rolUser !== "vicepresidente" && rolUser !== "tesorero" && rolUser !== "secretaria" && rolUser !== "vocalia")
+      return res
+        .status(403)
+        .json({
+          message:
+            "Error al acceder al recurso. Se requiere un rol de administrador para realizar esta acción.",
+        });
+
+    // Si el rol es administrador, continuar
     next();
-
   } catch (error) {
-    console.error("Error en middleware isAdmin:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).json({ message: "Error interno del servidor", error });
   }
 }
-*/
 
-/*
-"use strict";
-
-//se importa la entidad User desde la capa de entidad
-import User from "../entity/user.entity.js";
-
-//se importa la fuente de datos para acceder a la base de datos
-import { AppDataSource } from "../config/configDb.js";
-
-// Middleware para verificar si el usuario tiene rol de administrador
-export async function isAdmin(req, res, next) {
-  try {
-    //obtener el repositorio de usuarios
-    const userRepository = AppDataSource.getRepository(User);
-
-    //buscar al usuario autenticado por su email (obtenido desde req.user por JWT)
-    const userFound = await userRepository.findOneBy({ email: req.user?.email });
-
-    //si no se encuentra el usuario, retornar error
-    if (!userFound)
-      return res.status(404).json({ message: "Usuario no encontrado" });
-
-    //verificar si el rol del usuario es distinto a "administrador"
-    if (userFound.role !== "administrador")
-      return res.status(403).json({
-        message:
-          "Acceso denegado. Se requiere rol de administrador para esta acción.",
+// Función middleware para verificar el rol del usuario
+export function checkRole(roles) {
+  return async (req, res, next) => {
+    try {
+      const userRepository = AppDataSource.getRepository(User);
+      const userFound = await userRepository.findOneBy({
+        email: req.user?.email,
       });
 
-    //si el usuario tiene rol válido, continuar
-    next();
+      if (!userFound) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
 
-  } catch (error) {
-    //si ocurre un error, retornar mensaje de error interno
-    console.error("Error en middleware isAdmin:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
-  }
-}
-*/
+      if (!roles.includes(userFound.role)) {
+        return res.status(403).json({
+          message: `Acceso denegado. Se requiere uno de los siguientes roles: ${roles.join(
+            ", "
+          )}`,
+        });
+      }
 
-/*
-"use strict";
-
-
-export async function isAdmin(req, res, next) {
-  try {
-    if (!req.user) return res.status(401).json({ message: "Usuario no autenticado" });
-
-    if (req.user.role !== "administrador") {
-      return res.status(403).json({
-        message: "Acceso denegado. Se requiere rol de administrador."
-      });
+      next();
+    } catch (error) {
+      res.status(500).json({ message: "Error interno del servidor", error });
     }
-    next();
-  } catch (err) {
-    console.error("isAdmin:", err);
-    res.status(500).json({ message: "Error interno" });
-  }
+  };
 }
 
-export async function isAdminOrCee(req, res, next) {
-  try {
-    if (!req.user) return res.status(401).json({ message: "Usuario no autenticado" });
-
-    
-    if (req.user.role !== "administrador" && req.user.role !== "CEE") {
-      return res.status(403).json({
-        message: "Acceso denegado. Se requiere rol ADMIN o CEE."
-      });
-    }
-    next();
-  } catch (err) {
-    console.error("isAdminOrCee:", err);
-    res.status(500).json({ message: "Error interno" });
-  }
-}
-*/
-
-"use strict"; 
-
-//se define la función middleware isAdmin para permitir solo usuarios con rol "administrador"
-export async function isAdmin(req, res, next) {
-  try {
-    //se verifica si el usuario está autenticado (se encuentra en req.user)
-    if (!req.user) return res.status(401).json({ message: "Usuario no autenticado" });
-    //se verifica que el rol del usuario sea estrictamente "administrador"
-    if (req.user.role !== "administrador") {
-      //si no lo es, se retorna error 403 con mensaje personalizado
-      return res.status(403).json({
-        message: "Acceso denegado. Se requiere rol de administrador."
-      });
-    }
-    //si cumple con el rol, se continúa al siguiente middleware o ruta
-    next();
-  } catch (err) {
-    //se muestra el error por consola para depuración
-    console.error("isAdmin:", err);
-    //se responde con error 500 si ocurre un problema inesperado
-    res.status(500).json({ message: "Error interno" });
-  }
-}
-//se define el middleware isAdminOrCee que permite continuar si el usuario es "administrador" o "CEE"
 export async function isAdminOrCee(req, res, next) {
   try {
     //se verifica si el usuario está autenticado
-    if (!req.user) return res.status(401).json({ message: "Usuario no autenticado" });
-    //se comprueba que el rol del usuario sea "administrador" o "CEE"
+    if (!req.user)
+      return res.status(401).json({ message: "Usuario no autenticado" });
+
+    //se verifica si el rol del usuario no es ni 'administrador' ni 'CEE'
     if (req.user.role !== "administrador" && req.user.role !== "CEE") {
-      //si el rol no es válido, se responde con error 403
       return res.status(403).json({
-        message: "Acceso denegado. Se requiere rol ADMIN o CEE."
+        message: "Acceso denegado. Se requiere rol ADMIN o CEE.",
       });
     }
-    //si tiene el rol adecuado, se continúa con la ejecución
+
+    //si cumple con alguno de los dos roles, se continúa con la siguiente función
     next();
   } catch (err) {
-    //se muestra el error por consola si algo falla
+    //se muestra el error en consola y se responde con error 500
     console.error("isAdminOrCee:", err);
-    //se responde con un error interno si ocurre una excepción
     res.status(500).json({ message: "Error interno" });
   }
 }

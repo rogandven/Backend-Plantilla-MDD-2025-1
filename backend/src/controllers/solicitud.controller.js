@@ -290,6 +290,7 @@ export async function obtenerSolicitudes(req, res) {
   }
 }
 
+
 export async function crearSolicitud(req, res) {
   try {
     const solicitudRepo = AppDataSource.getRepository(SolicitudEntity);
