@@ -217,6 +217,7 @@ export const SolicitudEntity = new EntitySchema({
 export default SolicitudEntity;
 */
 
+/*
 "use strict";
 
 //se importa la clase EntitySchema desde TypeORM
@@ -267,9 +268,10 @@ export const SolicitudEntity = new EntitySchema({
       default: "no existe aun",
     },
     // NUEVA COLUMNA para guardar la fecha en que la solicitud fue resuelta
-    resueltaEn: {
+    fecha_resolucion: {
       type: "timestamp",
-      nullable: true, // puede estar vacía si aún no se resuelve
+      nullable: false, 
+      default: () => "no existe aun",
     },
     //columna para guardar la fecha de creación de la solicitud
     //se asigna automáticamente al momento de crear el registro
@@ -313,7 +315,8 @@ export const SolicitudEntity = new EntitySchema({
       //joinColumn permite la creacion de la columna de union con el gestor
       joinColumn: true,
       //nullable false indica que este campo es obligatorio por lo tanto es no nulo
-      nullable: true,//siguiendo buenas practicas 
+
+      nullable: false,//siguiendo buenas practicas 
       //eager indica que la relacion se carga automaticamente al realizar consulta 
       eager: true,
     },
@@ -334,4 +337,267 @@ export const SolicitudEntity = new EntitySchema({
 });
 
 //se exporta la entidad con valor por defecto 
+export default SolicitudEntity;
+*/
+/*
+"use strict";
+
+//se importa la clase EntitySchema desde TypeORM
+import { EntitySchema } from "typeorm";
+
+//se exporta la constante SolicitudEntity que define la entidad Solicitud
+export const SolicitudEntity = new EntitySchema({
+  name: "Solicitud",
+  tableName: "solicitudes",
+
+  columns: {
+    id: {
+      type: Number,
+      primary: true,
+      generated: true,
+    },
+    nombre_estudiante: {
+      type: String,
+      nullable: false,
+    },
+    correo_estudiante: {
+      type: String,
+      nullable: false,
+    },
+    carrera: {
+      type: String,
+      nullable: false,
+    },
+    descripcion: {
+      type: String,
+      nullable: false,
+    },
+    detalleResolucion: {
+      type: String,
+      nullable: false,
+      default: "no existe aun",
+    },
+
+    // ✅ CAMBIO: se reemplaza resueltaEn por fecha_resolucion
+    fecha_resolucion: {
+      type: "timestamp",
+      nullable: false,
+      default: () => "'2000-01-01T00:00:00'", // valor simbólico para indicar "no resuelto"
+    },
+
+    fecha_creacion: {
+      type: "timestamp",
+      default: () => "CURRENT_TIMESTAMP",
+    },
+    fecha_actualizacion: {
+      type: "timestamp",
+      default: () => "CURRENT_TIMESTAMP",
+      onUpdate: () => "CURRENT_TIMESTAMP",
+    },
+  },
+
+  relations: {
+    creador: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+    gestor: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+    estado: {
+      type: "many-to-one",
+      target: "Estado",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+  },
+});
+
+export default SolicitudEntity;
+*/
+/*
+"use strict";
+
+import { EntitySchema } from "typeorm";
+
+export const SolicitudEntity = new EntitySchema({
+  name: "Solicitud",
+  tableName: "solicitudes",
+
+  columns: {
+    id: {
+      type: Number,
+      primary: true,
+      generated: true,
+    },
+    nombre_estudiante: {
+      type: String,
+      nullable: false,
+    },
+    correo_estudiante: {
+      type: String,
+      nullable: false,
+    },
+    carrera: {
+      type: String,
+      nullable: false,
+    },
+    descripcion: {
+      type: String,
+      nullable: false,
+    },
+    detalleResolucion: {
+      type: String,
+      nullable: false,
+      default: "no existe aun",
+    },
+
+    // 🔄 Cambiado: eliminamos valor por defecto y lo hacemos nullable
+    fecha_resolucion: {
+      type: "timestamp",
+      nullable: true,
+    },
+
+    fecha_creacion: {
+      type: "timestamp",
+      createDate: true,//se usa para marcar de forma automatica la fecha de creacion
+      //default: () => "CURRENT_TIMESTAMP",
+    },
+    fecha_actualizacion: {
+      type: "timestamp",
+      updateDate: true,//se actualiza automaticamente al modificar
+      //default: () => "CURRENT_TIMESTAMP",
+      //onUpdate: () => "CURRENT_TIMESTAMP",
+    },
+  },
+
+  relations: {
+    creador: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+    gestor: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+    estado: {
+      type: "many-to-one",
+      target: "Estado",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+  },
+});
+
+export default SolicitudEntity;
+*/
+
+"use strict";
+
+//se importa la clase EntitySchema desde TypeORM
+import { EntitySchema } from "typeorm";
+
+//se exporta la constante SolicitudEntity que define la entidad Solicitud
+export const SolicitudEntity = new EntitySchema({
+  //se define el nombre lógico de la entidad
+  name: "Solicitud",
+  //se define el nombre real de la tabla que se creará en la base de datos
+  tableName: "solicitudes",
+
+  //se definen las columnas que tendrá la tabla solicitudes
+  columns: {
+    //se define la columna id como clave primaria y autoincremental
+    id: {
+      type: Number,
+      primary: true,
+      generated: true,
+    },
+    //se define la columna para guardar el nombre del estudiante
+    nombre_estudiante: {
+      type: String,
+      nullable: false,
+    },
+    //se define la columna para guardar el correo del estudiante
+    correo_estudiante: {
+      type: String,
+      nullable: false,
+    },
+    //se define la columna para guardar la carrera del estudiante
+    carrera: {
+      type: String,
+      nullable: false,
+    },
+    //se define la columna para guardar la descripción del caso
+    descripcion: {
+      type: String,
+      nullable: false,
+    },
+    //se define la columna para guardar el detalle de la resolución del caso
+    detalleResolucion: {
+      type: String,
+      nullable: false,
+      default: "no existe aun",
+    },
+    //se define la columna para registrar la fecha de resolución de la solicitud
+    fecha_resolucion: {
+      type: "timestamp",
+      nullable: true,
+    },
+    //se define la columna que se llenará automáticamente al crear la solicitud
+    fecha_creacion: {
+      type: "timestamp",
+      createDate: true,
+    },
+    //se define la columna que se actualizará automáticamente al modificar la solicitud
+    fecha_actualizacion: {
+      type: "timestamp",
+      updateDate: true,
+    },
+  },
+
+  //se definen las relaciones con otras entidades
+  relations: {
+    //se define la relación con el usuario que creó la solicitud
+    creador: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+    //se define la relación con el usuario que gestiona la solicitud
+    gestor: {
+      type: "many-to-one",
+      target: "User",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+    //se define la relación con el estado actual de la solicitud
+    estado: {
+      type: "many-to-one",
+      target: "Estado",
+      joinColumn: true,
+      nullable: false,
+      eager: true,
+    },
+  },
+});
+
+//se exporta la entidad como valor por defecto
 export default SolicitudEntity;
