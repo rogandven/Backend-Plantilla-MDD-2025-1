@@ -41,6 +41,18 @@ const parseDate = (dateStr, timeStr) => {
 };
 */
 
+async function assertCurrentDate(date) {
+    const today = new Date(Date.now()).toISOString().split("T")[0];
+    date = date.toString();
+    console.log(today);
+    console.log(date);
+    const comparison = await (today.localeCompare(date) >= 0);
+    console.log(comparison);
+    if (comparison) {
+        throw new Error("No se puede crear una reunión para una fecha pasada.");
+    }
+}
+
 // Crear una nueva reunión
 export const createMeeting = async (req, res) => {
     try {
@@ -60,6 +72,17 @@ export const createMeeting = async (req, res) => {
         newMeeting.createdBy = getUsername(getToken(req));
 
         const savedMeeting = await meetingRepository.save(newMeeting);
+
+        try {
+            console.log(date);
+            await assertCurrentDate(date);
+        } catch (error) {
+            console.log(error);
+            return res.status(400).json({
+                message: "Fecha no válida",
+                data: error 
+            });
+        }
 
         return res
             .status(201)
@@ -144,6 +167,14 @@ export async function updateMeeting(req, res) {
         meeting.time = time || meeting.time;
         meeting.description = description || meeting.description;
 
+        try {
+            await assertCurrentDate(meeting.date);
+        } catch (error) {
+            return res.status(400).json({
+                message: "Fecha no válida",
+                data: error 
+            });
+        }
         /*
         if (url !== undefined) {
             meeting.url = url
