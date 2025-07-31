@@ -74,17 +74,17 @@ const Sidebar = () => {
             </li>
           )}
           <li>
-            <NavLink to="/profile">
-              <CgProfile className="icon"/> Perfil
-            </NavLink>
-          </li>
-          <li>
           { ((globalIsAdmin(userRole))) && (
             <NavLink to="/Operaciones">
             <FaMoneyBillTransfer className="icon"/> Operacion          
             </NavLink>
             )
           }
+          </li>
+          <li>
+            <NavLink to="/profile">
+              <CgProfile className="icon"/> Perfil
+            </NavLink>
           </li>
           <li style={{ height: "70%" }}/>
           <li className="logout">
