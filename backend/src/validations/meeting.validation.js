@@ -29,7 +29,7 @@ export const createValidation = Joi.object({
         "string.pattern": "El formato de la hora es incorrecto" 
     }),
     description: Joi.string().required().min(10).max(500).messages({
-        "any.required": "La descripción e mobile es obligatoria",
+        "any.required": "La descripción es obligatoria",
         "string.base": "La descripción debe ser una cadena de caracteres",
         "string.min": "La descripción debe tener al menos 10 caracteres",
         "string.max": "La descripción no puede tener más de 500 caracteres"
