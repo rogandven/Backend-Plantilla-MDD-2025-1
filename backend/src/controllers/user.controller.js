@@ -66,7 +66,7 @@ export async function getUserById(req, res) {
     const userRepository = AppDataSource.getRepository(User);
     const { id } = req.params;
 
-    assertValidIdResult = assertValidId(id, req, res);
+    var assertValidIdResult = assertValidId(id, req, res);
     if (assertValidIdResult !== ASSERTVALIDID_SUCCESS) {
         return assertValidIdResult;
     }
