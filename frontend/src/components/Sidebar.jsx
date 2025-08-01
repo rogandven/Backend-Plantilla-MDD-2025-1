@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { logout } from "@services/auth.service.js";
-import { FaHome, FaUsers, FaSignOutAlt,FaBookOpen, FaWineGlass} from "react-icons/fa";
+import { FaHome, FaUsers, FaSignOutAlt, FaBookOpen, FaWineGlass, FaClipboardList } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import "@styles/Sidebar.css";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
@@ -12,9 +12,9 @@ const Sidebar = () => {
   try {
     preUser = JSON.parse(sessionStorage.getItem("usuario"));
   } catch (error) {
+    console(error);
     // console.log("Error en Sidebar:" + error); 
   }
-
 
   const user = preUser || "";
   const userRole = user?.rol;
@@ -35,61 +35,58 @@ const Sidebar = () => {
         <ul>
           <li>
             <NavLink to="/home">
-              <FaHome className="icon"/> Inicio
+              <FaHome className="icon" /> Inicio
             </NavLink>
           </li>
           {(globalIsAdmin(userRole)) && (
             <div>
-            <li>
-              <NavLink to="/users">
-                <FaUsers className="icon"/> Usuarios
-              </NavLink>
-            </li>
+              <li>
+                <NavLink to="/users">
+                  <FaUsers className="icon" /> Usuarios
+                </NavLink>
+              </li>
             </div>
           )}
           {(globalIsAdmin(userRole)) && (
             <div>
               <li>
                 <NavLink to="/meeting">
-                  <FaUsers className="icon"/> Reuniones
+                  <FaUsers className="icon" /> Reuniones
                 </NavLink>
               </li>
             </div>
           )}
-            <li>
-              <NavLink to="/Inquietudes">
-              <FaBookOpen className="icon"/>   Reclamos
-              </NavLink>
-            </li>
           <li>
-            <NavLink to="/asambleas">
-              <FaWineGlass className="icon"/> Asambleas
+            <NavLink to="/Inquietudes">
+              <FaBookOpen className="icon" /> Reclamos
             </NavLink>
           </li>
-          {(
-            <li>
-              <NavLink to="/solicitudes">
-                <span className="icon">📋</span> Solicitudes
-              </NavLink>
-            </li>
-          )}
           <li>
-          { ((globalIsAdmin(userRole))) && (
-            <NavLink to="/Operaciones">
-            <FaMoneyBillTransfer className="icon"/> Operacion          
+            <NavLink to="/asambleas">
+              <FaWineGlass className="icon" /> Asambleas
             </NavLink>
-            )
-          }
+          </li>
+          <li>
+            <NavLink to="/solicitudes">
+              <FaClipboardList className="icon" /> Solicitudes
+            </NavLink>
+          </li>
+          <li>
+            {(globalIsAdmin(userRole)) && (
+              <NavLink to="/Operaciones">
+                <FaMoneyBillTransfer className="icon" /> Operacion
+              </NavLink>
+            )}
           </li>
           <li>
             <NavLink to="/profile">
-              <CgProfile className="icon"/> Perfil
+              <CgProfile className="icon" /> Perfil
             </NavLink>
           </li>
-          <li style={{ height: "70%" }}/>
+          <li style={{ height: "70%" }} />
           <li className="logout">
             <NavLink to="/login" onClick={logoutSubmit}>
-              <FaSignOutAlt className="icon"/> Cerrar Sesión
+              <FaSignOutAlt className="icon" /> Cerrar Sesión
             </NavLink>
           </li>
         </ul>

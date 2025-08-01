@@ -548,6 +548,8 @@ import useEditSolicitud from "@hooks/solicitudes/useEditSolicitud.jsx";
 import useDeleteSolicitud from "@hooks/solicitudes/useDeleteSolicitud.jsx";
 import useChangeSolicitudEstado from "@hooks/solicitudes/useChangeSolicitudEstado.jsx";
 import { globalIsAdmin } from "../../algo/globalIsAdmin.js";
+//este es el cambi
+import { FaClipboardList } from "react-icons/fa";
 
 //funciones para identificar el rol del usuario
 const getUser = () => JSON.parse(sessionStorage.getItem("usuario")) || {};
@@ -560,29 +562,30 @@ const isAdmin = () =>
   getUser()?.rol === "administrador" || getUser()?.role === "administrador";
 */
 
-  const returnEstudianteIfUndefined = (role) => {
-    try {
-      if (role === null || role === undefined) {
-        return "estudiante";
-      }
-      return role;
-    } catch (error) {
-      // console.log("Error en la verificación de rol: " + error);
+const returnEstudianteIfUndefined = (role) => {
+  try {
+    if (role === null || role === undefined) {
       return "estudiante";
     }
+    return role;
+  } catch (error) {
+    console.error(error);
+    // console.log("Error en la verificación de rol: " + error);
+    return "estudiante";
   }
+};
 
 const isEstudiante = () => {
-  return !(globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol)));
-}
-  
+  return !globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol));
+};
+
 const isCee = () => {
-  return (globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol)));
-}
-  
+  return globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol));
+};
+
 const isAdmin = () => {
-  return (globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol)));
-}
+  return globalIsAdmin(returnEstudianteIfUndefined(getUser()?.rol));
+};
 
 const Solicitudes = () => {
   const { solicitudes, fetchSolicitudes } = useGetSolicitudes();
@@ -622,12 +625,12 @@ const Solicitudes = () => {
           type="text"
           placeholder="Buscar por descripción, carrera, correo o nombre..."
           value={busqueda}
-          onChange={e => setBusqueda(e.target.value)}
+          onChange={(e) => setBusqueda(e.target.value)}
         />
         <select
           className="solicitud-filtro-select"
           value={filtroEstado}
-          onChange={e => setFiltroEstado(e.target.value)}
+          onChange={(e) => setFiltroEstado(e.target.value)}
         >
           <option value="">Todos los estados</option>
           <option value="pendiente">Pendientes</option>
@@ -643,10 +646,8 @@ const Solicitudes = () => {
       {/* Boton para crear solicitud (solo estudiantes) */}
       {(isEstudiante() || isCee()) && (
         <div className="solicitud-button-container">
-          <button
-            className="solicitud-addbtn"
-            onClick={handleCreateSolicitud}
-          >
+          <button className="solicitud-addbtn" onClick={handleCreateSolicitud}>
+            <FaClipboardList style={{ marginRight: "8px" }} size={20} />
             Registrar nueva solicitud
           </button>
         </div>
@@ -671,13 +672,13 @@ const Solicitudes = () => {
               solicitudes.map((solicitud) => {
                 const puedeEditar =
                   (isEstudiante() &&
-                  solicitud.correo_estudiante === user.email &&
-                  solicitud.estado?.nombre === "pendiente") || isCee();
-                const puedeEliminar =
-                  isEstudiante()
-                    ? solicitud.correo_estudiante === user.email &&
-                      solicitud.estado?.nombre === "pendiente"
-                    : isCee() || isAdmin();
+                    solicitud.correo_estudiante === user.email &&
+                    solicitud.estado?.nombre === "pendiente") ||
+                  isCee();
+                const puedeEliminar = isEstudiante()
+                  ? solicitud.correo_estudiante === user.email &&
+                    solicitud.estado?.nombre === "pendiente"
+                  : isCee() || isAdmin();
                 const puedeResolver =
                   isCee() && solicitud.estado?.nombre === "pendiente";
 
